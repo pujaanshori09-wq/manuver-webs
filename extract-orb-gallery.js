@@ -1,0 +1,1 @@
+﻿const fs = require('fs'); const path = require('path'); const root = 'c:/Users/Asus/Desktop/try'; const data = JSON.parse(fs.readFileSync(path.join(root, 'orb-gallery.json'), 'utf8')); for (const item of data.files) { const p = path.join(root, item.path); fs.mkdirSync(path.dirname(p), { recursive: true }); fs.writeFileSync(p, item.code, 'utf8'); console.log(p); }

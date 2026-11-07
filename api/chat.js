@@ -195,13 +195,110 @@ export default async function handler(req, res) {
   };
 
   // 5. Execute with Streaming (SSE) or Full JSON Fallback
-  if (acceptsStream) {
-    try {
-      const streamUrl = `https://generativelanguage.googleapis.com/v1beta/models/${AI_MODEL}:streamGenerateContent?alt=sse&key=${apiKey}`;
-      const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 18000); // 18s timeout
+  const candidateModels = [
+    AI_MODEL,
+    'gemini-2.5-flash-lite',
+    'gemini-3.8-flash',
+    'gemini-3.5-flash',
+    'gemini-flash-latest',
+    'gemini-2.5-flash'
+  ].filter((m, i, arr) => m && arr.indexOf(m) === i);
 
-      const geminiStream = await fetch(streamUrl, {
+  if (acceptsStream) {
+    for (const model of candidateModels) {
+      try {
+        const streamUrl = `https://generativelanguage.googleapis.com/v1beta/models/${model}:streamGenerateContent?alt=sse&key=${apiKey}`;
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 18000);
+
+        const geminiStream = await fetch(streamUrl, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'x-goog-api-key': apiKey
+          },
+          body: JSON.stringify(requestPayload),
+          signal: controller.signal
+        });
+
+        clearTimeout(timeoutId);
+
+        if (!geminiStream.ok || !geminiStream.body) {
+          // If model not found or deprecated, try next model
+          if (geminiStream.status === 404) continue;
+          throw new Error(`Gemini stream error status ${geminiStream.status}`);
+        }
+
+        res.writeHead(200, {
+          'Content-Type': 'text/event-stream; charset=utf-8',
+          'Cache-Control': 'no-cache, no-transform',
+          'Connection': 'keep-alive',
+          'X-Accel-Buffering': 'no'
+        });
+
+        const reader = geminiStream.body.getReader();
+        const decoder = new TextDecoder('utf-8');
+        let buffer = '';
+        let accumulatedText = '';
+
+        while (true) {
+          const { value, done } = await reader.read();
+          if (done) break;
+
+          buffer += decoder.decode(value, { stream: true });
+          const lines = buffer.split('\n');
+          buffer = lines.pop() || '';
+
+          for (const line of lines) {
+            const trimmed = line.trim();
+            if (!trimmed.startsWith('data:')) continue;
+            const jsonStr = trimmed.slice(5).trim();
+            if (!jsonStr || jsonStr === '[DONE]') continue;
+
+            try {
+              const parsed = JSON.parse(jsonStr);
+              const partText = parsed.candidates?.[0]?.content?.parts?.[0]?.text;
+              if (partText) {
+                accumulatedText += partText;
+                res.write(`data: ${JSON.stringify({ text: partText })}\n\n`);
+              }
+            } catch (_) {}
+          }
+        }
+
+        // Check if WhatsApp should be suggested based on accumulated content
+        const lower = accumulatedText.toLowerCase();
+        const suggestWhatsApp = lower.includes('whatsapp') ||
+          lower.includes('harga') ||
+          lower.includes('price') ||
+          lower.includes('jadwal') ||
+          lower.includes('schedule') ||
+          lower.includes('mulai');
+
+        if (suggestWhatsApp) {
+          res.write(`data: ${JSON.stringify({ suggestWhatsApp: true })}\n\n`);
+        }
+
+        res.write('data: [DONE]\n\n');
+        return res.end();
+      } catch (err) {
+        if (res.headersSent) {
+          res.write(`data: ${JSON.stringify({ text: '\n\n' + (lang === 'id' ? 'Kamu bisa langsung chat lewat WhatsApp.' : 'You can reach out directly via WhatsApp.'), suggestWhatsApp: true })}\n\n`);
+          res.write('data: [DONE]\n\n');
+          return res.end();
+        }
+      }
+    }
+  }
+
+  // Non-streaming / Fallback path
+  for (const model of candidateModels) {
+    try {
+      const fullUrl = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 12000);
+
+      const apiResponse = await fetch(fullUrl, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -213,49 +310,20 @@ export default async function handler(req, res) {
 
       clearTimeout(timeoutId);
 
-      if (!geminiStream.ok || !geminiStream.body) {
-        throw new Error(`Gemini stream error status ${geminiStream.status}`);
+      if (!apiResponse.ok) {
+        if (apiResponse.status === 404) continue;
+        throw new Error(`API responded with status ${apiResponse.status}`);
       }
 
-      res.writeHead(200, {
-        'Content-Type': 'text/event-stream; charset=utf-8',
-        'Cache-Control': 'no-cache, no-transform',
-        'Connection': 'keep-alive',
-        'X-Accel-Buffering': 'no'
-      });
+      const data = await apiResponse.json();
+      const candidate = data.candidates?.[0];
+      const replyText = candidate?.content?.parts?.[0]?.text?.trim();
 
-      const reader = geminiStream.body.getReader();
-      const decoder = new TextDecoder('utf-8');
-      let buffer = '';
-      let accumulatedText = '';
-
-      while (true) {
-        const { value, done } = await reader.read();
-        if (done) break;
-
-        buffer += decoder.decode(value, { stream: true });
-        const lines = buffer.split('\n');
-        buffer = lines.pop() || '';
-
-        for (const line of lines) {
-          const trimmed = line.trim();
-          if (!trimmed.startsWith('data:')) continue;
-          const jsonStr = trimmed.slice(5).trim();
-          if (!jsonStr || jsonStr === '[DONE]') continue;
-
-          try {
-            const parsed = JSON.parse(jsonStr);
-            const partText = parsed.candidates?.[0]?.content?.parts?.[0]?.text;
-            if (partText) {
-              accumulatedText += partText;
-              res.write(`data: ${JSON.stringify({ text: partText })}\n\n`);
-            }
-          } catch (_) {}
-        }
+      if (!replyText) {
+        throw new Error('Empty candidate response');
       }
 
-      // Check if WhatsApp should be suggested based on accumulated content
-      const lower = accumulatedText.toLowerCase();
+      const lower = replyText.toLowerCase();
       const suggestWhatsApp = lower.includes('whatsapp') ||
         lower.includes('harga') ||
         lower.includes('price') ||
@@ -263,69 +331,16 @@ export default async function handler(req, res) {
         lower.includes('schedule') ||
         lower.includes('mulai');
 
-      if (suggestWhatsApp) {
-        res.write(`data: ${JSON.stringify({ suggestWhatsApp: true })}\n\n`);
-      }
-
-      res.write('data: [DONE]\n\n');
-      return res.end();
+      res.statusCode = 200;
+      res.setHeader('Content-Type', 'application/json');
+      return res.end(JSON.stringify({
+        reply: replyText,
+        suggestWhatsApp
+      }));
     } catch (err) {
-      // If streaming fails before headers are sent, fall back to non-streaming
-      if (!res.headersSent) {
-        // Fall back to non-streaming generateContent below
-      } else {
-        res.write(`data: ${JSON.stringify({ text: '\n\n' + (lang === 'id' ? 'Kamu bisa langsung chat lewat WhatsApp.' : 'You can reach out directly via WhatsApp.'), suggestWhatsApp: true })}\n\n`);
-        res.write('data: [DONE]\n\n');
-        return res.end();
-      }
+      // Continue to next model if available
     }
   }
-
-  // Non-streaming / Fallback path
-  try {
-    const fullUrl = `https://generativelanguage.googleapis.com/v1beta/models/${AI_MODEL}:generateContent?key=${apiKey}`;
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 12000);
-
-    const apiResponse = await fetch(fullUrl, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-goog-api-key': apiKey
-      },
-      body: JSON.stringify(requestPayload),
-      signal: controller.signal
-    });
-
-    clearTimeout(timeoutId);
-
-    if (!apiResponse.ok) {
-      throw new Error(`API responded with status ${apiResponse.status}`);
-    }
-
-    const data = await apiResponse.json();
-    const candidate = data.candidates?.[0];
-    const replyText = candidate?.content?.parts?.[0]?.text?.trim();
-
-    if (!replyText) {
-      throw new Error('Empty candidate response');
-    }
-
-    const lower = replyText.toLowerCase();
-    const suggestWhatsApp = lower.includes('whatsapp') ||
-      lower.includes('harga') ||
-      lower.includes('price') ||
-      lower.includes('jadwal') ||
-      lower.includes('schedule') ||
-      lower.includes('mulai');
-
-    res.statusCode = 200;
-    res.setHeader('Content-Type', 'application/json');
-    return res.end(JSON.stringify({
-      reply: replyText,
-      suggestWhatsApp
-    }));
-  } catch (err) {
     res.statusCode = 500;
     res.setHeader('Content-Type', 'application/json');
     const errMsg = lang === 'id'

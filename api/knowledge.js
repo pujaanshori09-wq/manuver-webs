@@ -15,8 +15,8 @@ export const WHATSAPP_NUMBER = '6281234567890';
 // [ISI: Ganti dengan nama Anda]
 export const OWNER_NAME = '[ISI: nama saya]';
 
-// [ISI: Model AI Google Gemini gratis (contoh: gemini-1.5-flash atau gemini-2.0-flash)]
-export const AI_MODEL = (typeof process !== 'undefined' && process.env && process.env.AI_MODEL) || 'gemini-1.5-flash';
+// [ISI: Model AI Google Gemini gratis (contoh: gemini-2.5-flash-lite, gemini-3.8-flash)]
+export const AI_MODEL = (typeof process !== 'undefined' && process.env && process.env.AI_MODEL) || 'gemini-2.5-flash-lite';
 
 // Daftar portofolio yang nanti bisa diisi.
 // Format item jika nanti diisi: { name: 'Nama Project', description: 'Deskripsi singkat', url: 'https://...' }

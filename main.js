@@ -1,9 +1,13 @@
 import { createClient } from '@supabase/supabase-js';
 import { initI18n, t } from './src/i18n.js';
 import { initChatWidget } from './src/ChatWidget.js';
+import { initLandingSections } from './src/LandingSections.js';
 
 // Initialize i18n & language switcher
 initI18n();
+
+// Initialize High-Converting Interactive Landing Sections
+initLandingSections('#landing-sections');
 
 // Initialize Manuver AI Assistant Chat Widget
 initChatWidget();

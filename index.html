@@ -20,7 +20,7 @@
     --pad:clamp(20px,3.4vw,52px);
   }
   *{box-sizing:border-box}
-  html{ -webkit-text-size-adjust:100% }
+  html{ -webkit-text-size-adjust:100%; scroll-behavior: smooth; }
   html,body{margin:0;background:var(--bg)}
   body{
     color:var(--ink); min-height:100dvh; overflow-x:hidden; overflow-y:auto; overscroll-behavior:none;
@@ -284,8 +284,8 @@
           Manual work slows teams down. Manuver automates the repetitive parts so you can build and move first.
         </p>
         <div class="cta">
-          <a class="btn lg solid" href="#"><span data-i18n="hero.ctaStart">Start building</span></a>
-          <a class="btn lg ghost" href="#"><span data-i18n="hero.ctaHow">See how it works</span> <span class="arrow">&rarr;</span></a>
+          <a class="btn lg solid" href="#calculator"><span data-i18n="hero.ctaStart">Start building</span></a>
+          <a class="btn lg ghost" href="#services"><span data-i18n="hero.ctaHow">See how it works</span> <span class="arrow">&rarr;</span></a>
         </div>
         <div class="pain-points">
           <div class="pain-item">
@@ -312,6 +312,9 @@
     </div>
   </div>
 </main>
+
+<!-- High-Converting Interactive Sections Container -->
+<div id="landing-sections"></div>
 
 <script src="https://unpkg.com/three@0.149.0/build/three.min.js"></script>
 <script type="module" src="/main.js"></script>

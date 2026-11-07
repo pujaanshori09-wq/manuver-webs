@@ -72,6 +72,88 @@ export const dictionary = {
       rateLimitAlert: 'Message limit reached (15 msgs/10 mins). You can chat directly via WhatsApp.',
       errorBusy: 'Sorry, the assistant is currently busy. You can chat directly via WhatsApp.',
       retryBtn: 'Try again'
+    },
+    landing: {
+      services: {
+        badge: 'Core capabilities',
+        title: 'Built to replace slow manual friction.',
+        subtitle: 'From automated pipelines to custom digital platforms, Manuver delivers modern engineering designed for real business acceleration.',
+        tabAutomation: 'Workflow Automation',
+        tabWeb: 'Web & Web Apps',
+        tabAi: 'Custom AI Solutions',
+        automationTitle: 'Automate repetitive operations 24/7',
+        automationDesc: 'Connect spreadsheets, CRMs, WhatsApp notifications, form submissions, and external APIs so your business runs smoothly without manual data entry or human error.',
+        automationPoints: [
+          'Eliminates manual copy-pasting between tools',
+          'Instant auto-alerts & customer order confirmations',
+          'Scales effortlessly with zero incremental headcount'
+        ],
+        webTitle: 'Modern, high-converting digital web apps',
+        webDesc: 'High-speed landing pages, sleek interactive client portals, and resilient SaaS dashboards built with next-gen frameworks for maximum conversion.',
+        webPoints: [
+          'Sub-second page load speeds & SEO optimization',
+          'Futuristic, clean responsive aesthetics across devices',
+          'Scalable backend with robust database architecture'
+        ],
+        aiTitle: 'Custom AI assistants & intelligent agents',
+        aiDesc: 'Deploy specialized conversational bots trained on your actual business data, automate document parsing, and embed LLM intelligence straight into your daily workflow.',
+        aiPoints: [
+          'Interactive 24/7 client discovery & lead qualification',
+          'Automated data extraction & inquiry triage',
+          'Private, secure API integration without third-party leaks'
+        ]
+      },
+      calculator: {
+        badge: 'Interactive ROI estimator',
+        title: 'How much time is manual work costing you?',
+        subtitle: 'Drag the sliders below to estimate the annual hours and operational overhead you can recover by automating with Manuver.',
+        sliderHoursLabel: 'Manual repetitive hours per person / week',
+        sliderTeamLabel: 'Team members involved',
+        hoursUnit: 'hrs/wk',
+        peopleUnit: 'people',
+        monthlySaved: 'Hours saved monthly',
+        annualSaved: 'Hours saved annually',
+        efficiencyGain: 'Estimated efficiency gain',
+        ctaBtn: 'Automate this workflow on WhatsApp →',
+        disclaimer: '*Based on standard 70-85% reduction in repetitive data handling and operational tasks.'
+      },
+      process: {
+        badge: 'How it works',
+        title: 'Transparent, structured, zero-fluff execution.',
+        subtitle: 'We turn complex requirements into high-performing systems in days, not months.',
+        step1Num: '01',
+        step1Title: 'Discovery & Mapping',
+        step1Desc: 'We dissect your current bottlenecks, tools, and objectives to define the leanest, highest-impact technical blueprint.',
+        step2Num: '02',
+        step2Title: 'Architecture & UX',
+        step2Desc: 'We design the interactive user experience and map out API data contracts before writing a single line of production code.',
+        step3Num: '03',
+        step3Title: 'Rapid Engineering',
+        step3Desc: 'We build your solution using high-velocity modern stacks, with strict performance checks and end-to-end testing.',
+        step4Num: '04',
+        step4Title: 'Launch & 30-Day Warranty',
+        step4Desc: 'Seamless deployment, complete handover with video tutorials for your team, backed by a 30-day bug-free warranty.'
+      },
+      faq: {
+        badge: 'Frequently asked questions',
+        title: 'Everything you need to know.',
+        subtitle: 'Common questions about working with Manuver, our timelines, and technology standards.',
+        q1: 'How long does a typical project take?',
+        a1: 'Workflow automations typically take 3 to 7 business days. Custom landing pages and company profiles take 1 to 2 weeks. Full web applications or custom AI integrations usually take 2 to 4 weeks depending on the scope of MVP features.',
+        q2: 'Is the system difficult for my team to manage?',
+        a2: 'Not at all. We specifically engineer systems to be intuitive and self-operating. Every handover includes concise video documentation, clear administrative controls, and 30 days of direct support to ensure your team is 100% confident.',
+        q3: 'How is data security and privacy handled?',
+        a3: 'Security is a top priority. All integrations utilize official encrypted API endpoints, environment variable secrets, and private credentials. We never expose your business data or train public AI models on your proprietary information.',
+        q4: 'What is required to get started?',
+        a4: 'Just reach out via WhatsApp with a brief description of your current challenge or app idea. We will schedule a quick consultative discovery call and provide a clear, modular roadmap with transparent pricing.'
+      },
+      bottomCta: {
+        badge: 'Ready to accelerate?',
+        title: 'Stop moving slow. Let’s build something extraordinary.',
+        subtitle: 'Tell us about your app concept or manual bottleneck. We will design the leanest, fastest digital solution for your business.',
+        btnWhatsApp: 'Consult Your Project on WhatsApp →',
+        guarantee: 'Free initial consultation · Transparent modular scope · 30-day bug warranty'
+      }
     }
   },
   id: {
@@ -140,6 +222,88 @@ export const dictionary = {
       rateLimitAlert: 'Batas pesan tercapai (15 pesan/10 menit). Kamu bisa langsung chat lewat WhatsApp.',
       errorBusy: 'Maaf, asisten sedang sibuk. Kamu bisa langsung chat lewat WhatsApp.',
       retryBtn: 'Coba lagi'
+    },
+    landing: {
+      services: {
+        badge: 'Layanan Utama',
+        title: 'Dirancang untuk mengeliminasi pekerjaan lambat.',
+        subtitle: 'Dari otomatisasi sistem hingga platform digital modern, Manuver menghadirkan teknologi mutakhir untuk mempercepat pertumbuhan bisnis Anda.',
+        tabAutomation: 'Otomasi Alur Kerja',
+        tabWeb: 'Web & Web App',
+        tabAi: 'Solusi AI Kustom',
+        automationTitle: 'Operasional berjalan otomatis 24/7 tanpa henti',
+        automationDesc: 'Hubungkan Google Sheets, CRM, WhatsApp Bot, formulir pemesanan, dan API pihak ketiga agar operasional bisnis Anda berjalan otomatis tanpa salah ketik atau entri manual.',
+        automationPoints: [
+          'Menghilangkan kebiasaan copy-paste manual antar aplikasi',
+          'Notifikasi & konfirmasi pesanan otomatis instan ke pelanggan',
+          'Operasional mudah di-scale up tanpa perlu tambah karyawan'
+        ],
+        webTitle: 'Website & aplikasi modern berkonversi tinggi',
+        webDesc: 'Landing page berkecepatan tinggi, portal klien interaktif yang elegan, dan dashboard SaaS modern yang dirancang untuk memaksimalkan penjualan dan leads.',
+        webPoints: [
+          'Kecepatan loading sub-detik & optimalisasi SEO',
+          'Desain futuristik responsif yang nyaman di semua perangkat',
+          'Arsitektur database yang aman, cepat, dan siap berkembang'
+        ],
+        aiTitle: 'Asisten AI pintar & otomatisasi data cerdas',
+        aiDesc: 'Hadirkan bot interaktif yang dilatih dengan data bisnis Anda, otomatisasi pembacaan dokumen/invoice, dan integrasikan kecerdasan buatan langsung ke alur kerja harian.',
+        aiPoints: [
+          'Riset & kualifikasi calon klien otomatis 24 jam nonstop',
+          'Ekstraksi data & ringkasan pesan masuk secara instan',
+          'Jalur API privat yang aman tanpa kebocoran data rahasia'
+        ]
+      },
+      calculator: {
+        badge: 'Kalkulator ROI Interaktif',
+        title: 'Berapa banyak waktu yang terbuang oleh kerja manual?',
+        subtitle: 'Geser slider di bawah ini untuk melihat estimasi jam kerja operasional yang bisa Anda hemat setiap bulan dan tahun dengan otomatisasi Manuver.',
+        sliderHoursLabel: 'Jam kerja manual repetitif per orang / minggu',
+        sliderTeamLabel: 'Jumlah anggota tim yang terlibat',
+        hoursUnit: 'jam/mgg',
+        peopleUnit: 'orang',
+        monthlySaved: 'Jam kerja dihemat per bulan',
+        annualSaved: 'Jam kerja dihemat per tahun',
+        efficiencyGain: 'Peningkatan efisiensi operasional',
+        ctaBtn: 'Konsultasikan Otomasi Ini via WhatsApp →',
+        disclaimer: '*Berdasarkan rata-rata efisiensi 70-85% eliminasi tugas repetitif dan entri data manual.'
+      },
+      process: {
+        badge: 'Cara Kerja',
+        title: 'Alur kerja transparan, terstruktur, & tanpa basa-basi.',
+        subtitle: 'Kami mengubah ide dan kebutuhan rumit menjadi sistem yang siap pakai dalam hitungan hari, bukan berbulan-bulan.',
+        step1Num: '01',
+        step1Title: 'Discovery & Pemetaan Masalah',
+        step1Desc: 'Kami membedah alur kerja dan kendala utama bisnis Anda untuk merumuskan arsitektur solusi yang paling efisien dan berdampak tinggi.',
+        step2Num: '02',
+        step2Title: 'Desain & Skema Solusi',
+        step2Desc: 'Kami merancang alur antarmuka pengguna (UI/UX) dan skema integrasi data sebelum penulisan kode dimulai.',
+        step3Num: '03',
+        step3Title: 'Pengerjaan Cepat (Fast Build)',
+        step3Desc: 'Membangun aplikasi dengan teknologi modern berkecepatan tinggi, melalui pengujian fungsional dan performa yang ketat.',
+        step4Num: '04',
+        step4Title: 'Peluncuran & Garansi 30 Hari',
+        step4Desc: 'Serah terima sistem lengkap dengan video tutorial cara pakai untuk tim Anda, didukung garansi perbaikan bug selama 30 hari.'
+      },
+      faq: {
+        badge: 'Pertanyaan Umum',
+        title: 'Segala hal yang perlu Anda ketahui.',
+        subtitle: 'Jawaban atas pertanyaan yang paling sering diajukan seputar kerja sama, timeline, dan teknologi Manuver.',
+        q1: 'Berapa lama estimasi pengerjaan sebuah project?',
+        a1: 'Otomasi alur kerja biasanya memakan waktu 3 hingga 7 hari kerja. Landing page dan company profile modern memakan waktu 1 hingga 2 minggu. Aplikasi web atau integrasi AI kustom umumnya memakan waktu 2 hingga 4 minggu sesuai skala fitur MVP.',
+        q2: 'Apakah sistemnya sulit dioperasikan oleh tim saya?',
+        a2: 'Sama sekali tidak. Kami selalu merancang sistem yang intuitif dan ramah pengguna. Setiap serah terima dilengkapi video dokumentasi langkah demi langkah serta garansi pendampingan selama 30 hari.',
+        q3: 'Bagaimana dengan keamanan data bisnis kami?',
+        a3: 'Keamanan data adalah prioritas utama. Semua integrasi menggunakan jalur API resmi terenkripsi dan kredensial privat. Kami tidak pernah membagikan data bisnis Anda ke pihak ketiga.',
+        q4: 'Bagaimana cara memulainya?',
+        a4: 'Cukup klik tombol WhatsApp dan ceritakan kebutuhan atau ide aplikasi Anda. Kami akan menjadwalkan sesi konsultasi singkat dan memberikan estimasi rencana kerja secara transparan.'
+      },
+      bottomCta: {
+        badge: 'Siap Bergerak Cepat?',
+        title: 'Hentikan kerja manual yang lambat. Wujudkan sistem modern Anda.',
+        subtitle: 'Ceritakan ide aplikasi atau alur kerja yang ingin Anda bangun. Kami bantu rancang solusi teknologi yang paling efisien untuk bisnis Anda.',
+        btnWhatsApp: 'Konsultasikan Project Anda di WhatsApp →',
+        guarantee: 'Konsultasi awal gratis · Skema transparan · Garansi bug 30 hari'
+      }
     }
   }
 };

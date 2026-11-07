@@ -1,0 +1,632 @@
+/**
+ * ============================================================
+ * Manuver Landing Page - Interactive High-Converting Sections
+ * Services Tabs · Interactive ROI Calculator · Process · FAQ · Bottom CTA
+ * ============================================================
+ */
+
+/* Section wrapper & layout */
+.landing-section {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  padding: clamp(64px, 8vw, 112px) 0;
+  border-top: 1px solid var(--line);
+}
+
+.landing-section--hero-followup {
+  border-top: 1px solid var(--line);
+}
+
+.section-head {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 14px;
+  max-width: 680px;
+  margin-bottom: clamp(36px, 5vw, 56px);
+}
+
+.section-head.center {
+  align-items: center;
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.section-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 14px 5px 10px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.04);
+  font-size: 12.5px;
+  color: var(--dim);
+  letter-spacing: -0.01em;
+  font-weight: 500;
+}
+
+.section-badge i {
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+  background: var(--accent);
+  box-shadow: 0 0 0 3px rgba(255, 87, 47, 0.2);
+}
+
+.section-title {
+  margin: 0;
+  font-size: clamp(30px, 3.6vw, 48px);
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -0.035em;
+  color: var(--ink);
+}
+
+.section-subtitle {
+  margin: 0;
+  font-size: clamp(15px, 1.1vw, 16.5px);
+  line-height: 1.6;
+  color: var(--dim);
+  letter-spacing: -0.01em;
+}
+
+/* ============================================================
+   1. Interactive Services Tabs
+   ============================================================ */
+.services-tabs-container {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  width: 100%;
+}
+
+.services-nav {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.035);
+  border: 1px solid var(--line);
+  padding: 6px;
+  border-radius: 999px;
+  width: fit-content;
+  max-width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.services-tab-btn {
+  background: transparent;
+  border: none;
+  border-radius: 999px;
+  color: var(--dim);
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  padding: 9px 20px;
+  cursor: pointer;
+  transition: all 0.22s ease;
+  white-space: nowrap;
+}
+
+.services-tab-btn:hover {
+  color: var(--ink);
+}
+
+.services-tab-btn.active {
+  background: var(--ink);
+  color: #17171a;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
+}
+
+.services-card {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: 40px;
+  background: rgba(255, 255, 255, 0.025);
+  border: 1px solid var(--line);
+  border-radius: 24px;
+  padding: clamp(28px, 4vw, 44px);
+  align-items: center;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+.services-card-info {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.services-card-title {
+  margin: 0;
+  font-size: clamp(22px, 2.2vw, 30px);
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  color: var(--ink);
+  line-height: 1.25;
+}
+
+.services-card-desc {
+  margin: 0;
+  font-size: 15.5px;
+  line-height: 1.65;
+  color: var(--dim);
+}
+
+.services-card-points {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.services-card-points li {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 14.5px;
+  color: var(--ink);
+  letter-spacing: -0.01em;
+}
+
+.services-point-icon {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: rgba(255, 87, 47, 0.15);
+  color: var(--accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.services-point-icon svg {
+  width: 10px;
+  height: 10px;
+  stroke-width: 2.5;
+}
+
+/* Visual Interactive Diagram on Right */
+.services-card-visual {
+  background: #18181a;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  box-shadow: 0 16px 36px -10px rgba(0, 0, 0, 0.5);
+}
+
+.visual-flow-node {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 16px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  font-size: 13.5px;
+  color: var(--ink);
+}
+
+.visual-flow-node svg {
+  width: 18px;
+  height: 18px;
+  color: var(--accent);
+  flex-shrink: 0;
+}
+
+.visual-flow-arrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--faint);
+  height: 8px;
+}
+
+.visual-flow-arrow svg {
+  width: 14px;
+  height: 14px;
+}
+
+/* ============================================================
+   2. Interactive ROI / Time-Saved Calculator
+   ============================================================ */
+.calc-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 36px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--line);
+  border-radius: 24px;
+  padding: clamp(28px, 4.5vw, 48px);
+}
+
+.calc-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.calc-control-group {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.calc-label-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.calc-label {
+  font-size: 14.5px;
+  font-weight: 500;
+  color: var(--ink);
+}
+
+.calc-val-badge {
+  font-family: "Geist Mono", monospace;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--accent);
+  background: rgba(255, 87, 47, 0.1);
+  padding: 3px 10px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 87, 47, 0.2);
+}
+
+/* Range input styling */
+.calc-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 6px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.12);
+  outline: none;
+  transition: background 0.2s;
+  cursor: pointer;
+}
+
+.calc-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--ink);
+  border: 3px solid var(--accent);
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
+  transition: transform 0.15s ease;
+}
+
+.calc-slider::-webkit-slider-thumb:hover {
+  transform: scale(1.15);
+}
+
+.calc-slider::-moz-range-thumb {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--ink);
+  border: 3px solid var(--accent);
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
+}
+
+/* Results panel on the right */
+.calc-results-box {
+  background: #171719;
+  border: 1px solid rgba(255, 87, 47, 0.25);
+  border-radius: 20px;
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 28px;
+  box-shadow: 0 20px 48px -12px rgba(255, 87, 47, 0.08);
+}
+
+.calc-stats-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.calc-stat-item {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.calc-stat-num {
+  font-family: "Geist Mono", monospace;
+  font-size: clamp(32px, 3.5vw, 44px);
+  font-weight: 800;
+  color: var(--ink);
+  line-height: 1;
+  letter-spacing: -0.04em;
+}
+
+.calc-stat-label {
+  font-size: 13px;
+  color: var(--dim);
+  line-height: 1.4;
+}
+
+.calc-highlight-box {
+  background: rgba(255, 87, 47, 0.08);
+  border: 1px solid rgba(255, 87, 47, 0.2);
+  border-radius: 12px;
+  padding: 14px 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.calc-highlight-title {
+  font-size: 13.5px;
+  color: var(--dim);
+}
+
+.calc-highlight-val {
+  font-family: "Geist Mono", monospace;
+  font-weight: 700;
+  font-size: 18px;
+  color: var(--accent);
+}
+
+.calc-cta-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  background: var(--accent);
+  color: #ffffff;
+  padding: 14px 24px;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 15px;
+  text-decoration: none;
+  transition: transform 0.2s ease, filter 0.2s ease;
+  box-shadow: 0 4px 14px rgba(255, 87, 47, 0.35);
+}
+
+.calc-cta-btn:hover {
+  transform: translateY(-2px);
+  filter: brightness(1.08);
+}
+
+.calc-disclaimer {
+  font-size: 11.5px;
+  color: var(--faint);
+  line-height: 1.4;
+}
+
+/* ============================================================
+   3. 4-Step Process Section
+   ============================================================ */
+.process-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+
+.process-card {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  padding: 28px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  transition: border-color 0.25s ease, transform 0.25s ease;
+}
+
+.process-card:hover {
+  border-color: var(--line-2);
+  transform: translateY(-4px);
+}
+
+.process-step-num {
+  font-family: "Geist Mono", monospace;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--accent);
+  background: rgba(255, 87, 47, 0.1);
+  padding: 4px 10px;
+  border-radius: 8px;
+  width: fit-content;
+}
+
+.process-step-title {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--ink);
+  letter-spacing: -0.02em;
+}
+
+.process-step-desc {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--dim);
+}
+
+/* ============================================================
+   4. Interactive FAQ Accordion
+   ============================================================ */
+.faq-accordion {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-width: 840px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.faq-item {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  overflow: hidden;
+  transition: border-color 0.2s ease;
+}
+
+.faq-item.is-open {
+  border-color: var(--line-2);
+  background: rgba(255, 255, 255, 0.035);
+}
+
+.faq-question-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 22px 26px;
+  background: none;
+  border: none;
+  color: var(--ink);
+  font-family: inherit;
+  font-size: 16px;
+  font-weight: 600;
+  text-align: left;
+  cursor: pointer;
+  letter-spacing: -0.015em;
+}
+
+.faq-icon {
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--dim);
+  transition: transform 0.25s cubic-bezier(0.2, 0.7, 0.3, 1);
+  flex-shrink: 0;
+}
+
+.faq-item.is-open .faq-icon {
+  transform: rotate(45deg);
+  color: var(--accent);
+}
+
+.faq-answer {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.28s cubic-bezier(0.2, 0.7, 0.3, 1), padding 0.28s ease;
+  padding: 0 26px;
+  color: var(--dim);
+  font-size: 15px;
+  line-height: 1.65;
+}
+
+.faq-item.is-open .faq-answer {
+  max-height: 200px;
+  padding-bottom: 24px;
+}
+
+/* ============================================================
+   5. Bottom High-Converting CTA Banner
+   ============================================================ */
+.bottom-cta-banner {
+  background: linear-gradient(180deg, rgba(255, 87, 47, 0.06) 0%, rgba(255, 87, 47, 0.01) 100%), #17171a;
+  border: 1px solid rgba(255, 87, 47, 0.25);
+  border-radius: 28px;
+  padding: clamp(48px, 6vw, 72px) clamp(24px, 4vw, 48px);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 22px;
+  box-shadow: 0 24px 64px -16px rgba(0, 0, 0, 0.6);
+}
+
+.bottom-cta-title {
+  margin: 0;
+  font-size: clamp(32px, 4vw, 52px);
+  font-weight: 800;
+  letter-spacing: -0.035em;
+  color: var(--ink);
+  max-width: 760px;
+  line-height: 1.15;
+}
+
+.bottom-cta-subtitle {
+  margin: 0;
+  font-size: clamp(15.5px, 1.15vw, 17.5px);
+  color: var(--dim);
+  max-width: 580px;
+  line-height: 1.6;
+}
+
+.bottom-cta-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--accent);
+  color: #ffffff;
+  padding: 16px 34px;
+  border-radius: 999px;
+  font-size: 16px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: transform 0.22s ease, filter 0.22s ease;
+  box-shadow: 0 4px 18px rgba(255, 87, 47, 0.4);
+}
+
+.bottom-cta-btn:hover {
+  transform: translateY(-2px);
+  filter: brightness(1.1);
+}
+
+.bottom-cta-guarantee {
+  font-size: 13px;
+  color: var(--faint);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* ============================================================
+   Responsive Layouts (Tablet & Mobile)
+   ============================================================ */
+@media (max-width: 960px) {
+  .services-card {
+    grid-template-columns: 1fr;
+    gap: 28px;
+  }
+  .calc-grid {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+  .process-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .process-grid {
+    grid-template-columns: 1fr;
+  }
+  .calc-stats-row {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  .services-nav {
+    width: 100%;
+    justify-content: flex-start;
+  }
+}

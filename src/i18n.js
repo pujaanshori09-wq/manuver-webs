@@ -58,11 +58,11 @@ export const dictionary = {
       whatsappBtn: 'Continue on WhatsApp',
       whatsappFooterLink: 'Continue on WhatsApp',
       whatsappMessage: 'Hi Manuver, I would like to consult about an automation or tech project.',
-      greeting: "Hey there! 👋 I'm Manuver's assistant. Got an idea you want to automate or build? Tell me what you have in mind.",
+      greeting: "Hey there! 👋 I'm Manuver's tech advisor. Got an app idea or workflow you want to automate? Tell me what you have in mind.",
       suggestions: [
-        'What can you build?',
-        'How does it work?',
-        'I need a quote'
+        'Consult on app idea',
+        'Workflow automation',
+        'What can you build?'
       ],
       placeholder: 'Type your question…',
       sendAria: 'Send message',
@@ -126,11 +126,11 @@ export const dictionary = {
       whatsappBtn: 'Lanjut di WhatsApp',
       whatsappFooterLink: 'Lanjut di WhatsApp',
       whatsappMessage: 'Halo Manuver, saya ingin konsultasi mengenai project otomasi atau teknologi.',
-      greeting: 'Hai! Aku asisten Manuver. Lagi ada ide yang mau diotomasi atau dibangun? Ceritakan saja, nanti kubantu.',
+      greeting: 'Hai! Aku konsultan teknologi Manuver. Punya ide aplikasi atau alur kerja yang mau diotomasi? Ceritakan saja, nanti kubantu rancang solusinya.',
       suggestions: [
-        'Bisa bikin apa saja?',
-        'Alurnya gimana?',
-        'Minta penawaran'
+        'Konsultasi ide aplikasi',
+        'Otomasi alur kerja',
+        'Bisa bikin apa saja?'
       ],
       placeholder: 'Tulis pertanyaanmu…',
       sendAria: 'Kirim pesan',

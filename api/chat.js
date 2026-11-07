@@ -180,8 +180,8 @@ export default async function handler(req, res) {
   }));
 
   const languageDirective = lang === 'id'
-    ? 'Bahasa pengunjung saat ini: Bahasa Indonesia.'
-    : 'Visitor interface current language: English.';
+    ? 'Bahasa pengunjung saat ini: Bahasa Indonesia. Jawab dan berinteraksilah dalam Bahasa Indonesia yang ramah, santai, dan solutif.'
+    : 'Visitor interface current language: English. Respond and interact in warm, friendly, and consultative English.';
 
   const requestPayload = {
     contents,
@@ -189,8 +189,8 @@ export default async function handler(req, res) {
       parts: [{ text: `${buildSystemPrompt()}\n\n[PANDUAN BAHASA]\n${languageDirective}` }]
     },
     generationConfig: {
-      maxOutputTokens: 300,
-      temperature: 0.35
+      maxOutputTokens: 500,
+      temperature: 0.5
     }
   };
 

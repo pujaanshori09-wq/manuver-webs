@@ -1,4 +1,12 @@
 import { createClient } from '@supabase/supabase-js';
+import { initI18n, t } from './src/i18n.js';
+import { initChatWidget } from './src/ChatWidget.js';
+
+// Initialize i18n & language switcher
+initI18n();
+
+// Initialize Manuver AI Assistant Chat Widget
+initChatWidget();
 
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL?.trim();
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY?.trim();

@@ -180,17 +180,17 @@ export default async function handler(req, res) {
   }));
 
   const languageDirective = lang === 'id'
-    ? 'Bahasa pengunjung saat ini: Bahasa Indonesia. Jawab dan berinteraksilah dalam Bahasa Indonesia yang ramah, santai, dan solutif.'
-    : 'Visitor interface current language: English. Respond and interact in warm, friendly, and consultative English.';
+    ? 'Bahasa lawan bicaramu saat ini: Bahasa Indonesia. Kamu adalah manusia asli (Fauzan dari Tim Manuver). Balas dengan Bahasa Indonesia yang santai, akrab (panggil kak/kamu), antusias, dan solutif layaknya chatting WhatsApp dengan partner kerja. DILARANG KERAS berbicara kaku seperti robot, dan DILARANG mengeluarkan catatan internal, checklist, atau teks evaluasi.'
+    : 'Current visitor language: English. You are a real human (Fauzan from the Manuver team). Respond in a warm, friendly, casual, and enthusiastic conversational tone like chatting on Slack. NEVER speak like a robot, and NEVER output internal notes, checklists, or rule evaluations.';
 
   const requestPayload = {
     contents,
     systemInstruction: {
-      parts: [{ text: `${buildSystemPrompt()}\n\n[PANDUAN BAHASA]\n${languageDirective}` }]
+      parts: [{ text: `${buildSystemPrompt()}\n\n[PANDUAN INTERAKSI]\n${languageDirective}` }]
     },
     generationConfig: {
-      maxOutputTokens: 500,
-      temperature: 0.5
+      maxOutputTokens: 1000,
+      temperature: 0.75
     }
   };
 

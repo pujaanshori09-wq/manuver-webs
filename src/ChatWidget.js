@@ -597,6 +597,20 @@ export function initChatWidget(container = document.body) {
     return formatted || `<p>${withItalic}</p>`;
   }
 
+  // Expose global helper for landing page CTA buttons
+  window.openManuverChat = (customPrompt) => {
+    setOpen(true);
+    if (customPrompt && typeof customPrompt === 'string') {
+      setTimeout(() => {
+        handleUserSend(customPrompt);
+      }, 250);
+    } else {
+      setTimeout(() => {
+        textarea.focus();
+      }, 150);
+    }
+  };
+
   return {
     open: () => setOpen(true),
     close: () => setOpen(false),

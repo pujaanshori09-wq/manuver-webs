@@ -12,6 +12,18 @@ initLandingSections('#landing-sections');
 // Initialize Manuver AI Assistant Chat Widget
 initChatWidget();
 
+// Connect Hero CTA button to open consultative AI discovery
+document.querySelector('#hero-start-building')?.addEventListener('click', (e) => {
+  e.preventDefault();
+  const lang = initI18n();
+  const prompt = lang === 'id'
+    ? 'Hai! Saya tertarik membangun project baru bersama Manuver. Boleh bantu konsultasikan alur dan teknologinya?'
+    : 'Hi! I am interested in building a new project with Manuver. Could you help consult on the workflow and technology?';
+  if (window.openManuverChat) {
+    window.openManuverChat(prompt);
+  }
+});
+
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL?.trim();
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY?.trim();
 const hasValidSupabaseConfig = Boolean(

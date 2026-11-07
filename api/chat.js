@@ -266,14 +266,21 @@ export default async function handler(req, res) {
           }
         }
 
-        // Check if WhatsApp should be suggested based on accumulated content
+        // Check if WhatsApp should be suggested (only after customer discovery has started or explicit request)
+        const userMsgCount = validMessages.filter(m => m.role === 'user').length;
+        const lastUserMsg = (validMessages[validMessages.length - 1]?.content || '').toLowerCase();
+        const explicitWaRequest = lastUserMsg.includes('whatsapp') || lastUserMsg.includes('wa') || lastUserMsg.includes('kontak') || lastUserMsg.includes('hubungi') || lastUserMsg.includes('contact');
+
         const lower = accumulatedText.toLowerCase();
-        const suggestWhatsApp = lower.includes('whatsapp') ||
+        const mentionsWaOrDeal = lower.includes('whatsapp') ||
           lower.includes('harga') ||
           lower.includes('price') ||
           lower.includes('jadwal') ||
           lower.includes('schedule') ||
           lower.includes('mulai');
+
+        // Only show WhatsApp button after at least 2 user messages (discovery done) OR if user explicitly requested
+        const suggestWhatsApp = (userMsgCount >= 2 || explicitWaRequest) && mentionsWaOrDeal;
 
         if (suggestWhatsApp) {
           res.write(`data: ${JSON.stringify({ suggestWhatsApp: true })}\n\n`);
@@ -323,13 +330,19 @@ export default async function handler(req, res) {
         throw new Error('Empty candidate response');
       }
 
+      const userMsgCount = validMessages.filter(m => m.role === 'user').length;
+      const lastUserMsg = (validMessages[validMessages.length - 1]?.content || '').toLowerCase();
+      const explicitWaRequest = lastUserMsg.includes('whatsapp') || lastUserMsg.includes('wa') || lastUserMsg.includes('kontak') || lastUserMsg.includes('hubungi') || lastUserMsg.includes('contact');
+
       const lower = replyText.toLowerCase();
-      const suggestWhatsApp = lower.includes('whatsapp') ||
+      const mentionsWaOrDeal = lower.includes('whatsapp') ||
         lower.includes('harga') ||
         lower.includes('price') ||
         lower.includes('jadwal') ||
         lower.includes('schedule') ||
         lower.includes('mulai');
+
+      const suggestWhatsApp = (userMsgCount >= 2 || explicitWaRequest) && mentionsWaOrDeal;
 
       res.statusCode = 200;
       res.setHeader('Content-Type', 'application/json');

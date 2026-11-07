@@ -100,12 +100,12 @@ export function initLandingSections(containerSelector = '#landing-sections') {
                 </div>
               </div>
 
-              <a href="${getCalculatorWhatsAppUrl()}" target="_blank" rel="noopener noreferrer" class="calc-cta-btn" id="calc-whatsapp-btn">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981z"/>
+              <button type="button" class="calc-cta-btn" id="calc-whatsapp-btn">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
                 </svg>
                 <span>${t('landing.calculator.ctaBtn', lang)}</span>
-              </a>
+              </button>
 
               <span class="calc-disclaimer">${t('landing.calculator.disclaimer', lang)}</span>
             </div>
@@ -213,12 +213,12 @@ export function initLandingSections(containerSelector = '#landing-sections') {
             <span class="section-badge"><i></i><span>${t('landing.bottomCta.badge', lang)}</span></span>
             <h2 class="bottom-cta-title">${t('landing.bottomCta.title', lang)}</h2>
             <p class="bottom-cta-subtitle">${t('landing.bottomCta.subtitle', lang)}</p>
-            <a href="https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(lang === 'id' ? 'Halo Manuver, saya ingin konsultasi mengenai pembuatan sistem atau website.' : 'Hi Manuver, I would like to consult on an automation or app project.')}" target="_blank" rel="noopener noreferrer" class="bottom-cta-btn">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981z"/>
+            <button type="button" class="bottom-cta-btn" id="bottom-cta-consult-btn">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
               </svg>
               <span>${t('landing.bottomCta.btnWhatsApp', lang)}</span>
-            </a>
+            </button>
             <span class="bottom-cta-guarantee">${t('landing.bottomCta.guarantee', lang)}</span>
           </div>
         </div>
@@ -403,11 +403,38 @@ export function initLandingSections(containerSelector = '#landing-sections') {
 
       if (resMonthly) resMonthly.textContent = `${monthly}h`;
       if (resAnnual) resAnnual.textContent = `${annual}h`;
-      if (ctaBtn) ctaBtn.setAttribute('href', getCalculatorWhatsAppUrl());
     }
 
     if (sliderHours) sliderHours.addEventListener('input', updateCalc);
     if (sliderTeam) sliderTeam.addEventListener('input', updateCalc);
+
+    // Calculator CTA: Trigger consultative AI discovery interview
+    if (ctaBtn) {
+      ctaBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        const hours = calculateMonthlyHours();
+        const prompt = lang === 'id'
+          ? `Halo! Saya baru saja menghitung potensi hemat ~${hours} jam kerja per bulan di kalkulator. Boleh bantu riset & konsultasikan solusi otomasi yang cocok untuk bisnis saya?`
+          : `Hi! I just calculated potential savings of ~${hours} hrs/month on the calculator. Could you help research and consult on the best automation solution for my business?`;
+        if (window.openManuverChat) {
+          window.openManuverChat(prompt);
+        }
+      });
+    }
+
+    // Bottom Banner CTA: Trigger consultative AI discovery interview
+    const bottomCtaBtn = container.querySelector('#bottom-cta-consult-btn');
+    if (bottomCtaBtn) {
+      bottomCtaBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        const prompt = lang === 'id'
+          ? 'Halo! Saya ingin konsultasi ide teknologi & aplikasi untuk bisnis saya. Apa saja yang perlu saya siapkan?'
+          : 'Hi! I would like to consult on an app or tech project for my business. What should we start with?';
+        if (window.openManuverChat) {
+          window.openManuverChat(prompt);
+        }
+      });
+    }
 
     // 3. FAQ Accordion Click
     const faqItems = container.querySelectorAll('.faq-item');

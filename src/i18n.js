@@ -58,7 +58,7 @@ export const dictionary = {
       whatsappBtn: 'Continue on WhatsApp',
       whatsappFooterLink: 'Continue on WhatsApp',
       whatsappMessage: 'Hi Manuver, I would like to consult about an automation or tech project.',
-      greeting: "Hey there! 👋 I'm Manuver's tech advisor. Got an app idea or workflow you want to automate? Tell me what you have in mind.",
+      greeting: "Hi there! I'm Manuver, ready to streamline your operations and save your valuable time 👋 Got an app idea or a repetitive workflow to automate? Let's talk.",
       suggestions: [
         'Consult on app idea',
         'Workflow automation',
@@ -208,7 +208,7 @@ export const dictionary = {
       whatsappBtn: 'Lanjut di WhatsApp',
       whatsappFooterLink: 'Lanjut di WhatsApp',
       whatsappMessage: 'Halo Manuver, saya ingin konsultasi mengenai project otomasi atau teknologi.',
-      greeting: 'Hai! Aku konsultan teknologi Manuver. Punya ide aplikasi atau alur kerja yang mau diotomasi? Ceritakan saja, nanti kubantu rancang solusinya.',
+      greeting: 'Halo kak! Saya Manuver, siap membantu mengefisiensikan waktu dan operasional bisnis kamu 👋 Ada ide aplikasi atau alur kerja yang mau dibuat otomatis nih?',
       suggestions: [
         'Konsultasi ide aplikasi',
         'Otomasi alur kerja',

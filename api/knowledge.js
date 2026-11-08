@@ -5,7 +5,7 @@
  * ============================================================
  */
 
-export const WHATSAPP_NUMBER = '6281234567890';
+export const WHATSAPP_NUMBER = '6285159113497';
 export const BRAND_NAME = 'Manuver';
 export const AI_MODEL = (typeof process !== 'undefined' && process.env && process.env.AI_MODEL) || 'gemini-2.5-flash-lite';
 

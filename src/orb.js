@@ -135,7 +135,16 @@ const hitPt=new THREE.Vector3();
 let hoverPos=null, hoverIdx=-1, dimT=0, slowT=0;
 let hoverT=null, live=new Set();
 const AUTO=Math.PI*2/20;              /* one full turn every 20 seconds */
-const canvas=document.getElementById('orb');
+let canvas=document.getElementById('orb');
+let globalMouse = { x: 0, y: 0, targetX: 0, targetY: 0 };
+window.addEventListener('pointermove', e => {
+  globalMouse.targetX = (e.clientX / window.innerWidth) * 2 - 1;
+  globalMouse.targetY = -(e.clientY / window.innerHeight) * 2 + 1;
+}, { passive: true });
+window.addEventListener('pointerleave', () => {
+  globalMouse.targetX = 0;
+  globalMouse.targetY = 0;
+}, { passive: true });
 const hintEl=document.getElementById('hint');
 const navEl=document.querySelector('.nav');
 const leadEl=document.querySelector('.lead');
@@ -272,6 +281,10 @@ function initGL(){
                                         vertexColors:true,toneMapped:false});
   cardMesh=new THREE.Mesh(geo,mat);
   orbGroup=new THREE.Group();
+  const coreGeo=new THREE.SphereGeometry(0.982, 36, 36);
+  const coreMat=new THREE.MeshBasicMaterial({ color: 0x0c0e14 });
+  const coreMesh=new THREE.Mesh(coreGeo, coreMat);
+  orbGroup.add(coreMesh);
   orbGroup.add(cardMesh);
   scene.add(orbGroup);
 
@@ -328,7 +341,11 @@ function tick(now){
     pitchVel*=Math.pow(0.0016,dt);
     pitch*=Math.pow(0.22,dt);          /* ease the tilt back to level */
   }
-  orbGroup.rotation.set(pitch,yaw,0);
+  globalMouse.x += (globalMouse.targetX - globalMouse.x) * 0.06;
+  globalMouse.y += (globalMouse.targetY - globalMouse.y) * 0.06;
+  const parallaxPitch = -globalMouse.y * 0.038;
+  const parallaxYaw = globalMouse.x * 0.048;
+  orbGroup.rotation.set(pitch + parallaxPitch, yaw + parallaxYaw, 0);
   updateHover(dt);
   renderer.render(scene,camera);
 }
@@ -392,6 +409,8 @@ function updateHover(dt){
    boot
    ============================================================ */
 async function boot(){
+  canvas = document.getElementById('orb');
+  if(!canvas) return;
   try{
     if(document.fonts&&document.fonts.load){
       await document.fonts.load('500 40px Inter');

@@ -421,3 +421,4 @@ if (typeof window !== 'undefined') {
     new SpatialHero('hero-particles');
   });
 }
+

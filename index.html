@@ -220,7 +220,7 @@
   .pain-item{ display:flex; align-items:center; gap:8px; font-size:13px; color:var(--dim); letter-spacing:-.004em }
   .pain-item svg{ width:13px; height:13px; color:var(--accent); flex-shrink:0; opacity:.85 }
 
-  /* RIGHT column: Spatial Focus Area */
+  /* RIGHT column: SaaS UI Sphere with Atmospheric Sync */
   .hero-right{
     display: flex;
     align-items: center;
@@ -229,8 +229,46 @@
     width: 100%;
     height: 100%;
     min-height: 480px;
-    pointer-events: none;
+    z-index: 3;
   }
+  .stage{
+    position: relative;
+    width: min(38vw, 600px);
+    aspect-ratio: 1;
+    background: transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: auto;
+  }
+  /* Luminous cyan/blue aura behind the sphere, perfectly matching background particles */
+  .stage::before{
+    content: '';
+    position: absolute;
+    width: 78%;
+    height: 78%;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(0, 240, 255, 0.28) 0%, rgba(0, 102, 255, 0.16) 42%, rgba(0, 30, 80, 0.04) 64%, transparent 72%);
+    filter: blur(44px);
+    pointer-events: none;
+    z-index: 1;
+    opacity: 0.88;
+    animation: orbAuraPulse 6s ease-in-out infinite alternate;
+  }
+  @keyframes orbAuraPulse{
+    0% { transform: scale(0.95); opacity: 0.72; }
+    100% { transform: scale(1.08); opacity: 0.96; }
+  }
+  #orb{
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: block;
+    cursor: grab;
+    touch-action: none;
+    z-index: 2;
+  }
+  #orb.dragging{ cursor: grabbing }
 
   /* Responsive / Mobile */
   @media (max-width:900px){
@@ -318,8 +356,12 @@
         </div>
       </div>
 
-      <!-- RIGHT column: Spatial Atmospheric Focus -->
-      <div class="hero-right" aria-hidden="true"></div>
+      <!-- RIGHT column: 3D Stage with Synchronized SaaS UI Sphere -->
+      <div class="hero-right">
+        <div class="stage">
+          <canvas id="orb"></canvas>
+        </div>
+      </div>
     </div>
   </div>
 </main>
@@ -330,5 +372,6 @@
 <script src="https://unpkg.com/three@0.149.0/build/three.min.js"></script>
 <script type="module" src="/main.js"></script>
 <script type="module" src="/src/spatialHero.js"></script>
+<script type="module" src="/src/orb.js"></script>
 </body>
 </html>

@@ -23,7 +23,7 @@ atlasCanvas.width=TW*COLS; atlasCanvas.height=TH*ROWS;
 
 async function buildAtlas(){
   const ac=atlasCanvas.getContext('2d');
-  ac.fillStyle='#1f1f21';ac.fillRect(0,0,atlasCanvas.width,atlasCanvas.height);
+  ac.clearRect(0,0,atlasCanvas.width,atlasCanvas.height);
   const imgs=await Promise.all(TILE_SRC.map(src=>new Promise(res=>{
     const im=new Image(); im.onload=()=>res(im); im.onerror=()=>res(null); im.src=src;
   })));
@@ -278,13 +278,10 @@ function initGL(){
   hoverT=new Float32Array(cards.length);
   const geo=buildGeometry(cards);
   const mat=new THREE.MeshBasicMaterial({map:atlasTex,side:THREE.FrontSide,
-                                        vertexColors:true,toneMapped:false});
+                                        vertexColors:true,toneMapped:false,
+                                        transparent:true,alphaTest:0.02});
   cardMesh=new THREE.Mesh(geo,mat);
   orbGroup=new THREE.Group();
-  const coreGeo=new THREE.SphereGeometry(0.982, 36, 36);
-  const coreMat=new THREE.MeshBasicMaterial({ color: 0x0c0e14 });
-  const coreMesh=new THREE.Mesh(coreGeo, coreMat);
-  orbGroup.add(coreMesh);
   orbGroup.add(cardMesh);
 
   // 3D Orbital stardust particles that dance around the SaaS cards

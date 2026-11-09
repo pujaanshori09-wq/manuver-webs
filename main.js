@@ -1,4 +1,3 @@
-import { createClient } from '@supabase/supabase-js';
 import { initI18n, t } from './src/i18n.js';
 import { initChatWidget } from './src/ChatWidget.js';
 import { initLandingSections } from './src/LandingSections.js';
@@ -24,56 +23,36 @@ document.querySelector('#hero-start-building')?.addEventListener('click', (e) =>
   }
 });
 
-const defaultSupabaseUrl = 'https://pepmuztlrwctwgfryhwq.supabase.co';
-const defaultSupabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBlcG11enRscndjdHdnZnJ5aHdxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTI3MjExNjksImV4cCI6MjEwODI5NzE2OX0.9BhgQEVUUQdYp1McEE_gA26n_sjWKMmdtleagPphy3M';
-
-const supabaseUrl = (import.meta.env.VITE_SUPABASE_URL || defaultSupabaseUrl).trim();
-const supabaseAnonKey = (import.meta.env.VITE_SUPABASE_ANON_KEY || defaultSupabaseAnonKey).trim();
-const hasValidSupabaseConfig = Boolean(
-  supabaseUrl &&
-  supabaseAnonKey &&
-  !supabaseUrl.includes('YOUR_') &&
-  !supabaseUrl.includes('PASTE_') &&
-  !supabaseAnonKey.includes('YOUR_') &&
-  !supabaseAnonKey.includes('PASTE_') &&
-  !supabaseAnonKey.startsWith('sb_secret_')
-);
-
-const supabase = hasValidSupabaseConfig ? createClient(supabaseUrl, supabaseAnonKey) : null;
-
-async function signInWithGoogle() {
-  if (!supabase) {
-    alert('Supabase is not configured correctly.');
-    return;
-  }
-
-  const { error } = await supabase.auth.signInWithOAuth({
-    provider: 'google',
-    options: {
-      redirectTo: window.location.origin,
-      queryParams: {
-        access_type: 'offline',
-        prompt: 'consent',
-      },
-    },
-  });
-
-  if (error) {
-    console.error('Google login error:', error.message);
-    alert(error.message);
-  }
+// Clean up OAuth query parameters from URL after login
+const urlParams = new URLSearchParams(window.location.search);
+if (urlParams.get('auth') === 'success') {
+  window.history.replaceState({}, document.title, window.location.pathname);
 }
 
-function updateAuthUI(user) {
+/**
+ * Trigger Node Express / PostgreSQL Google OAuth flow
+ */
+export function signInWithGoogle() {
+  window.location.href = '/api/auth/google';
+}
+
+/**
+ * Updates navbar UI based on authentication state
+ */
+export function updateAuthUI(user) {
   const signInEl = document.getElementById('sign-in-link');
   if (!signInEl) return;
+
   if (user) {
-    const displayName = user.user_metadata?.full_name || user.email?.split('@')[0] || 'User';
-    signInEl.innerHTML = `<span title="${user.email}">👤 ${displayName} (Keluar)</span>`;
+    const displayName = user.name || user.email?.split('@')[0] || 'User';
+    const avatar = user.avatar_url
+      ? `<img src="${user.avatar_url}" style="width:22px;height:22px;border-radius:50%;vertical-align:middle;margin-right:6px;" alt="" />`
+      : '👤 ';
+    signInEl.innerHTML = `<span title="${user.email}" style="display:inline-flex;align-items:center;">${avatar}<span>${displayName} (Keluar)</span></span>`;
     signInEl.onclick = async (e) => {
       e.preventDefault();
       if (confirm(`Keluar dari akun ${user.email}?`)) {
-        await supabase.auth.signOut();
+        await fetch('/api/auth/logout', { method: 'POST', credentials: 'include' }).catch(() => {});
         window.location.reload();
       }
     };
@@ -86,11 +65,7 @@ function updateAuthUI(user) {
   }
 }
 
-const button = document.getElementById('google-login');
-if (button) {
-  button.addEventListener('click', signInWithGoogle);
-}
-
+// Connect Sign-In link in navigation
 const signInLink = document.getElementById('sign-in-link');
 if (signInLink) {
   signInLink.addEventListener('click', (event) => {
@@ -99,12 +74,20 @@ if (signInLink) {
   });
 }
 
-if (supabase) {
-  supabase.auth.getSession().then(({ data }) => {
-    updateAuthUI(data?.session?.user || null);
-  });
-
-  supabase.auth.onAuthStateChange((_event, session) => {
-    updateAuthUI(session?.user || null);
+const googleLoginBtn = document.getElementById('google-login');
+if (googleLoginBtn) {
+  googleLoginBtn.addEventListener('click', (event) => {
+    event.preventDefault();
+    signInWithGoogle();
   });
 }
+
+// Check logged in user status from PostgreSQL backend on page load
+fetch('/api/auth/me', { credentials: 'include' })
+  .then((res) => (res.ok ? res.json() : { user: null }))
+  .then((data) => {
+    updateAuthUI(data?.user || null);
+  })
+  .catch(() => {
+    updateAuthUI(null);
+  });

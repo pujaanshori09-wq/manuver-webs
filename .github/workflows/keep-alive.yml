@@ -18,3 +18,4 @@ jobs:
             "https://pepmuztlrwctwgfryhwq.supabase.co/rest/v1/")
           echo "Supabase responded with HTTP code: $HTTP_STATUS"
           echo "Inactivity timer successfully refreshed! Database will stay awake."
+

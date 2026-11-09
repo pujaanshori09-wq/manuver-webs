@@ -1,6 +1,7 @@
 import { initI18n, t } from './src/i18n.js';
 import { initChatWidget } from './src/ChatWidget.js';
 import { initLandingSections } from './src/LandingSections.js';
+import { initClientPortal, openClientPortal } from './src/ClientPortal.js';
 
 // Initialize i18n & language switcher
 initI18n();
@@ -10,6 +11,9 @@ initLandingSections('#landing-sections');
 
 // Initialize Manuver AI Assistant Chat Widget
 initChatWidget();
+
+// Initialize Manuver Client Portal & Project Tracker
+initClientPortal();
 
 // Connect Hero CTA button to open consultative AI discovery
 document.querySelector('#hero-start-building')?.addEventListener('click', (e) => {
@@ -41,27 +45,61 @@ export function signInWithGoogle() {
  */
 export function updateAuthUI(user) {
   const signInEl = document.getElementById('sign-in-link');
+  const googleLoginBtn = document.getElementById('google-login');
   if (!signInEl) return;
 
   if (user) {
     const displayName = user.name || user.email?.split('@')[0] || 'User';
     const avatar = user.avatar_url
-      ? `<img src="${user.avatar_url}" style="width:22px;height:22px;border-radius:50%;vertical-align:middle;margin-right:6px;" alt="" />`
+      ? `<img src="${user.avatar_url}" style="width:22px;height:22px;border-radius:50%;vertical-align:middle;margin-right:6px;border:1.5px solid var(--accent);" alt="" />`
       : '👤 ';
-    signInEl.innerHTML = `<span title="${user.email}" style="display:inline-flex;align-items:center;">${avatar}<span>${displayName} (Keluar)</span></span>`;
-    signInEl.onclick = async (e) => {
-      e.preventDefault();
+
+    signInEl.innerHTML = `
+      <span style="display:inline-flex;align-items:center;gap:6px;">
+        <span class="user-portal-trigger" title="Buka Client Portal (${user.email})" style="display:inline-flex;align-items:center;cursor:pointer;">
+          ${avatar}<span>${displayName}</span>
+        </span>
+        <button type="button" class="user-quick-logout" title="Keluar dari akun" style="background:none;border:none;color:var(--dim);font-size:12px;cursor:pointer;padding:0 2px;opacity:0.75;">(Keluar)</button>
+      </span>
+    `;
+
+    const portalTrigger = signInEl.querySelector('.user-portal-trigger');
+    const quickLogout = signInEl.querySelector('.user-quick-logout');
+
+    portalTrigger?.addEventListener('click', (e) => {
+      e.stopPropagation();
+      openClientPortal();
+    });
+
+    quickLogout?.addEventListener('click', async (e) => {
+      e.stopPropagation();
       if (confirm(`Keluar dari akun ${user.email}?`)) {
         await fetch('/api/auth/logout', { method: 'POST', credentials: 'include' }).catch(() => {});
         window.location.reload();
       }
-    };
+    });
+
+    if (googleLoginBtn) {
+      googleLoginBtn.innerHTML = `<span>🚀 Client Portal</span>`;
+      googleLoginBtn.onclick = (e) => {
+        e.preventDefault();
+        openClientPortal();
+      };
+    }
   } else {
     signInEl.innerHTML = `<span data-i18n="nav.signIn">${t('nav.signIn', initI18n())}</span>`;
     signInEl.onclick = (e) => {
       e.preventDefault();
       signInWithGoogle();
     };
+
+    if (googleLoginBtn) {
+      googleLoginBtn.innerHTML = `<span data-i18n="nav.getStarted">${t('nav.getStarted', initI18n())}</span>`;
+      googleLoginBtn.onclick = (e) => {
+        e.preventDefault();
+        signInWithGoogle();
+      };
+    }
   }
 }
 

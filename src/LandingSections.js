@@ -413,6 +413,20 @@ export function initLandingSections(containerSelector = '#landing-sections') {
       ctaBtn.addEventListener('click', (e) => {
         e.preventDefault();
         const hours = calculateMonthlyHours();
+
+        // Persist to PostgreSQL if authenticated
+        fetch('/api/auth/roi', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'include',
+          body: JSON.stringify({
+            hoursPerWeek,
+            teamSize,
+            monthlySavedHours: hours,
+            annualSavedHours: calculateAnnualHours()
+          })
+        }).catch(() => {});
+
         const prompt = lang === 'id'
           ? `Halo! Saya baru saja menghitung potensi hemat ~${hours} jam kerja per bulan di kalkulator. Boleh bantu riset & konsultasikan solusi otomasi yang cocok untuk bisnis saya?`
           : `Hi! I just calculated potential savings of ~${hours} hrs/month on the calculator. Could you help research and consult on the best automation solution for my business?`;

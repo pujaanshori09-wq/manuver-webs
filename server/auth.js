@@ -1,6 +1,12 @@
 import express from 'express';
 import jwt from 'jsonwebtoken';
-import { upsertGoogleUser, findUserById } from './db.js';
+import {
+  upsertGoogleUser,
+  findUserById,
+  getUserDashboardData,
+  createProjectBrief,
+  saveRoiCalculation
+} from './db.js';
 
 export const authRouter = express.Router();
 
@@ -175,5 +181,74 @@ authRouter.get('/me', async (req, res) => {
 authRouter.post('/logout', (req, res) => {
   res.clearCookie('manuver_token');
   res.json({ success: true, message: 'Logged out successfully' });
+});
+
+/**
+ * 5. GET /api/auth/dashboard
+ * Retrieves comprehensive client portal dashboard data from PostgreSQL
+ */
+authRouter.get('/dashboard', async (req, res) => {
+  const token = req.cookies?.manuver_token || req.headers.authorization?.replace('Bearer ', '');
+  if (!token) return res.status(401).json({ error: 'Unauthorized' });
+
+  try {
+    const decoded = jwt.verify(token, JWT_SECRET);
+    const data = await getUserDashboardData(decoded.userId);
+    if (!data) return res.status(404).json({ error: 'User not found' });
+    res.json(data);
+  } catch (err) {
+    res.status(401).json({ error: 'Invalid session' });
+  }
+});
+
+/**
+ * 6. POST /api/auth/brief
+ * Submits a new project brief to PostgreSQL
+ */
+authRouter.post('/brief', async (req, res) => {
+  const token = req.cookies?.manuver_token || req.headers.authorization?.replace('Bearer ', '');
+  if (!token) return res.status(401).json({ error: 'Unauthorized' });
+
+  try {
+    const decoded = jwt.verify(token, JWT_SECRET);
+    const { serviceCategory, description, budgetRange, targetTimeline } = req.body;
+    if (!serviceCategory || !description) {
+      return res.status(400).json({ error: 'Service category and description are required' });
+    }
+    const brief = await createProjectBrief({
+      userId: decoded.userId,
+      serviceCategory,
+      description,
+      budgetRange,
+      targetTimeline
+    });
+    res.json({ success: true, brief });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+/**
+ * 7. POST /api/auth/roi
+ * Saves ROI calculator estimates to PostgreSQL
+ */
+authRouter.post('/roi', async (req, res) => {
+  const token = req.cookies?.manuver_token || req.headers.authorization?.replace('Bearer ', '');
+  if (!token) return res.status(401).json({ error: 'Unauthorized' });
+
+  try {
+    const decoded = jwt.verify(token, JWT_SECRET);
+    const { hoursPerWeek, teamSize, monthlySavedHours, annualSavedHours } = req.body;
+    const result = await saveRoiCalculation({
+      userId: decoded.userId,
+      hoursPerWeek,
+      teamSize,
+      monthlySavedHours,
+      annualSavedHours
+    });
+    res.json({ success: true, result });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 });
 

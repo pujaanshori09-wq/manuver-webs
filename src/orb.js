@@ -286,6 +286,50 @@ function initGL(){
   const coreMesh=new THREE.Mesh(coreGeo, coreMat);
   orbGroup.add(coreMesh);
   orbGroup.add(cardMesh);
+
+  // 3D Orbital stardust particles that dance around the SaaS cards
+  const dustCount = 380;
+  const dustGeo = new THREE.BufferGeometry();
+  const dustPos = new Float32Array(dustCount * 3);
+  const dustCol = new Float32Array(dustCount * 3);
+  for (let i = 0; i < dustCount; i++) {
+    const i3 = i * 3;
+    const r = 1.04 + Math.random() * 0.40;
+    const theta = Math.random() * Math.PI * 2;
+    const phi = Math.acos(2 * Math.random() - 1);
+    dustPos[i3] = r * Math.sin(phi) * Math.cos(theta);
+    dustPos[i3 + 1] = r * Math.sin(phi) * Math.sin(theta);
+    dustPos[i3 + 2] = r * Math.cos(phi);
+    if (Math.random() > 0.45) {
+      dustCol[i3] = 0.0; dustCol[i3 + 1] = 0.94; dustCol[i3 + 2] = 1.0;
+    } else if (Math.random() > 0.5) {
+      dustCol[i3] = 0.0; dustCol[i3 + 1] = 0.45; dustCol[i3 + 2] = 1.0;
+    } else {
+      dustCol[i3] = 0.95; dustCol[i3 + 1] = 0.98; dustCol[i3 + 2] = 1.0;
+    }
+  }
+  dustGeo.setAttribute('position', new THREE.BufferAttribute(dustPos, 3));
+  dustGeo.setAttribute('color', new THREE.BufferAttribute(dustCol, 3));
+  const dustCanvas = document.createElement('canvas');
+  dustCanvas.width = 32; dustCanvas.height = 32;
+  const dCtx = dustCanvas.getContext('2d');
+  const dGrad = dCtx.createRadialGradient(16, 16, 0, 16, 16, 16);
+  dGrad.addColorStop(0, 'rgba(255,255,255,1)');
+  dGrad.addColorStop(0.35, 'rgba(0,240,255,0.7)');
+  dGrad.addColorStop(1, 'rgba(0,0,0,0)');
+  dCtx.fillStyle = dGrad; dCtx.fillRect(0, 0, 32, 32);
+  const dustTex = new THREE.CanvasTexture(dustCanvas);
+  const dustMat = new THREE.PointsMaterial({
+    size: 0.045,
+    map: dustTex,
+    vertexColors: true,
+    transparent: true,
+    opacity: 0.85,
+    blending: THREE.AdditiveBlending,
+    depthWrite: false
+  });
+  const dustPoints = new THREE.Points(dustGeo, dustMat);
+  orbGroup.add(dustPoints);
   scene.add(orbGroup);
 
   fitCamera();
@@ -341,8 +385,8 @@ function tick(now){
     pitchVel*=Math.pow(0.0016,dt);
     pitch*=Math.pow(0.22,dt);          /* ease the tilt back to level */
   }
-  globalMouse.x += (globalMouse.targetX - globalMouse.x) * 0.06;
-  globalMouse.y += (globalMouse.targetY - globalMouse.y) * 0.06;
+  globalMouse.x += (globalMouse.targetX - globalMouse.x) * 0.045;
+  globalMouse.y += (globalMouse.targetY - globalMouse.y) * 0.045;
   const parallaxPitch = -globalMouse.y * 0.038;
   const parallaxYaw = globalMouse.x * 0.048;
   orbGroup.rotation.set(pitch + parallaxPitch, yaw + parallaxYaw, 0);
@@ -385,7 +429,7 @@ function updateHover(dt){
   dimT  += ((hoverIdx>=0?1:0)-dimT )*ease;
   slowT += ((hoverIdx>=0?1:0)-slowT)*ease;
   const dimTo=1-0.42*dimT;
-  cardMesh.material.color.setScalar(dimTo);
+  cardMesh.material.color.setRGB(0.90*dimTo, 0.95*dimTo, 1.0*dimTo);
 
   let movedGeo=false, movedCol=false;
   for(const i of Array.from(live)){

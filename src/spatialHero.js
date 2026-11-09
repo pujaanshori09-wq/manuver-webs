@@ -15,9 +15,9 @@ export class SpatialHero {
     this.isMobile = window.innerWidth < 768;
 
     // Adaptive density based on GPU tier & screen size
-    this.particleCount = this.isMobile ? 5500 : 16000;
-    this.bokehCount = this.isMobile ? 30 : 70;
-    this.dustCount = this.isMobile ? 800 : 2200;
+    this.particleCount = this.isMobile ? 7000 : 22000;
+    this.bokehCount = this.isMobile ? 35 : 85;
+    this.dustCount = this.isMobile ? 900 : 2600;
     this.dprCap = 2.0;
 
     this.scene = null;
@@ -186,8 +186,8 @@ export class SpatialHero {
           gl_Position = projectionMatrix * mvPosition;
 
           // 4. Distance-based sizing
-          float pointSize = (32.0 * aScale * uPixelRatio) / -mvPosition.z;
-          gl_PointSize = clamp(pointSize, 2.0, 14.0);
+          float pointSize = (44.0 * aScale * uPixelRatio) / -mvPosition.z;
+          gl_PointSize = clamp(pointSize, 3.0, 18.0);
 
           // 5. Electric Blue & Luminous White Gradient
           float speedRatio = clamp(length(flow) * 0.7, 0.0, 1.0);
@@ -197,7 +197,7 @@ export class SpatialHero {
           }
 
           vColor = col;
-          vAlpha = smoothstep(230.0, 45.0, -mvPosition.z) * 0.9;
+          vAlpha = smoothstep(270.0, 30.0, -mvPosition.z) * 0.98;
         }
       `,
       fragmentShader: `
@@ -209,10 +209,10 @@ export class SpatialHero {
           float dist = length(coord);
           if (dist > 0.5) discard;
 
-          float intensity = smoothstep(0.5, 0.04, dist);
-          intensity = pow(intensity, 1.3);
+          float intensity = smoothstep(0.5, 0.02, dist);
+          intensity = pow(intensity, 1.15);
 
-          gl_FragColor = vec4(vColor, intensity * vAlpha);
+          gl_FragColor = vec4(vColor, intensity * vAlpha * 1.35);
         }
       `
     });
@@ -383,9 +383,9 @@ export class SpatialHero {
       this.mouse.targetY = 0;
     }
 
-    // Smooth Damping (0.06 factor)
-    this.mouse.x += (this.mouse.targetX - this.mouse.x) * 0.06;
-    this.mouse.y += (this.mouse.targetY - this.mouse.y) * 0.06;
+    // Smooth Damping (0.045 factor for buttery smooth organic glide)
+    this.mouse.x += (this.mouse.targetX - this.mouse.x) * 0.045;
+    this.mouse.y += (this.mouse.targetY - this.mouse.y) * 0.045;
 
     // Cinematic Parallax Tilt
     const autonomousTiltX = Math.sin(elapsedTime * 0.35) * 0.015;

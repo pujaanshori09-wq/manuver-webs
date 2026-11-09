@@ -149,15 +149,16 @@
   }
 
   .btn{ display:inline-flex; align-items:center; justify-content:center; gap:8px;
-        border-radius:999px; font-weight:500; letter-spacing:-.012em; white-space:nowrap;
-        transition:transform .3s cubic-bezier(.2,.7,.3,1), background .25s ease, border-color .25s ease }
+        border-radius:999px; font-weight:600; letter-spacing:-.012em; white-space:nowrap;
+        font-family:inherit; cursor:pointer; text-decoration:none;
+        transition:transform .25s cubic-bezier(.2,.7,.3,1), background .2s ease, border-color .2s ease, box-shadow .2s ease }
   .btn:active{ transform:translateY(1px) }
-  .btn.sm{ font-size:14px; padding:9px 17px }
-  .btn.lg{ font-size:15.5px; padding:13px 25px }
-  .btn.solid{ background:var(--ink); color:#17171a }
-  .btn.solid:hover{ background:#fff }
-  .btn.ghost{ border:1px solid var(--line-2); color:var(--ink) }
-  .btn.ghost:hover{ border-color:rgba(255,255,255,.42); background:rgba(255,255,255,.05) }
+  .btn.sm{ font-size:13.5px; padding:8px 18px; min-height:38px }
+  .btn.lg{ font-size:15px; padding:13px 26px; min-height:48px }
+  .btn.solid{ background:var(--ink); color:#17171a; border:1px solid transparent; box-shadow: 0 2px 8px rgba(0,0,0,0.2) }
+  .btn.solid:hover{ background:#ffffff; box-shadow: 0 4px 14px rgba(0,0,0,0.3) }
+  .btn.ghost{ border:1px solid var(--line-2); color:var(--ink); background:transparent }
+  .btn.ghost:hover{ border-color:rgba(255,255,255,.45); background:rgba(255,255,255,.05) }
   .btn .arrow{ transition:transform .3s cubic-bezier(.2,.7,.3,1) }
   .btn:hover .arrow{ transform:translateX(3px) }
 
@@ -245,6 +246,14 @@
       max-width: 480px;
       margin: 0 auto;
     }
+  }
+  @media (max-width:480px){
+    .layout-wrapper{ padding: 0 18px; }
+    .hero-grid{ gap: 28px; padding: 12px 0 36px; }
+    .lead{ font-size: 38px; }
+    .cta{ width: 100%; flex-direction: column; }
+    .btn.lg{ width: 100%; }
+    .navend .sign{ font-size: 13.5px; padding: 4px 8px; }
   }
   @media (max-width:420px){ .navend .sign{ display:inline-flex; } }
   @media (prefers-reduced-motion:reduce){ .btn,.btn .arrow{ transition:none } }

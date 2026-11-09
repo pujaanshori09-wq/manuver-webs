@@ -406,13 +406,35 @@
 }
 
 @media (max-width: 640px) {
+  .portal-modal {
+    width: 95vw;
+    max-height: 92vh;
+    border-radius: 16px;
+  }
+  .portal-header {
+    padding: 16px 18px;
+  }
+  .portal-nav-tabs {
+    padding: 10px 16px;
+    gap: 6px;
+  }
+  .portal-tab-btn {
+    padding: 7px 12px;
+    font-size: 13px;
+  }
+  .portal-content {
+    padding: 18px 16px 24px;
+  }
   .portal-metrics-grid {
     grid-template-columns: 1fr;
+    gap: 12px;
   }
   .portal-timeline {
     grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
   }
-  .portal-modal {
-    width: 96vw;
+  .portal-form-select,
+  .portal-form-textarea {
+    font-size: 16px; /* Prevents auto-zoom on iOS Safari */
   }
 }

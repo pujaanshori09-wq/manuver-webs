@@ -1,0 +1,20 @@
+name: Keep Supabase Active
+
+on:
+  schedule:
+    # Runs automatically every 3 days at 00:00 UTC
+    - cron: '0 0 */3 * *'
+  workflow_dispatch: # Allows manual trigger from GitHub UI anytime
+
+jobs:
+  keep-alive:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping Supabase Database
+        run: |
+          echo "Sending automated keep-alive ping to Supabase..."
+          HTTP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" \
+            -H "apikey: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBlcG11enRscndjdHdnZnJ5aHdxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTI3MjExNjksImV4cCI6MjEwODI5NzE2OX0.9BhgQEVUUQdYp1McEE_gA26n_sjWKMmdtleagPphy3M" \
+            "https://pepmuztlrwctwgfryhwq.supabase.co/rest/v1/")
+          echo "Supabase responded with HTTP code: $HTTP_STATUS"
+          echo "Inactivity timer successfully refreshed! Database will stay awake."

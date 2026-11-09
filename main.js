@@ -24,8 +24,11 @@ document.querySelector('#hero-start-building')?.addEventListener('click', (e) =>
   }
 });
 
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL?.trim();
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY?.trim();
+const defaultSupabaseUrl = 'https://pepmuztlrwctwgfryhwq.supabase.co';
+const defaultSupabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBlcG11enRscndjdHdnZnJ5aHdxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTI3MjExNjksImV4cCI6MjEwODI5NzE2OX0.9BhgQEVUUQdYp1McEE_gA26n_sjWKMmdtleagPphy3M';
+
+const supabaseUrl = (import.meta.env.VITE_SUPABASE_URL || defaultSupabaseUrl).trim();
+const supabaseAnonKey = (import.meta.env.VITE_SUPABASE_ANON_KEY || defaultSupabaseAnonKey).trim();
 const hasValidSupabaseConfig = Boolean(
   supabaseUrl &&
   supabaseAnonKey &&
@@ -36,15 +39,11 @@ const hasValidSupabaseConfig = Boolean(
   !supabaseAnonKey.startsWith('sb_secret_')
 );
 
-if (!hasValidSupabaseConfig) {
-  console.warn('Supabase env is not configured correctly. Use the project URL and the publishable key, not the secret key.');
-}
-
 const supabase = hasValidSupabaseConfig ? createClient(supabaseUrl, supabaseAnonKey) : null;
 
 async function signInWithGoogle() {
   if (!supabase) {
-    alert('Supabase is not configured correctly. Put your project URL and publishable key in .env.');
+    alert('Supabase is not configured correctly.');
     return;
   }
 
@@ -65,6 +64,28 @@ async function signInWithGoogle() {
   }
 }
 
+function updateAuthUI(user) {
+  const signInEl = document.getElementById('sign-in-link');
+  if (!signInEl) return;
+  if (user) {
+    const displayName = user.user_metadata?.full_name || user.email?.split('@')[0] || 'User';
+    signInEl.innerHTML = `<span title="${user.email}">👤 ${displayName} (Keluar)</span>`;
+    signInEl.onclick = async (e) => {
+      e.preventDefault();
+      if (confirm(`Keluar dari akun ${user.email}?`)) {
+        await supabase.auth.signOut();
+        window.location.reload();
+      }
+    };
+  } else {
+    signInEl.innerHTML = `<span data-i18n="nav.signIn">${t('nav.signIn', initI18n())}</span>`;
+    signInEl.onclick = (e) => {
+      e.preventDefault();
+      signInWithGoogle();
+    };
+  }
+}
+
 const button = document.getElementById('google-login');
 if (button) {
   button.addEventListener('click', signInWithGoogle);
@@ -79,16 +100,11 @@ if (signInLink) {
 }
 
 if (supabase) {
-  supabase.auth.getSession().then(({ data, error }) => {
-    if (error) {
-      console.error('Session check failed:', error.message);
-      return;
-    }
+  supabase.auth.getSession().then(({ data }) => {
+    updateAuthUI(data?.session?.user || null);
+  });
 
-    if (data.session) {
-      console.log('User session exists:', data.session.user.email);
-    } else {
-      console.log('No active session yet.');
-    }
+  supabase.auth.onAuthStateChange((_event, session) => {
+    updateAuthUI(session?.user || null);
   });
 }

@@ -12,9 +12,8 @@ function getRedirectUri(req) {
   if (process.env.GOOGLE_REDIRECT_URI) return process.env.GOOGLE_REDIRECT_URI;
   const protocol = req.protocol === 'https' || req.headers['x-forwarded-proto'] === 'https' ? 'https' : 'http';
   const host = req.get('host');
-  // Use current incoming path prefix (/auth or /api/auth)
-  const basePath = req.baseUrl || '/api/auth';
-  return `${protocol}://${host}${basePath}/google/callback`;
+  // Default to /auth/google/callback as configured in Google Console
+  return `${protocol}://${host}/auth/google/callback`;
 }
 
 /**
@@ -87,17 +86,34 @@ authRouter.get('/google/callback', async (req, res) => {
       return res.redirect('/?auth=failed_profile_fetch');
     }
 
-    // Upsert user into PostgreSQL database
-    const dbUser = await upsertGoogleUser({
-      googleId: profile.id,
-      email: profile.email,
-      name: profile.name || profile.given_name || 'User',
-      avatarUrl: profile.picture || ''
-    });
+    // Upsert user into PostgreSQL database (with resilient fallback if DB is not connected yet)
+    let dbUser = null;
+    try {
+      dbUser = await upsertGoogleUser({
+        googleId: profile.id,
+        email: profile.email,
+        name: profile.name || profile.given_name || 'User',
+        avatarUrl: profile.picture || ''
+      });
+    } catch (dbErr) {
+      console.warn('PostgreSQL write skipped (database not connected):', dbErr.message);
+      dbUser = {
+        id: profile.id,
+        google_id: profile.id,
+        email: profile.email,
+        name: profile.name || profile.given_name || 'User',
+        avatar_url: profile.picture || ''
+      };
+    }
 
     // Generate JWT token (valid for 7 days)
     const token = jwt.sign(
-      { userId: dbUser.id, email: dbUser.email, name: dbUser.name },
+      {
+        userId: dbUser.id,
+        email: dbUser.email,
+        name: dbUser.name,
+        avatarUrl: dbUser.avatar_url
+      },
       JWT_SECRET,
       { expiresIn: '7d' }
     );
@@ -132,10 +148,18 @@ authRouter.get('/me', async (req, res) => {
 
   try {
     const decoded = jwt.verify(token, JWT_SECRET);
-    const user = await findUserById(decoded.userId);
+    let user = null;
+    try {
+      user = await findUserById(decoded.userId);
+    } catch (_) {}
 
     if (!user) {
-      return res.status(401).json({ user: null });
+      user = {
+        id: decoded.userId,
+        email: decoded.email,
+        name: decoded.name,
+        avatar_url: decoded.avatarUrl || ''
+      };
     }
 
     res.json({ user });

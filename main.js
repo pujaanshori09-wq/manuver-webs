@@ -129,3 +129,24 @@ fetch('/api/auth/me', { credentials: 'include' })
   .catch(() => {
     updateAuthUI(null);
   });
+
+// Header proximity & particle blending effect
+const navHeader = document.querySelector('.nav-header');
+if (navHeader) {
+  window.addEventListener('pointermove', (e) => {
+    // If cursor approaches the top navbar (within 80px of top)
+    if (e.clientY <= 80 || navHeader.matches(':hover')) {
+      navHeader.classList.add('nav-active');
+    } else {
+      navHeader.classList.remove('nav-active');
+    }
+  }, { passive: true });
+
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > 40) {
+      navHeader.classList.add('nav-scrolled');
+    } else {
+      navHeader.classList.remove('nav-scrolled');
+    }
+  }, { passive: true });
+}

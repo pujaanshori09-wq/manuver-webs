@@ -40,16 +40,35 @@
 
   /* ---------- navigation ---------- */
   .nav-header{
-    position: relative;
-    z-index: 10;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
     width: 100%;
+    z-index: 50;
+    background: transparent;
+    border-bottom: 1px solid transparent;
+    transition: background 0.35s cubic-bezier(0.2, 0.7, 0.3, 1),
+                border-color 0.35s ease,
+                backdrop-filter 0.35s ease,
+                -webkit-backdrop-filter 0.35s ease,
+                box-shadow 0.35s ease;
+  }
+  .nav-header:hover,
+  .nav-header.nav-active,
+  .nav-header.nav-scrolled{
+    background: rgba(14, 15, 18, 0.78);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
   }
   .nav{
     display: flex;
     align-items: center;
     gap: clamp(20px, 3vw, 44px);
-    padding-top: clamp(18px, 2.3vw, 28px);
-    padding-bottom: clamp(18px, 2.3vw, 28px);
+    padding-top: clamp(16px, 2vw, 24px);
+    padding-bottom: clamp(16px, 2vw, 24px);
   }
   .logo{
     display: inline-flex;
@@ -167,7 +186,7 @@
     position: relative;
     z-index: 2;
     width: 100%;
-    min-height: calc(100vh - 120px);
+    min-height: 100vh;
     display: flex;
     align-items: center;
     overflow: hidden;
@@ -192,7 +211,7 @@
     gap: 48px;
     align-items: center;
     width: 100%;
-    padding: 32px 0 64px;
+    padding: clamp(96px, 12vh, 128px) 0 64px;
   }
 
   /* LEFT column: Content */
@@ -296,7 +315,7 @@
     .hero-grid{
       grid-template-columns: 1fr;
       gap: 40px;
-      padding: 20px 0 48px;
+      padding: clamp(84px, 10vh, 100px) 0 48px;
     }
     .hero-left{ order: 1; }
     .hero-right{ order: 2; min-height: auto; }
@@ -308,7 +327,7 @@
   }
   @media (max-width:480px){
     .layout-wrapper{ padding: 0 18px; }
-    .hero-grid{ gap: 28px; padding: 12px 0 36px; }
+    .hero-grid{ gap: 28px; padding: 76px 0 36px; }
     .lead{ font-size: 38px; }
     .cta{ width: 100%; flex-direction: column; }
     .btn.lg{ width: 100%; }

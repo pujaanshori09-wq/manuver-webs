@@ -1,4 +1,5 @@
 import { defineConfig, loadEnv } from 'vite';
+import path from 'path';
 
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '');
@@ -10,6 +11,14 @@ export default defineConfig(({ mode }) => {
   }
 
   return {
+    build: {
+      rollupOptions: {
+        input: {
+          main: path.resolve(__dirname, 'index.html'),
+          particles: path.resolve(__dirname, 'prototype-particles.html')
+        }
+      }
+    },
     plugins: [
       {
         name: 'api-chat-dev-middleware',

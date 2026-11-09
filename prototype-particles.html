@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Manuver — Cinematic Spatial Particle Experience (Prototype)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700;800&family=Geist+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/src/prototypes/spatial-particles.css">
+</head>
+<body>
+
+  <!-- 3D WebGL Canvas Viewport -->
+  <canvas id="particle-canvas" class="particle-viewport"></canvas>
+
+  <!-- Atmospheric Vignette Overlay -->
+  <div class="cinematic-vignette" aria-hidden="true"></div>
+
+  <!-- Top Prototype HUD & Real-Time Telemetry -->
+  <header class="prototype-hud">
+    <div class="hud-brand">
+      <div class="hud-title">
+        <span>MANUVER</span>
+        <span class="hud-badge">Spatial Engine v1.0</span>
+      </div>
+      <div class="hud-subtitle">GPU Vector Field · 3-Layer Spatial Depth · Mouse Responsive</div>
+    </div>
+
+    <div class="hud-metrics">
+      <div class="hud-metric-item">
+        <span class="hud-metric-dot"></span>
+        <span id="hud-fps" class="hud-metric-val">60</span> FPS
+      </div>
+      <div class="hud-metric-item">
+        PARTICLES: <span id="hud-count" class="hud-metric-val">20,575</span>
+      </div>
+      <div class="hud-metric-item">
+        INTERACTION: <span id="hud-state" class="hud-metric-val" style="color:#00f0ff;">Idle Flow</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Optional Realistic Hero Mockup Layer (Toggleable) -->
+  <section class="hero-mockup-layer" id="hero-mockup" style="opacity: 1;">
+    <div class="hero-mockup-content">
+      <span class="mockup-badge"><i></i><span>Next-Gen Spatial Architecture</span></span>
+      <h1 class="mockup-lead">
+        Slow Doesn&rsquo;t Scale.<br>
+        <span class="cyan">Manuver Does.</span>
+      </h1>
+      <p class="mockup-lede">
+        Manual work slows teams down. Manuver automates the repetitive parts so you can build and move first.
+      </p>
+    </div>
+  </section>
+
+  <!-- Bottom Floating Control Pill -->
+  <footer class="prototype-bottom-bar">
+    <a href="/" class="prototype-back-btn">&larr; Main Website</a>
+    <span style="opacity: 0.2; color: #fff;">|</span>
+    <button type="button" class="prototype-toggle-btn is-active" id="btn-toggle-hero">Hero Overlay: ON</button>
+    <button type="button" class="prototype-toggle-btn" id="btn-toggle-speed">Speed: Ambient</button>
+  </footer>
+
+  <!-- Three.js Runtime -->
+  <script src="https://unpkg.com/three@0.149.0/build/three.min.js"></script>
+
+  <!-- Prototype Controller -->
+  <script type="module">
+    import { SpatialParticleEngine } from '/src/prototypes/spatial-particles.js';
+
+    const canvas = document.getElementById('particle-canvas');
+    const hudFps = document.getElementById('hud-fps');
+    const hudCount = document.getElementById('hud-count');
+    const hudState = document.getElementById('hud-state');
+    const heroMockup = document.getElementById('hero-mockup');
+    const btnToggleHero = document.getElementById('btn-toggle-hero');
+    const btnToggleSpeed = document.getElementById('btn-toggle-speed');
+
+    // Instantiate Engine
+    const engine = new SpatialParticleEngine(canvas, {
+      onTelemetryUpdate: ({ fps, particles, isPointerActive }) => {
+        if (hudFps) hudFps.textContent = fps;
+        if (hudCount) hudCount.textContent = particles.toLocaleString();
+        if (hudState) {
+          hudState.textContent = isPointerActive ? 'Pointer Parallax' : 'Idle Drift';
+          hudState.style.color = isPointerActive ? '#00f0ff' : '#94a3b8';
+        }
+      }
+    });
+
+    // Control: Toggle Hero Mockup Overlay
+    let heroVisible = true;
+    btnToggleHero.addEventListener('click', () => {
+      heroVisible = !heroVisible;
+      heroMockup.style.opacity = heroVisible ? '1' : '0';
+      btnToggleHero.classList.toggle('is-active', heroVisible);
+      btnToggleHero.textContent = `Hero Overlay: ${heroVisible ? 'ON' : 'OFF'}`;
+    });
+
+    // Control: Toggle Speed Profile (Calm vs Ambient Flow)
+    let speedProfile = 'ambient';
+    btnToggleSpeed.addEventListener('click', () => {
+      if (speedProfile === 'ambient') {
+        speedProfile = 'dynamic';
+        engine.setFlowSpeed(1.4);
+        btnToggleSpeed.textContent = 'Speed: Dynamic';
+        btnToggleSpeed.classList.add('is-active');
+      } else {
+        speedProfile = 'ambient';
+        engine.setFlowSpeed(0.85);
+        btnToggleSpeed.textContent = 'Speed: Ambient';
+        btnToggleSpeed.classList.remove('is-active');
+      }
+    });
+  </script>
+</body>
+</html>

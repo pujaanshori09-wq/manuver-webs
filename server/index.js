@@ -38,6 +38,12 @@ app.all('/api/chat', (req, res) => {
 const distPath = path.join(__dirname, '../dist');
 app.use(express.static(distPath));
 
+// Serve standalone prototype pages directly if requested
+app.get('/prototype-particles.html', (req, res) => {
+  res.sendFile(path.join(__dirname, '../prototype-particles.html'));
+});
+app.use('/src', express.static(path.join(__dirname, '../src')));
+
 // Fallback to index.html for SPA routing
 app.use((req, res) => {
   res.sendFile(path.join(distPath, 'index.html'), (err) => {

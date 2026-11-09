@@ -1,0 +1,261 @@
+/* ============================================================
+   MANUVER — Cinematic Spatial Particle Experience
+   Isolated Prototype Styling
+   Aesthetic: Deep Charcoal, Atmospheric Vignette, Zero-Clutter
+   ============================================================ */
+
+:root {
+  --bg-void: #070709;
+  --bg-charcoal: #0e0e13;
+  --accent-cyan: #00f0ff;
+  --accent-blue: #0066ff;
+  --text-primary: #f4f8ff;
+  --text-dim: rgba(244, 248, 255, 0.55);
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background-color: var(--bg-void);
+  color: var(--text-primary);
+  font-family: "Geist", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  user-select: none;
+}
+
+/* Canvas Viewport */
+.particle-viewport {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  display: block;
+  touch-action: none;
+}
+
+/* Subtle Cinematic Vignette Overlay */
+.cinematic-vignette {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 2;
+  background: radial-gradient(
+    circle at 50% 50%,
+    transparent 45%,
+    rgba(7, 7, 9, 0.4) 75%,
+    rgba(7, 7, 9, 0.85) 100%
+  );
+}
+
+/* Prototype HUD & Telemetry Overlay */
+.prototype-hud {
+  position: absolute;
+  top: 24px;
+  left: 28px;
+  right: 28px;
+  z-index: 10;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  pointer-events: none;
+}
+
+.hud-brand {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.hud-title {
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.hud-badge {
+  font-family: "Geist Mono", monospace;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 2px 7px;
+  border-radius: 4px;
+  background: rgba(0, 240, 255, 0.12);
+  color: var(--accent-cyan);
+  border: 1px solid rgba(0, 240, 255, 0.3);
+}
+
+.hud-subtitle {
+  font-size: 12px;
+  color: var(--text-dim);
+  font-family: "Geist Mono", monospace;
+}
+
+.hud-metrics {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background: rgba(14, 14, 19, 0.65);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 8px 16px;
+  border-radius: 999px;
+  pointer-events: auto;
+}
+
+.hud-metric-item {
+  font-family: "Geist Mono", monospace;
+  font-size: 11.5px;
+  color: var(--text-dim);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.hud-metric-val {
+  color: #ffffff;
+  font-weight: 700;
+}
+
+.hud-metric-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #00f0ff;
+  box-shadow: 0 0 8px #00f0ff;
+}
+
+/* Optional Hero Preview Mockup (To see how particle flow complements text) */
+.hero-mockup-layer {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  padding: 0 clamp(24px, 6vw, 96px);
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.hero-mockup-content {
+  max-width: 580px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.mockup-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.04);
+  font-size: 12px;
+  color: var(--text-dim);
+  width: fit-content;
+}
+
+.mockup-badge i {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #00f0ff;
+  box-shadow: 0 0 8px #00f0ff;
+}
+
+.mockup-lead {
+  font-size: clamp(38px, 4.5vw, 64px);
+  font-weight: 800;
+  line-height: 1.08;
+  letter-spacing: -0.04em;
+  color: #ffffff;
+  margin: 0;
+}
+
+.mockup-lead .cyan {
+  color: var(--accent-cyan);
+  text-shadow: 0 0 28px rgba(0, 240, 255, 0.35);
+}
+
+.mockup-lede {
+  font-size: clamp(14px, 1.1vw, 16px);
+  line-height: 1.6;
+  color: var(--text-dim);
+  margin: 0;
+}
+
+/* Bottom Controls */
+.prototype-bottom-bar {
+  position: absolute;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: rgba(14, 14, 19, 0.75);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  padding: 6px 14px;
+  border-radius: 999px;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5);
+}
+
+.prototype-toggle-btn {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: var(--text-dim);
+  font-family: "Geist Mono", monospace;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 6px 14px;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.prototype-toggle-btn:hover {
+  color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.25);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.prototype-toggle-btn.is-active {
+  background: rgba(0, 240, 255, 0.15);
+  border-color: rgba(0, 240, 255, 0.4);
+  color: var(--accent-cyan);
+}
+
+.prototype-back-btn {
+  color: var(--text-dim);
+  text-decoration: none;
+  font-size: 12px;
+  font-weight: 500;
+  padding: 6px 12px;
+  transition: color 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.prototype-back-btn:hover {
+  color: #ffffff;
+}

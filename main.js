@@ -1,13 +1,9 @@
 import { initI18n, t } from './src/i18n.js';
 import { initChatWidget } from './src/ChatWidget.js';
-import { initLandingSections } from './src/LandingSections.js';
 import { initClientPortal, openClientPortal } from './src/ClientPortal.js';
 
 // Initialize i18n & language switcher
 initI18n();
-
-// Initialize High-Converting Interactive Landing Sections
-initLandingSections('#landing-sections');
 
 // Initialize Manuver AI Assistant Chat Widget
 initChatWidget();
@@ -15,13 +11,24 @@ initChatWidget();
 // Initialize Manuver Client Portal & Project Tracker
 initClientPortal();
 
-// Connect Hero CTA button to open consultative AI discovery
+// Connect Hero CTA buttons to open consultative AI discovery
 document.querySelector('#hero-start-building')?.addEventListener('click', (e) => {
   e.preventDefault();
   const lang = initI18n();
   const prompt = lang === 'id'
     ? 'Hai! Saya tertarik membangun project baru bersama Manuver. Boleh bantu konsultasikan alur dan teknologinya?'
     : 'Hi! I am interested in building a new project with Manuver. Could you help consult on the workflow and technology?';
+  if (window.openManuverChat) {
+    window.openManuverChat(prompt);
+  }
+});
+
+document.querySelector('#hero-see-how')?.addEventListener('click', (e) => {
+  e.preventDefault();
+  const lang = initI18n();
+  const prompt = lang === 'id'
+    ? 'Bagaimana cara kerja Manuver dalam mengotomasi operasional bisnis?'
+    : 'How does Manuver work to automate business operations and workflow?';
   if (window.openManuverChat) {
     window.openManuverChat(prompt);
   }

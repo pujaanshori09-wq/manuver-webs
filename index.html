@@ -307,6 +307,12 @@
   }
   #orb.dragging{ cursor: grabbing }
 
+  /* Single Viewport Slide on Desktop */
+  @media (min-width:901px){
+    html, body{ height:100vh; overflow:hidden }
+    .hero-main{ height:100vh; min-height:100vh }
+  }
+
   /* Responsive / Mobile */
   @media (max-width:900px){
     body{ height:auto; min-height:100dvh; overflow-y:auto }
@@ -375,7 +381,7 @@
         </p>
         <div class="cta">
           <a class="btn lg solid" id="hero-start-building" href="#chat"><span data-i18n="hero.ctaStart">Start building</span></a>
-          <a class="btn lg ghost" href="#services"><span data-i18n="hero.ctaHow">See how it works</span> <span class="arrow">&rarr;</span></a>
+          <a class="btn lg ghost" id="hero-see-how" href="#chat"><span data-i18n="hero.ctaHow">See how it works</span> <span class="arrow">&rarr;</span></a>
         </div>
         <div class="pain-points">
           <div class="pain-item">
@@ -402,9 +408,6 @@
     </div>
   </div>
 </main>
-
-<!-- High-Converting Interactive Sections Container -->
-<div id="landing-sections"></div>
 
 <script src="https://unpkg.com/three@0.149.0/build/three.min.js"></script>
 <script type="module" src="/main.js"></script>

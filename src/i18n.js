@@ -194,14 +194,16 @@ export const dictionary = {
       sectionRequestsTitle: 'My Requests',
       sectionRequestsDesc: 'Live status of your submitted project briefs and feature inquiries.',
       
-      // Empty States
-      emptyProjectsTitle: 'No projects yet.',
-      emptyProjectsDesc: 'Every great solution begins with an idea.',
-      btnShareIdea: 'Share Your Idea',
+      // Empty States (Strictly 1 line muted text + 1 action)
+      emptyProjectsTitle: 'No active projects yet.',
+      emptyProjectsDesc: '',
+      emptyProjectsText: 'No active projects yet.',
+      btnShareIdea: 'Start Project',
       
       emptyRequestsTitle: 'No requests submitted yet.',
-      emptyRequestsDesc: 'Submit your first technical requirements or consultation brief.',
-      btnSubmitFirstRequest: 'Submit First Request',
+      emptyRequestsDesc: '',
+      emptyRequestsText: 'No requests submitted yet.',
+      btnSubmitFirstRequest: 'Create Request',
       
       // Status Badges
       statusReceived: 'Received',
@@ -446,14 +448,16 @@ export const dictionary = {
       sectionRequestsTitle: 'Permintaan Saya',
       sectionRequestsDesc: 'Status langsung dari brief proyek dan permintaan fitur yang Anda ajukan.',
       
-      // Empty States
-      emptyProjectsTitle: 'Belum ada proyek.',
-      emptyProjectsDesc: 'Setiap solusi besar dimulai dari sebuah ide.',
-      btnShareIdea: 'Ceritakan Ide Anda',
+      // Empty States (Strictly 1 line muted text + 1 action)
+      emptyProjectsTitle: 'Belum ada proyek aktif.',
+      emptyProjectsDesc: '',
+      emptyProjectsText: 'Belum ada proyek aktif.',
+      btnShareIdea: 'Mulai Proyek',
       
       emptyRequestsTitle: 'Belum ada permintaan yang diajukan.',
-      emptyRequestsDesc: 'Kirimkan brief konsultasi atau kebutuhan teknis pertama Anda.',
-      btnSubmitFirstRequest: 'Ajukan Permintaan Pertama',
+      emptyRequestsDesc: '',
+      emptyRequestsText: 'Belum ada permintaan yang diajukan.',
+      btnSubmitFirstRequest: 'Buat Permintaan',
       
       // Status Badges
       statusReceived: 'Diterima',
@@ -513,7 +517,7 @@ export const dictionary = {
 };
 
 const STORAGE_KEY = 'manuver_lang';
-let currentLang = 'en';
+let currentLang = 'id';
 const listeners = new Set();
 
 /**
@@ -528,7 +532,7 @@ export function getSavedLanguage() {
   } catch (err) {
     console.warn('[i18n] Storage access error:', err);
   }
-  return 'en';
+  return 'id';
 }
 
 /**

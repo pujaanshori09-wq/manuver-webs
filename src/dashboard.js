@@ -215,18 +215,10 @@ function renderProjects(projects) {
 
   if (!projects || projects.length === 0) {
     const emptyHtml = `
-      <div class="thoughtful-empty-box">
-        <div class="empty-icon-circle" aria-hidden="true">
-          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-            <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
-            <polyline points="2 17 12 22 22 17"></polyline>
-            <polyline points="2 12 12 17 22 12"></polyline>
-          </svg>
-        </div>
-        <h4 class="empty-state-title" data-i18n="dashboard.emptyProjectsTitle">${t('dashboard.emptyProjectsTitle', currentLang)}</h4>
-        <p class="empty-state-desc" data-i18n="dashboard.emptyProjectsDesc">${t('dashboard.emptyProjectsDesc', currentLang)}</p>
-        <button type="button" class="btn-empty-action open-request-trigger" data-i18n="dashboard.btnShareIdea">
-          ${t('dashboard.btnShareIdea', currentLang)}
+      <div class="empty-state-box">
+        <p class="empty-state-muted">${t('dashboard.emptyProjectsText', currentLang) || 'Belum ada proyek aktif.'}</p>
+        <button type="button" class="btn-primary-action open-request-trigger">
+          ${t('dashboard.btnShareIdea', currentLang) || 'Mulai Proyek'}
         </button>
       </div>
     `;
@@ -291,19 +283,10 @@ function renderRequests(requests) {
 
   if (!requests || requests.length === 0) {
     const emptyHtml = `
-      <div class="thoughtful-empty-box">
-        <div class="empty-icon-circle" aria-hidden="true">
-          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-            <polyline points="14 2 14 8 20 8"></polyline>
-            <line x1="16" y1="13" x2="8" y2="13"></line>
-            <line x1="16" y1="17" x2="8" y2="17"></line>
-          </svg>
-        </div>
-        <h4 class="empty-state-title" data-i18n="dashboard.emptyRequestsTitle">${t('dashboard.emptyRequestsTitle', currentLang)}</h4>
-        <p class="empty-state-desc" data-i18n="dashboard.emptyRequestsDesc">${t('dashboard.emptyRequestsDesc', currentLang)}</p>
-        <button type="button" class="btn-empty-action open-request-trigger" data-i18n="dashboard.btnSubmitFirstRequest">
-          ${t('dashboard.btnSubmitFirstRequest', currentLang)}
+      <div class="empty-state-box">
+        <p class="empty-state-muted">${t('dashboard.emptyRequestsText', currentLang) || 'Belum ada permintaan yang diajukan.'}</p>
+        <button type="button" class="btn-primary-action open-request-trigger">
+          ${t('dashboard.btnSubmitFirstRequest', currentLang) || 'Buat Permintaan'}
         </button>
       </div>
     `;

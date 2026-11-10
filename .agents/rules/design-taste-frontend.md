@@ -91,3 +91,4 @@ Manuver is classified as **software / tech SaaS**. Effects, scenes, code diffs, 
 - Never use fake generic stock imagery pretending to be real software; use authentic screenshots, diagram cards, or clean interactive UI components.
 - Never invent fake customer quotes or fake statistics presented as verified metrics.
 - Never introduce violet or lavender colors into Manuver's identity palette.
+

@@ -53,12 +53,10 @@ onLanguageChange((lang) => {
  * 1. SESSION VERIFICATION & BOOTSTRAP
  */
 async function bootstrapDashboard() {
-  console.log('[DEBUG] bootstrapDashboard starting, search:', window.location.search);
   const loaderEl = document.getElementById('dashboard-loader');
   const appEl = document.getElementById('dashboard-app');
   const urlParams = new URLSearchParams(window.location.search);
   const isPreview = urlParams.get('preview') === '1' || urlParams.get('preview') === 'true';
-  console.log('[DEBUG] isPreview:', isPreview);
 
   try {
     if (isPreview) {
@@ -120,6 +118,7 @@ async function bootstrapDashboard() {
     loaderEl.classList.add('hidden');
     loaderEl.setAttribute('aria-hidden', 'true');
 
+    initSpatialParticles();
     setupNavigation();
     setupModal();
     setupSidebarToggle();
@@ -755,6 +754,129 @@ function escapeHtml(str) {
     .replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;')
     .replace(/'/g, '&#039;');
+}
+
+/**
+ * Subtle Spatial Particle Atmosphere for Dashboard
+ * Lightweight Canvas 2D engine inspired by Manuver landing page
+ * Respects prefers-reduced-motion, pauses when tab is backgrounded
+ */
+function initSpatialParticles() {
+  const canvas = document.getElementById('spatial-particles-canvas');
+  if (!canvas) return;
+
+  const ctx = canvas.getContext('2d');
+  if (!ctx) return;
+
+  const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let animationFrameId = null;
+  let isRunning = true;
+
+  let width = 0;
+  let height = 0;
+
+  function resize() {
+    const parent = canvas.parentElement;
+    if (!parent) return;
+    width = parent.clientWidth || window.innerWidth;
+    height = Math.max(parent.clientHeight, parent.scrollHeight || window.innerHeight);
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    canvas.width = width * dpr;
+    canvas.height = height * dpr;
+    canvas.style.width = width + 'px';
+    canvas.style.height = height + 'px';
+    ctx.scale(dpr, dpr);
+  }
+
+  resize();
+  window.addEventListener('resize', resize, { passive: true });
+
+  const particleCount = window.innerWidth < 768 ? 20 : 50;
+  const particles = [];
+  const palette = [
+    { r: 57, g: 123, b: 255 },  // Electric Blue
+    { r: 91, g: 203, b: 255 },  // Cyan
+    { r: 245, g: 247, b: 250 }  // Soft High-Contrast White
+  ];
+
+  for (let i = 0; i < particleCount; i++) {
+    const col = palette[Math.floor(Math.random() * palette.length)];
+    particles.push({
+      x: Math.random() * width,
+      y: Math.random() * height,
+      vx: (Math.random() - 0.5) * 0.3,
+      vy: (Math.random() - 0.5) * 0.3,
+      radius: Math.random() * 1.5 + 0.8,
+      baseAlpha: Math.random() * 0.4 + 0.15,
+      color: col
+    });
+  }
+
+  function draw() {
+    ctx.clearRect(0, 0, width, height);
+
+    // Subtle connection lines between nearby particles
+    for (let i = 0; i < particles.length; i++) {
+      const p1 = particles[i];
+      for (let j = i + 1; j < particles.length; j++) {
+        const p2 = particles[j];
+        const dx = p1.x - p2.x;
+        const dy = p1.y - p2.y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist < 90) {
+          const lineAlpha = (1 - dist / 90) * 0.07;
+          ctx.strokeStyle = `rgba(91, 203, 255, ${lineAlpha})`;
+          ctx.lineWidth = 0.6;
+          ctx.beginPath();
+          ctx.moveTo(p1.x, p1.y);
+          ctx.lineTo(p2.x, p2.y);
+          ctx.stroke();
+        }
+      }
+    }
+
+    // Draw and drift particles
+    for (let i = 0; i < particles.length; i++) {
+      const p = particles[i];
+
+      if (!prefersReduced) {
+        p.x += p.vx;
+        p.y += p.vy;
+
+        if (p.x < 0) p.x = width;
+        else if (p.x > width) p.x = 0;
+        if (p.y < 0) p.y = height;
+        else if (p.y > height) p.y = 0;
+      }
+
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(${p.color.r}, ${p.color.g}, ${p.color.b}, ${p.baseAlpha})`;
+      ctx.shadowColor = `rgba(${p.color.r}, ${p.color.g}, ${p.color.b}, 0.45)`;
+      ctx.shadowBlur = 6;
+      ctx.fill();
+      ctx.shadowBlur = 0;
+    }
+
+    if (isRunning && !prefersReduced) {
+      animationFrameId = requestAnimationFrame(draw);
+    }
+  }
+
+  draw();
+
+  // Visibility state handling
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) {
+      isRunning = false;
+      if (animationFrameId) cancelAnimationFrame(animationFrameId);
+    } else {
+      if (!isRunning && !prefersReduced) {
+        isRunning = true;
+        animationFrameId = requestAnimationFrame(draw);
+      }
+    }
+  });
 }
 
 // Start application bootstrap immediately

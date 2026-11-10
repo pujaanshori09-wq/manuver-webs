@@ -1,40 +1,53 @@
 /* ============================================================
- * Manuver — Client Dashboard (Manuver Fullscreen AppShell)
- * Fullscreen application architecture: grid 260px 1fr 340px
- * Tenang, mahal, dan buatan manusia.
+ * Manuver — Client Dashboard (Dark Cinematic SaaS Workspace)
+ * Fullscreen application architecture: grid 260px minmax(0,1fr) 340px
+ * Visually aligned with Manuver Landing Page
+ * Deep navy/near-black canvas · Electric blue accents · Spatial depth
  * ============================================================ */
 
 :root {
-  /* Design Tokens — Satu-satunya sumber warna */
-  --bg-app:        #F6F4F1;   /* kanvas hangat */
-  --surface:       #FFFFFF;
-  --surface-muted: #F1EEEA;   /* sidebar & panel muted */
-  --border:        rgba(17, 18, 22, 0.08);
-  --text:          #111216;
-  --text-muted:    #6B6A68;
-  --ink:           #111216;   /* tombol utama gelap */
-  --accent:        #E8643C;   /* oranye Manuver: hanya blok/ikon/glow */
-  --accent-text:   #C2461F;   /* oranye untuk teks kecil (kontras lolos) */
-  --accent-soft:   #FDEBE3;
-  --shell-gradient: linear-gradient(135deg, #D9D6D2 0%, #F3E4DA 55%, #F2A07F 100%);
+  /* Design Tokens — Dark Cinematic SaaS */
+  --bg-app:          #080B12;   /* Primary background: deep dark navy */
+  --bg-secondary:    #0D1422;   /* Secondary background: sidebar & right panel */
+  --surface:         #111B2B;   /* Elevated surface */
+  --surface-card:    #121C2C;   /* Card surface */
+  --surface-muted:   #0D1422;   /* Sidebar & panel background */
+  --surface-hover:   #16233B;   /* Card hover background */
 
-  /* Bentuk & Ukuran */
-  --radius-card:    20px;
-  --radius-control: 12px;
-  --radius-pill:    9999px;
+  --border:          rgba(130, 160, 200, 0.14); /* Understated separation */
+  --border-subtle:   rgba(130, 160, 200, 0.08);
+  --border-focus:    rgba(57, 123, 255, 0.65);
 
-  /* Bayangan lembut */
-  --shadow-card:  0 1px 2px rgba(17, 18, 22, 0.04), 0 8px 24px rgba(17, 18, 22, 0.04);
-  --shadow-modal: 0 8px 24px rgba(17, 18, 22, 0.08);
+  --text:            #F5F7FA;   /* Primary text: crisp high contrast */
+  --text-secondary:  #A1ACBC;   /* Secondary text */
+  --text-muted:      #687589;   /* Muted metadata */
 
-  --header-height: 60px;
+  --ink:             #397BFF;   /* Primary interactive accent: Electric Blue */
+  --ink-hover:       #4d8aff;
+  --accent:          #397BFF;   /* Electric Blue */
+  --accent-cyan:     #5BCBFF;   /* Cyan highlight */
+  --accent-text:     #5BCBFF;   /* Readable cyan for small tags & badges */
+  --accent-soft:     rgba(57, 123, 255, 0.12); /* Subtle blue tint */
+
+  /* Geometry */
+  --radius-card:      20px;
+  --radius-control:   12px;
+  --radius-pill:      9999px;
+
+  /* Subtle depth shadows */
+  --shadow-card:      0 4px 20px rgba(0, 0, 0, 0.35);
+  --shadow-card-hover:0 10px 30px rgba(0, 0, 0, 0.45), 0 0 20px rgba(57, 123, 255, 0.16);
+  --shadow-modal:     0 20px 50px rgba(0, 0, 0, 0.65), 0 0 32px rgba(57, 123, 255, 0.12);
+  --shadow-glow:      0 0 24px rgba(57, 123, 255, 0.28);
+
+  --header-height:    60px;
 }
 
 * {
   box-sizing: border-box;
 }
 
-/* 1. Hapus margin, padding, radius, shadow, latar gradient dari wrapper luar */
+/* 1. Fullscreen application wrapper */
 html, body {
   margin: 0;
   padding: 0;
@@ -43,7 +56,7 @@ html, body {
   overflow: hidden;
   background-color: var(--bg-app);
   color: var(--text);
-  font-family: 'Plus Jakarta Sans', Inter, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-family: 'Geist', 'Plus Jakarta Sans', Inter, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   font-size: 14px;
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
@@ -59,17 +72,17 @@ button {
   font-family: inherit;
 }
 
-/* Fokus keyboard terlihat (ring 2px --ink offset 2px) */
+/* Visible keyboard focus outline */
 button:focus-visible,
 a:focus-visible,
 input:focus-visible,
 select:focus-visible,
 textarea:focus-visible {
-  outline: 2px solid var(--ink);
+  outline: 2px solid var(--accent);
   outline-offset: 2px;
 }
 
-/* Subtle refined scrollbars for middle column and panel */
+/* Refined scrollbars */
 .main-layout::-webkit-scrollbar,
 .right-panel-content::-webkit-scrollbar,
 .sidebar-nav::-webkit-scrollbar {
@@ -85,22 +98,24 @@ textarea:focus-visible {
 .main-layout::-webkit-scrollbar-thumb,
 .right-panel-content::-webkit-scrollbar-thumb,
 .sidebar-nav::-webkit-scrollbar-thumb {
-  background: rgba(17, 18, 22, 0.10);
+  background: rgba(130, 160, 200, 0.18);
   border-radius: 999px;
 }
 
 .main-layout::-webkit-scrollbar-thumb:hover,
 .right-panel-content::-webkit-scrollbar-thumb:hover,
 .sidebar-nav::-webkit-scrollbar-thumb:hover {
-  background: rgba(17, 18, 22, 0.20);
+  background: rgba(130, 160, 200, 0.35);
 }
 
-/* Position floating chat launcher above right panel footer */
+/* Floating chat assistant launcher */
 .chat-launcher {
   bottom: 80px !important;
   right: 20px !important;
   z-index: 25 !important;
 }
+
+/* Session loader */
 #dashboard-loader {
   position: fixed;
   inset: 0;
@@ -126,13 +141,13 @@ textarea:focus-visible {
   height: 28px;
   border-radius: 50%;
   border: 2px solid var(--border);
-  border-top-color: var(--ink);
+  border-top-color: var(--accent);
   animation: spin 0.75s linear infinite;
 }
 
 .loader-text {
   font-size: 14px;
-  color: var(--text-muted);
+  color: var(--text-secondary);
   font-weight: 500;
 }
 
@@ -204,7 +219,7 @@ textarea:focus-visible {
   width: 26px;
   height: 26px;
   border-radius: 8px;
-  background: var(--accent);
+  background: linear-gradient(135deg, #397BFF 0%, #2055CC 100%);
   color: #FFFFFF;
   font-weight: 700;
   font-size: 13px;
@@ -212,6 +227,7 @@ textarea:focus-visible {
   align-items: center;
   justify-content: center;
   letter-spacing: -0.02em;
+  box-shadow: 0 0 12px rgba(57, 123, 255, 0.35);
 }
 
 .brand-name {
@@ -225,7 +241,7 @@ textarea:focus-visible {
   display: none;
   background: none;
   border: none;
-  color: var(--text-muted);
+  color: var(--text-secondary);
   cursor: pointer;
   padding: 8px;
   min-height: 44px;
@@ -269,7 +285,7 @@ textarea:focus-visible {
   border-radius: var(--radius-pill);
   background: transparent;
   border: 1px solid transparent;
-  color: var(--text-muted);
+  color: var(--text-secondary);
   font-size: 14px;
   font-weight: 500;
   cursor: pointer;
@@ -285,7 +301,7 @@ textarea:focus-visible {
 
 .nav-item:hover {
   color: var(--text);
-  background: rgba(17, 18, 22, 0.04);
+  background: rgba(130, 160, 200, 0.08);
 }
 
 .nav-item:hover svg {
@@ -293,15 +309,15 @@ textarea:focus-visible {
 }
 
 .nav-item.is-active {
-  color: var(--text);
+  color: #FFFFFF;
   background: var(--surface);
-  border-color: var(--border);
+  border-color: rgba(57, 123, 255, 0.35);
   font-weight: 600;
-  box-shadow: 0 1px 3px rgba(17, 18, 22, 0.04);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3), 0 0 14px rgba(57, 123, 255, 0.16);
 }
 
 .nav-item.is-active svg {
-  color: var(--accent-text);
+  color: var(--accent-cyan);
 }
 
 .nav-count-pill {
@@ -310,8 +326,9 @@ textarea:focus-visible {
   font-weight: 600;
   padding: 2px 7px;
   border-radius: var(--radius-pill);
-  background: rgba(17, 18, 22, 0.06);
-  color: var(--text);
+  background: rgba(130, 160, 200, 0.12);
+  color: var(--accent-cyan);
+  border: 1px solid rgba(130, 160, 200, 0.18);
 }
 
 /* Sidebar Footer / User Profile Card */
@@ -340,8 +357,8 @@ textarea:focus-visible {
   height: 32px;
   border-radius: 50%;
   overflow: hidden;
-  background: var(--surface-muted);
-  border: 1px solid var(--border);
+  background: rgba(57, 123, 255, 0.15);
+  border: 1px solid rgba(57, 123, 255, 0.3);
   flex-shrink: 0;
   display: flex;
   align-items: center;
@@ -357,7 +374,7 @@ textarea:focus-visible {
 .avatar-fallback {
   font-size: 13px;
   font-weight: 600;
-  color: var(--text);
+  color: var(--accent-cyan);
   text-transform: uppercase;
 }
 
@@ -394,7 +411,7 @@ textarea:focus-visible {
   border-radius: var(--radius-control);
   background: transparent;
   border: 1px solid var(--border);
-  color: var(--text-muted);
+  color: var(--text-secondary);
   font-size: 13px;
   font-weight: 500;
   cursor: pointer;
@@ -402,14 +419,14 @@ textarea:focus-visible {
 }
 
 .sidebar-signout-btn:hover {
-  color: var(--accent-text);
-  background: var(--accent-soft);
-  border-color: rgba(232, 100, 60, 0.2);
+  color: #FFA39E;
+  background: rgba(255, 77, 79, 0.1);
+  border-color: rgba(255, 77, 79, 0.25);
 }
 
 /* ============================================================
  * 2. KOLOM TENGAH (HANYA KOLOM INI YANG SCROLL: overflow-y-auto)
- * 7. Glow halus pojok kanan bawah (radial-gradient, opasitas maks 0.35)
+ * Ambient Cinematic Glow & Spatial Atmosphere
  * ============================================================ */
 .main-layout {
   min-width: 0;
@@ -418,10 +435,25 @@ textarea:focus-visible {
   flex-direction: column;
   overflow-y: auto;
   overflow-x: hidden;
+  position: relative;
   background-color: var(--bg-app);
-  background-image: radial-gradient(circle at 100% 100%, rgba(242, 160, 127, 0.28) 0%, rgba(243, 228, 218, 0.14) 35%, transparent 65%);
+  background-image: 
+    radial-gradient(circle at 85% 90%, rgba(57, 123, 255, 0.12) 0%, rgba(91, 203, 255, 0.04) 30%, transparent 65%),
+    radial-gradient(circle at 20% 15%, rgba(57, 123, 255, 0.08) 0%, transparent 50%);
   background-repeat: no-repeat;
   background-attachment: local;
+}
+
+/* Spatial Particles Background Canvas */
+.spatial-particles-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.85;
 }
 
 .top-header {
@@ -430,7 +462,9 @@ textarea:focus-visible {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: var(--bg-app);
+  background: rgba(8, 11, 18, 0.82);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
   border-bottom: 1px solid var(--border);
   position: sticky;
   top: 0;
@@ -503,9 +537,10 @@ textarea:focus-visible {
 }
 
 .lang-btn.active {
-  background: var(--ink);
+  background: var(--accent);
   color: #FFFFFF;
   cursor: default;
+  box-shadow: 0 0 10px rgba(57, 123, 255, 0.4);
 }
 
 .header-profile {
@@ -524,11 +559,11 @@ textarea:focus-visible {
   height: 26px;
   border-radius: 50%;
   overflow: hidden;
-  background: var(--surface-muted);
+  background: rgba(57, 123, 255, 0.15);
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 1px solid var(--border);
+  border: 1px solid rgba(57, 123, 255, 0.25);
 }
 
 .header-avatar-wrap img {
@@ -555,11 +590,12 @@ textarea:focus-visible {
   border-radius: var(--radius-control);
   align-items: center;
   justify-content: center;
-  transition: background 0.16s ease;
+  transition: background 0.16s ease, border-color 0.16s ease;
 }
 
 .panel-toggle-btn:hover {
-  background: var(--surface-muted);
+  background: var(--surface-hover);
+  border-color: rgba(57, 123, 255, 0.3);
 }
 
 /* ============================================================
@@ -572,6 +608,8 @@ textarea:focus-visible {
   margin: 0 auto;
   padding: 32px 32px 48px;
   box-sizing: border-box;
+  position: relative;
+  z-index: 10;
 }
 
 .view-panel {
@@ -590,20 +628,19 @@ textarea:focus-visible {
 .view-title {
   margin: 0 0 6px;
   font-size: 32px;
-  font-weight: 600;
-  letter-spacing: -0.02em;
+  font-weight: 700;
+  letter-spacing: -0.025em;
   color: var(--text);
 }
 
 .view-desc {
   margin: 0;
   font-size: 14px;
-  color: var(--text-muted);
+  color: var(--text-secondary);
 }
 
 /* ============================================================
- * HERO CENTER SECTION (MATCHING REFERENCE AESTHETIC)
- * 5. Pertahankan radius 20px hanya pada kartu di dalam
+ * HERO CENTER SECTION (MATCHING CINEMATIC AESTHETIC)
  * ============================================================ */
 .hero-center-box {
   display: flex;
@@ -620,24 +657,25 @@ textarea:focus-visible {
   align-items: center;
   justify-content: center;
   animation: floatSoft 6s ease-in-out infinite;
+  filter: drop-shadow(0 0 16px rgba(91, 203, 255, 0.45));
 }
 
 @keyframes floatSoft {
   0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-4px); }
+  50% { transform: translateY(-5px); }
 }
 
 .hero-text-wrap {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 8px;
 }
 
 .welcome-title {
   margin: 0;
   font-size: 44px;
-  font-weight: 600;
-  letter-spacing: -0.02em;
+  font-weight: 700;
+  letter-spacing: -0.025em;
   line-height: 1.15;
   color: var(--text);
 }
@@ -645,7 +683,7 @@ textarea:focus-visible {
 .welcome-question {
   margin: 0;
   font-size: 15px;
-  color: var(--text-muted);
+  color: var(--text-secondary);
 }
 
 /* 3 Quick Action / Solution Cards Grid */
@@ -657,22 +695,23 @@ textarea:focus-visible {
 }
 
 .solution-card {
-  background: var(--surface);
+  background: var(--surface-card);
   border: 1px solid var(--border);
   border-radius: var(--radius-card); /* 20px */
   padding: 20px 18px;
   text-align: left;
   cursor: pointer;
-  transition: transform 0.16s ease, box-shadow 0.16s ease, border-color 0.16s ease;
-  box-shadow: 0 1px 2px rgba(17, 18, 22, 0.03);
+  transition: transform 0.2s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.2s ease, border-color 0.2s ease, background-color 0.2s ease;
+  box-shadow: var(--shadow-card);
   display: flex;
   flex-direction: column;
 }
 
 .solution-card:hover {
   transform: translateY(-2px);
-  border-color: rgba(17, 18, 22, 0.16);
-  box-shadow: var(--shadow-card);
+  background: var(--surface-hover);
+  border-color: rgba(57, 123, 255, 0.45);
+  box-shadow: var(--shadow-card-hover);
 }
 
 .solution-card-icon-box {
@@ -687,18 +726,21 @@ textarea:focus-visible {
 }
 
 .solution-card-icon--automation {
-  background: var(--accent-soft);
-  color: var(--accent-text);
+  background: rgba(57, 123, 255, 0.16);
+  color: var(--accent-cyan);
+  box-shadow: 0 0 10px rgba(57, 123, 255, 0.25);
 }
 
 .solution-card-icon--web {
-  background: rgba(17, 18, 22, 0.05);
-  color: var(--text);
+  background: rgba(91, 203, 255, 0.14);
+  color: var(--accent-cyan);
+  box-shadow: 0 0 10px rgba(91, 203, 255, 0.2);
 }
 
 .solution-card-icon--ai {
-  background: rgba(242, 160, 127, 0.22);
-  color: var(--accent-text);
+  background: rgba(168, 85, 247, 0.16);
+  color: #C084FC;
+  box-shadow: 0 0 10px rgba(168, 85, 247, 0.25);
 }
 
 .solution-card-title {
@@ -712,14 +754,14 @@ textarea:focus-visible {
 .solution-card-desc {
   margin: 0;
   font-size: 12.5px;
-  color: var(--text-muted);
+  color: var(--text-secondary);
   line-height: 1.45;
 }
 
 /* Bottom Floating Prompt Dock (Reference Match) */
 .consultation-dock {
   width: 100%;
-  background: var(--surface);
+  background: var(--surface-card);
   border: 1px solid var(--border);
   border-radius: var(--radius-pill);
   padding: 6px 8px 6px 18px;
@@ -727,14 +769,15 @@ textarea:focus-visible {
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-  box-shadow: 0 2px 8px rgba(17, 18, 22, 0.04);
+  box-shadow: var(--shadow-card);
   cursor: pointer;
-  transition: border-color 0.16s ease, box-shadow 0.16s ease;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
 }
 
 .consultation-dock:hover {
-  border-color: rgba(17, 18, 22, 0.18);
-  box-shadow: 0 4px 16px rgba(17, 18, 22, 0.06);
+  background: var(--surface-hover);
+  border-color: rgba(57, 123, 255, 0.45);
+  box-shadow: var(--shadow-card-hover);
 }
 
 .dock-left {
@@ -746,14 +789,15 @@ textarea:focus-visible {
 }
 
 .dock-sparkle {
-  color: var(--accent-text);
+  color: var(--accent-cyan);
   font-size: 14px;
   flex-shrink: 0;
+  filter: drop-shadow(0 0 6px rgba(91, 203, 255, 0.6));
 }
 
 .dock-placeholder-text {
   font-size: 13.5px;
-  color: var(--text-muted);
+  color: var(--text-secondary);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -769,8 +813,8 @@ textarea:focus-visible {
 .dock-pill-tag {
   font-size: 11.5px;
   font-weight: 500;
-  color: var(--text-muted);
-  background: var(--surface-muted);
+  color: var(--text-secondary);
+  background: rgba(130, 160, 200, 0.08);
   border: 1px solid var(--border);
   padding: 4px 10px;
   border-radius: var(--radius-pill);
@@ -781,22 +825,24 @@ textarea:focus-visible {
   width: 32px;
   height: 32px;
   border-radius: 50%;
-  background: var(--ink);
+  background: var(--accent);
   color: #FFFFFF;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  transition: transform 0.16s ease;
+  box-shadow: 0 0 12px rgba(57, 123, 255, 0.4);
+  transition: transform 0.16s ease, background-color 0.16s ease;
 }
 
 .consultation-dock:hover .dock-submit-circle {
+  background: var(--ink-hover);
   transform: translateX(1px);
 }
 
 /* ============================================================
  * PRIMARY BUTTON RULE:
- * Tombol utama = --ink (gelap), bukan oranye penuh.
+ * Electric Blue CTA with soft blue glow on hover.
  * Target sentuh minimal 44px.
  * ============================================================ */
 .btn-primary-action {
@@ -804,22 +850,24 @@ textarea:focus-visible {
   align-items: center;
   justify-content: center;
   gap: 8px;
-  background: var(--ink);
+  background: var(--accent);
   color: #FFFFFF;
-  border: 1px solid var(--ink);
+  border: 1px solid rgba(255, 255, 255, 0.16);
   font-size: 14px;
   font-weight: 500;
   padding: 0 20px;
   min-height: 44px;
   border-radius: var(--radius-pill);
   cursor: pointer;
-  transition: opacity 0.16s ease, transform 0.16s ease;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3), 0 0 16px rgba(57, 123, 255, 0.35);
+  transition: opacity 0.16s ease, transform 0.16s ease, box-shadow 0.16s ease, background-color 0.16s ease;
   white-space: nowrap;
 }
 
 .btn-primary-action:hover {
-  opacity: 0.90;
+  background: var(--ink-hover);
   transform: translateY(-1px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4), 0 0 22px rgba(57, 123, 255, 0.55);
 }
 
 .btn-primary-action:active {
@@ -837,13 +885,13 @@ textarea:focus-visible {
 }
 
 /* ============================================================
- * 3. RIGHT PANEL (340px, tinggi penuh, diam, latar --surface)
+ * 3. RIGHT PANEL (340px, tinggi penuh, diam, latar --surface-muted)
  * Tombol "Create New Request" menempel di bawah panel kanan
  * ============================================================ */
 .right-panel {
   width: 340px;
   height: 100dvh;
-  background: var(--surface);
+  background: var(--surface-muted);
   border-left: 1px solid var(--border);
   display: flex;
   flex-direction: column;
@@ -882,16 +930,16 @@ textarea:focus-visible {
   font-weight: 600;
   padding: 2px 7px;
   border-radius: var(--radius-pill);
-  background: var(--surface-muted);
-  border: 1px solid var(--border);
-  color: var(--text);
+  background: rgba(57, 123, 255, 0.12);
+  border: 1px solid rgba(57, 123, 255, 0.25);
+  color: var(--accent-cyan);
 }
 
 .right-panel-close-btn {
   display: none;
   background: none;
   border: none;
-  color: var(--text-muted);
+  color: var(--text-secondary);
   cursor: pointer;
   padding: 8px;
   min-height: 44px;
@@ -910,12 +958,18 @@ textarea:focus-visible {
   display: flex;
   align-items: center;
   gap: 10px;
-  background: var(--surface-muted);
+  background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius-pill);
   margin: 16px 20px 12px;
   min-height: 40px;
   flex-shrink: 0;
+  transition: border-color 0.16s ease;
+}
+
+.panel-search-box:focus-within {
+  border-color: rgba(57, 123, 255, 0.5);
+  box-shadow: 0 0 12px rgba(57, 123, 255, 0.15);
 }
 
 .panel-search-box svg {
@@ -949,7 +1003,7 @@ textarea:focus-visible {
 }
 
 .panel-card {
-  background: var(--surface-muted);
+  background: var(--surface-card);
   border: 1px solid var(--border);
   border-radius: 14px;
   padding: 14px 16px;
@@ -962,8 +1016,8 @@ textarea:focus-visible {
 }
 
 .panel-card:hover {
-  background: #FAF8F5;
-  border-color: rgba(17, 18, 22, 0.16);
+  background: var(--surface-hover);
+  border-color: rgba(57, 123, 255, 0.35);
   transform: translateY(-1px);
 }
 
@@ -984,7 +1038,7 @@ textarea:focus-visible {
 .panel-card-desc {
   margin: 0;
   font-size: 12px;
-  color: var(--text-muted);
+  color: var(--text-secondary);
   line-height: 1.4;
   display: -webkit-box;
   -webkit-line-clamp: 2;
@@ -1009,14 +1063,14 @@ textarea:focus-visible {
 .panel-empty-text {
   margin: 0;
   font-size: 13px;
-  color: var(--text-muted);
+  color: var(--text-secondary);
 }
 
 /* Tombol menempel di bawah panel kanan */
 .right-panel-footer {
   padding: 16px 20px;
   border-top: 1px solid var(--border);
-  background: var(--surface);
+  background: var(--surface-muted);
   flex-shrink: 0;
   margin-top: auto;
 }
@@ -1048,13 +1102,13 @@ textarea:focus-visible {
 .section-block-desc {
   margin: 0;
   font-size: 14px;
-  color: var(--text-muted);
+  color: var(--text-secondary);
 }
 
 .btn-link-action {
   background: none;
   border: none;
-  color: var(--text-muted);
+  color: var(--accent-cyan);
   font-size: 14px;
   font-weight: 500;
   cursor: pointer;
@@ -1062,12 +1116,13 @@ textarea:focus-visible {
   min-height: 44px;
   display: inline-flex;
   align-items: center;
-  transition: color 0.16s ease;
+  transition: color 0.16s ease, transform 0.16s ease;
   white-space: nowrap;
 }
 
 .btn-link-action:hover {
-  color: var(--text);
+  color: #FFFFFF;
+  transform: translateX(2px);
 }
 
 .items-list-container {
@@ -1081,7 +1136,7 @@ textarea:focus-visible {
  * Card radius 20px, padding 24px, 1px --border
  * ============================================================ */
 .data-card {
-  background: var(--surface);
+  background: var(--surface-card);
   border: 1px solid var(--border);
   border-radius: var(--radius-card); /* 20px */
   padding: 24px;
@@ -1089,11 +1144,12 @@ textarea:focus-visible {
   display: flex;
   flex-direction: column;
   gap: 14px;
-  transition: border-color 0.16s ease;
+  transition: border-color 0.18s ease, background-color 0.18s ease;
 }
 
 .data-card:hover {
-  border-color: rgba(17, 18, 22, 0.16);
+  border-color: rgba(57, 123, 255, 0.35);
+  background: var(--surface-hover);
 }
 
 .data-card-top {
@@ -1114,7 +1170,7 @@ textarea:focus-visible {
 .data-card-desc {
   margin: 0;
   font-size: 14px;
-  color: var(--text-muted);
+  color: var(--text-secondary);
   line-height: 1.5;
 }
 
@@ -1134,12 +1190,12 @@ textarea:focus-visible {
   font-weight: 500;
   padding: 3px 10px;
   border-radius: var(--radius-pill);
-  background: var(--surface-muted);
-  color: var(--text);
+  background: rgba(130, 160, 200, 0.08);
+  color: var(--text-secondary);
   border: 1px solid var(--border);
 }
 
-/* Status Badges — Clean, calm pills */
+/* Status Badges — Crisp Dark Theme Contrast */
 .status-badge {
   display: inline-flex;
   align-items: center;
@@ -1160,40 +1216,40 @@ textarea:focus-visible {
 }
 
 .status-badge--received {
-  background: var(--surface-muted);
+  background: rgba(130, 160, 200, 0.12);
   color: var(--text);
   border: 1px solid var(--border);
 }
 
 .status-badge--under_review {
-  background: var(--accent-soft);
-  color: var(--accent-text);
-  border: 1px solid rgba(232, 100, 60, 0.18);
+  background: rgba(57, 123, 255, 0.15);
+  color: var(--accent-cyan);
+  border: 1px solid rgba(57, 123, 255, 0.35);
 }
 
 .status-badge--in_discussion {
-  background: #F3F1EC;
-  color: #383633;
-  border: 1px solid rgba(17, 18, 22, 0.1);
+  background: rgba(245, 158, 11, 0.15);
+  color: #FBBF24;
+  border: 1px solid rgba(245, 158, 11, 0.35);
 }
 
 .status-badge--in_progress {
-  background: #EBF8F2;
-  color: #1E6B4B;
-  border: 1px solid rgba(30, 107, 75, 0.18);
+  background: rgba(16, 185, 129, 0.15);
+  color: #34D399;
+  border: 1px solid rgba(16, 185, 129, 0.35);
 }
 
 .status-badge--completed {
-  background: #EBF8F2;
-  color: #1E6B4B;
-  border: 1px solid rgba(30, 107, 75, 0.18);
+  background: rgba(16, 185, 129, 0.2);
+  color: #34D399;
+  border: 1px solid rgba(16, 185, 129, 0.4);
 }
 
 /* Progress bar inside project cards */
 .progress-wrap {
   width: 100%;
   height: 6px;
-  background: var(--surface-muted);
+  background: rgba(130, 160, 200, 0.12);
   border-radius: var(--radius-pill);
   overflow: hidden;
   margin-top: 6px;
@@ -1201,8 +1257,9 @@ textarea:focus-visible {
 
 .progress-fill {
   height: 100%;
-  background: var(--accent);
+  background: linear-gradient(90deg, #397BFF 0%, #5BCBFF 100%);
   border-radius: var(--radius-pill);
+  box-shadow: 0 0 10px rgba(57, 123, 255, 0.5);
   transition: width 0.3s ease;
 }
 
@@ -1211,7 +1268,7 @@ textarea:focus-visible {
  * Tanpa kalimat motivasi generik. Empty state: satu baris teks muted + satu aksi.
  * ============================================================ */
 .empty-state-box {
-  background: var(--surface);
+  background: var(--surface-card);
   border: 1px solid var(--border);
   border-radius: var(--radius-card); /* 20px */
   padding: 32px 24px;
@@ -1227,27 +1284,29 @@ textarea:focus-visible {
 .empty-state-muted {
   margin: 0;
   font-size: 14px;
-  color: var(--text-muted);
+  color: var(--text-secondary);
 }
 
 .btn-empty-action {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  background: var(--ink);
+  background: var(--accent);
   color: #FFFFFF;
-  border: 1px solid var(--ink);
+  border: 1px solid rgba(255, 255, 255, 0.14);
   font-size: 14px;
   font-weight: 500;
   padding: 0 20px;
   min-height: 44px;
   border-radius: var(--radius-pill);
   cursor: pointer;
-  transition: opacity 0.16s ease;
+  box-shadow: 0 0 14px rgba(57, 123, 255, 0.35);
+  transition: opacity 0.16s ease, transform 0.16s ease;
 }
 
 .btn-empty-action:hover {
   opacity: 0.90;
+  transform: translateY(-1px);
 }
 
 /* ============================================================
@@ -1260,18 +1319,19 @@ textarea:focus-visible {
 }
 
 .product-pillar-card {
-  background: var(--surface);
+  background: var(--surface-card);
   border: 1px solid var(--border);
   border-radius: var(--radius-card); /* 20px */
   padding: 24px;
   box-shadow: var(--shadow-card);
   display: flex;
   flex-direction: column;
-  transition: border-color 0.16s ease;
+  transition: border-color 0.18s ease, background-color 0.18s ease;
 }
 
 .product-pillar-card:hover {
-  border-color: rgba(17, 18, 22, 0.16);
+  border-color: rgba(57, 123, 255, 0.35);
+  background: var(--surface-hover);
 }
 
 .product-card-badge {
@@ -1281,16 +1341,16 @@ textarea:focus-visible {
   font-weight: 500;
   padding: 3px 10px;
   border-radius: var(--radius-pill);
-  background: var(--accent-soft);
-  color: var(--accent-text);
-  border: 1px solid rgba(232, 100, 60, 0.18);
+  background: rgba(57, 123, 255, 0.14);
+  color: var(--accent-cyan);
+  border: 1px solid rgba(57, 123, 255, 0.3);
   margin-bottom: 16px;
 }
 
 .product-pillar-num {
   font-size: 12px;
   font-weight: 600;
-  color: var(--text-muted);
+  color: var(--accent-cyan);
   letter-spacing: 0.05em;
   margin-bottom: 6px;
 }
@@ -1298,7 +1358,7 @@ textarea:focus-visible {
 .product-pillar-title {
   margin: 0 0 8px;
   font-size: 20px;
-  font-weight: 600;
+  font-weight: 700;
   letter-spacing: -0.015em;
   color: var(--text);
 }
@@ -1306,7 +1366,7 @@ textarea:focus-visible {
 .product-pillar-desc {
   margin: 0 0 24px;
   font-size: 14px;
-  color: var(--text-muted);
+  color: var(--text-secondary);
   line-height: 1.55;
   flex: 1;
 }
@@ -1315,7 +1375,7 @@ textarea:focus-visible {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  background: var(--surface-muted);
+  background: rgba(130, 160, 200, 0.08);
   border: 1px solid var(--border);
   color: var(--text);
   font-size: 14px;
@@ -1324,13 +1384,14 @@ textarea:focus-visible {
   min-height: 44px;
   border-radius: var(--radius-control);
   cursor: pointer;
-  transition: background 0.16s ease, border-color 0.16s ease;
+  transition: background 0.16s ease, border-color 0.16s ease, color 0.16s ease;
   width: 100%;
 }
 
 .btn-product-consult:hover {
   background: var(--surface);
-  border-color: var(--text);
+  border-color: var(--accent);
+  color: var(--accent-cyan);
 }
 
 .help-grid {
@@ -1340,7 +1401,7 @@ textarea:focus-visible {
 }
 
 .help-card {
-  background: var(--surface);
+  background: var(--surface-card);
   border: 1px solid var(--border);
   border-radius: var(--radius-card); /* 20px */
   padding: 24px;
@@ -1353,13 +1414,14 @@ textarea:focus-visible {
   width: 44px;
   height: 44px;
   border-radius: var(--radius-control);
-  background: var(--surface-muted);
-  border: 1px solid var(--border);
-  color: var(--text);
+  background: rgba(57, 123, 255, 0.14);
+  border: 1px solid rgba(57, 123, 255, 0.3);
+  color: var(--accent-cyan);
   display: inline-flex;
   align-items: center;
   justify-content: center;
   margin-bottom: 16px;
+  box-shadow: 0 0 12px rgba(57, 123, 255, 0.25);
 }
 
 .help-card-title {
@@ -1372,7 +1434,7 @@ textarea:focus-visible {
 .help-card-desc {
   margin: 0 0 24px;
   font-size: 14px;
-  color: var(--text-muted);
+  color: var(--text-secondary);
   line-height: 1.5;
   flex: 1;
 }
@@ -1381,7 +1443,7 @@ textarea:focus-visible {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  background: var(--surface-muted);
+  background: rgba(130, 160, 200, 0.08);
   border: 1px solid var(--border);
   color: var(--text);
   font-size: 14px;
@@ -1390,24 +1452,24 @@ textarea:focus-visible {
   min-height: 44px;
   border-radius: var(--radius-control);
   width: fit-content;
-  transition: background 0.16s ease, border-color 0.16s ease;
+  transition: background 0.16s ease, border-color 0.16s ease, color 0.16s ease;
 }
 
 .btn-help-link:hover {
   background: var(--surface);
-  border-color: var(--text);
+  border-color: var(--accent);
+  color: var(--accent-cyan);
 }
 
 /* ============================================================
  * REAL REQUEST MODAL FORM
- * Card radius 20px, shadow maksimal 0 8px 24px rgba(17,18,22,.08)
  * ============================================================ */
 .modal-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(17, 18, 22, 0.45);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+  background: rgba(8, 11, 18, 0.78);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
   z-index: 1000;
   display: flex;
   align-items: center;
@@ -1458,14 +1520,14 @@ textarea:focus-visible {
 .modal-subtext {
   margin: 0;
   font-size: 14px;
-  color: var(--text-muted);
+  color: var(--text-secondary);
   line-height: 1.45;
 }
 
 .modal-close-icon {
   background: none;
   border: none;
-  color: var(--text-muted);
+  color: var(--text-secondary);
   cursor: pointer;
   padding: 8px;
   min-height: 44px;
@@ -1504,10 +1566,10 @@ textarea:focus-visible {
   color: var(--text);
 }
 
-/* Input & tombol konsisten 12px radius, min-height 44px */
+/* Input & select elements */
 .form-select,
 .form-textarea {
-  background: var(--surface);
+  background: var(--bg-secondary);
   border: 1px solid var(--border);
   color: var(--text);
   font-family: inherit;
@@ -1516,14 +1578,20 @@ textarea:focus-visible {
   padding: 10px 14px;
   min-height: 44px;
   outline: none;
-  transition: border-color 0.16s ease;
+  transition: border-color 0.16s ease, box-shadow 0.16s ease;
+}
+
+.form-select option {
+  background: var(--bg-secondary);
+  color: var(--text);
 }
 
 .form-select:focus,
 .form-textarea:focus {
-  outline: 2px solid var(--ink);
+  outline: 2px solid var(--accent);
   outline-offset: 2px;
-  border-color: var(--ink);
+  border-color: var(--accent);
+  box-shadow: 0 0 12px rgba(57, 123, 255, 0.2);
 }
 
 .form-textarea {
@@ -1534,9 +1602,9 @@ textarea:focus-visible {
 
 .form-error-alert {
   font-size: 13px;
-  color: var(--accent-text);
-  background: var(--accent-soft);
-  border: 1px solid rgba(194, 70, 31, 0.2);
+  color: #FFA39E;
+  background: rgba(255, 77, 79, 0.12);
+  border: 1px solid rgba(255, 77, 79, 0.25);
   padding: 10px 14px;
   border-radius: var(--radius-control);
 }
@@ -1554,7 +1622,7 @@ textarea:focus-visible {
 .btn-modal-cancel {
   background: transparent;
   border: 1px solid var(--border);
-  color: var(--text-muted);
+  color: var(--text-secondary);
   font-size: 14px;
   font-weight: 500;
   padding: 0 18px;
@@ -1577,7 +1645,8 @@ textarea:focus-visible {
   bottom: 24px;
   left: 50%;
   transform: translateX(-50%) translateY(20px);
-  background: var(--ink);
+  background: var(--surface);
+  border: 1px solid rgba(57, 123, 255, 0.35);
   color: #FFFFFF;
   font-size: 14px;
   font-weight: 500;
@@ -1604,7 +1673,9 @@ textarea:focus-visible {
 .right-panel-backdrop {
   position: fixed;
   inset: 0;
-  background: rgba(17, 18, 22, 0.45);
+  background: rgba(8, 11, 18, 0.65);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
   z-index: 48;
   opacity: 0;
   visibility: hidden;
@@ -1619,7 +1690,9 @@ textarea:focus-visible {
 .sidebar-backdrop {
   position: fixed;
   inset: 0;
-  background: rgba(17, 18, 22, 0.45);
+  background: rgba(8, 11, 18, 0.65);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
   z-index: 48;
   opacity: 0;
   visibility: hidden;
@@ -1721,5 +1794,15 @@ textarea:focus-visible {
 
   .dock-actions {
     justify-content: space-between;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-emblem,
+  .solution-card,
+  .consultation-dock,
+  .btn-primary-action {
+    animation: none !important;
+    transition: none !important;
   }
 }

@@ -7,7 +7,7 @@
   <meta name="description" content="Manuver Customer Digital Workspace">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700;800&family=Geist+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/src/dashboard.css">
 </head>
 <body>
@@ -122,6 +122,9 @@
 
     <!-- MAIN VIEW AREA -->
     <div class="main-layout">
+      <!-- Ambient Spatial Particles Canvas -->
+      <canvas id="spatial-particles-canvas" class="spatial-particles-canvas" aria-hidden="true"></canvas>
+
       <!-- 2. TOP HEADER -->
       <header class="top-header">
         <div class="header-left">
@@ -164,14 +167,14 @@
         <section id="view-overview" class="view-panel is-active" role="tabpanel">
           <!-- HERO CENTER SECTION (MATCHING REFERENCE) -->
           <div class="hero-center-box">
-            <!-- 4-point subtle warm star emblem -->
+            <!-- 4-point subtle cinematic star emblem -->
             <div class="hero-emblem" aria-hidden="true">
               <svg viewBox="0 0 80 80" width="56" height="56" fill="none">
                 <defs>
                   <radialGradient id="starGrad" cx="50%" cy="50%" r="50%">
-                    <stop offset="0%" stop-color="#F2A07F" stop-opacity="0.9" />
-                    <stop offset="60%" stop-color="#E8643C" stop-opacity="0.5" />
-                    <stop offset="100%" stop-color="#F3E4DA" stop-opacity="0.1" />
+                    <stop offset="0%" stop-color="#5BCBFF" stop-opacity="0.9" />
+                    <stop offset="55%" stop-color="#397BFF" stop-opacity="0.65" />
+                    <stop offset="100%" stop-color="#397BFF" stop-opacity="0.0" />
                   </radialGradient>
                 </defs>
                 <path d="M40 6 C40 24, 24 40, 6 40 C24 40, 40 56, 40 74 C40 56, 56 40, 74 40 C56 40, 40 24, 40 6 Z" fill="url(#starGrad)" />

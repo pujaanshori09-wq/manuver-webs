@@ -20,11 +20,12 @@ This workspace contains project-specific guidelines and anti-slop frontend stand
 
 4. **Client Dashboard UI Rules:**
    - Feel: Tenang, mahal, dan buatan manusia.
-   - Canvas: Warm light canvas (`--bg-app: #F6F4F1`, `--surface: #FFFFFF`, `--surface-muted: #F1EEEA`).
-   - Accent: Signature Manuver Orange (`--accent: #E8643C`, `--accent-text: #C2461F`, `--accent-soft: #FDEBE3`). Max 1 dominant accent per screen.
-   - Primary Buttons: Must use `--ink: #111216` (dark), not solid orange.
-   - Typography: Single font family `Plus Jakarta Sans` (welcome title 44px semibold tracking -0.02em, default text 14px, muted text `--text-muted: #6B6A68`).
-   - Geometry: Outer shell radius 28px, cards 20px, inputs/buttons 12px or pill, shadows subtle (`0 1px 2px rgba(17,18,22,.04), 0 8px 24px rgba(17,18,22,.04)`), section gap 32px.
+   - Canvas: Deep dark navy (`--bg-app: #080B12`, `--surface: #111B2B`, `--surface-card: #121C2C`, `--surface-muted: #0D1422`).
+   - Accent: Electric Blue (`--accent: #397BFF`, `--accent-cyan: #5BCBFF`, `--accent-soft: rgba(57,123,255,0.12)`).
+   - Primary Buttons: Electric Blue `--accent: #397BFF` with white text and soft glow hover.
+   - Typography: `Geist`, `Plus Jakarta Sans`, and `Inter` (welcome title 44px bold tracking -0.025em, default text 14px, muted text `--text-secondary: #A1ACBC`, `--text-muted: #687589`).
+   - Geometry: Fullscreen AppShell (`260px minmax(0,1fr) 340px`), cards 20px, inputs/buttons 12px or pill, border `rgba(130, 160, 200, 0.14)`.
+   - Atmosphere: Lightweight ambient 2D spatial particles + subtle electric blue depth glow.
    - Empty State: Strictly one line muted text + one action button. No motivational filler.
    - Menu: No unfinished badges (e.g. no "Soon" tag).
 

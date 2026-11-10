@@ -152,32 +152,79 @@
              VIEW 1: OVERVIEW (RINGKASAN)
              ============================================================ -->
         <section id="view-overview" class="view-panel is-active" role="tabpanel">
-          <!-- 3. OVERVIEW / WELCOME SECTION -->
-          <div class="welcome-card">
-            <div class="welcome-copy">
-              <h1 class="welcome-title" id="welcome-title">Selamat datang kembali.</h1>
-              <p class="welcome-subtitle" data-i18n="dashboard.welcomeSubtitle">Ruang kerja digital Anda dimulai dari sini.</p>
+          <!-- HERO CENTER SECTION (MATCHING REFERENCE) -->
+          <div class="hero-center-box">
+            <!-- 4-point subtle warm star emblem -->
+            <div class="hero-emblem" aria-hidden="true">
+              <svg viewBox="0 0 80 80" width="56" height="56" fill="none">
+                <defs>
+                  <radialGradient id="starGrad" cx="50%" cy="50%" r="50%">
+                    <stop offset="0%" stop-color="#F2A07F" stop-opacity="0.9" />
+                    <stop offset="60%" stop-color="#E8643C" stop-opacity="0.5" />
+                    <stop offset="100%" stop-color="#F3E4DA" stop-opacity="0.1" />
+                  </radialGradient>
+                </defs>
+                <path d="M40 6 C40 24, 24 40, 6 40 C24 40, 40 56, 40 74 C40 56, 56 40, 74 40 C56 40, 40 24, 40 6 Z" fill="url(#starGrad)" />
+              </svg>
             </div>
-            <div class="welcome-action">
-              <button type="button" class="btn-primary-action open-request-trigger" data-i18n="dashboard.btnCreateRequest">
-                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-                <span>Buat Permintaan</span>
-              </button>
-            </div>
-          </div>
 
-          <!-- 4. MAIN ACTION CARD -->
-          <div class="action-highlight-card">
-            <div class="action-highlight-content">
-              <div class="action-pill-tag">KONSULTASI SOLUSI</div>
-              <h3 class="action-highlight-title" data-i18n="dashboard.actionCardTitle">Ada ide atau kebutuhan yang ingin diwujudkan?</h3>
-              <p class="action-highlight-desc" data-i18n="dashboard.actionCardDesc">Ceritakan kebutuhan Anda. Manuver akan membantu mengubahnya menjadi solusi digital.</p>
+            <!-- Welcome Title & Subtitle -->
+            <div class="hero-text-wrap">
+              <h1 class="welcome-title" id="welcome-title">Selamat datang kembali.</h1>
+              <p class="welcome-question" data-i18n="dashboard.welcomeQuestion">Apa yang ingin Anda kembangkan hari ini?</p>
             </div>
-            <div class="action-highlight-btn-wrap">
-              <button type="button" class="btn-highlight-action open-request-trigger" data-i18n="dashboard.btnStartConsultation">
-                <span>Mulai Konsultasi &rarr;</span>
+
+            <!-- 3 Quick Action / Solution Cards (Aligned with Reference) -->
+            <div class="solution-cards-grid">
+              <button type="button" class="solution-card open-request-trigger" data-category="workflow_automation">
+                <div class="solution-card-icon-box solution-card-icon--automation" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                    <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+                  </svg>
+                </div>
+                <h3 class="solution-card-title" data-i18n="dashboard.quickAutomationTitle">Otomasi Alur Kerja</h3>
+                <p class="solution-card-desc" data-i18n="dashboard.quickAutomationDesc">Hubungkan CRM, WhatsApp, API, & Sheets tanpa kerja manual.</p>
+              </button>
+
+              <button type="button" class="solution-card open-request-trigger" data-category="web_application">
+                <div class="solution-card-icon-box solution-card-icon--web" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="16 18 22 12 16 6"></polyline>
+                    <polyline points="8 6 2 12 8 18"></polyline>
+                  </svg>
+                </div>
+                <h3 class="solution-card-title" data-i18n="dashboard.quickWebTitle">Aplikasi Web & SaaS</h3>
+                <p class="solution-card-desc" data-i18n="dashboard.quickWebDesc">Pengembangan platform digital, portal klien, dan web berkecepatan tinggi.</p>
+              </button>
+
+              <button type="button" class="solution-card open-request-trigger" data-category="custom_ai">
+                <div class="solution-card-icon-box solution-card-icon--ai" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"></path>
+                  </svg>
+                </div>
+                <h3 class="solution-card-title" data-i18n="dashboard.quickAiTitle">Solusi AI Kustom</h3>
+                <p class="solution-card-desc" data-i18n="dashboard.quickAiDesc">Asisten cerdas dan integrasi AI berbasis data bisnis Anda.</p>
               </button>
             </div>
+
+            <!-- Bottom Consultation Prompt Dock (Floating Pill Dock) -->
+            <button type="button" class="consultation-dock open-request-trigger" aria-label="Mulai konsultasi proyek">
+              <div class="dock-left">
+                <span class="dock-sparkle" aria-hidden="true">✦</span>
+                <span class="dock-placeholder-text" data-i18n="dashboard.dockPlaceholder">Konsultasikan ide proyek atau kendala manual Anda...</span>
+              </div>
+              <div class="dock-actions">
+                <span class="dock-pill-tag" data-i18n="dashboard.dockPillCategory">Pilih Kategori</span>
+                <span class="dock-pill-tag" data-i18n="dashboard.dockPillTimeline">Timeline</span>
+                <span class="dock-submit-circle" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                    <polyline points="12 5 19 12 12 19"></polyline>
+                  </svg>
+                </span>
+              </div>
+            </button>
           </div>
 
           <!-- RECENT PROJECTS PREVIEW -->
@@ -344,6 +391,38 @@
         </section>
       </main>
     </div>
+
+    <!-- 3. RIGHT ACTIVITY & REQUESTS PANEL (MATCHING REFERENCE) -->
+    <aside id="right-activity-panel" class="right-panel" aria-label="Aktivitas Permintaan">
+      <div class="right-panel-header">
+        <div class="right-panel-title-wrap">
+          <h3 class="right-panel-title" data-i18n="dashboard.panelActivityTitle">Aktivitas Permintaan</h3>
+          <span class="right-panel-count-pill" id="panel-requests-badge">0</span>
+        </div>
+      </div>
+
+      <!-- Search input filter -->
+      <div class="panel-search-box">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="11" cy="11" r="8"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+        <input type="search" id="panel-search-input" class="panel-search-input" placeholder="Cari permintaan..." data-i18n-placeholder="dashboard.searchPlaceholder" aria-label="Cari permintaan" />
+      </div>
+
+      <!-- Scrollable list of recent requests/briefs -->
+      <div class="right-panel-content" id="panel-activity-list">
+        <!-- Dynamically rendered items or clean 1-line empty state -->
+      </div>
+
+      <!-- Bottom action button (Pill/12px, --ink background, #ffffff text) -->
+      <div class="right-panel-footer">
+        <button type="button" class="btn-primary-action open-request-trigger btn-full-width" data-i18n="dashboard.btnCreateNewRequest">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+          <span>Buat Permintaan Baru</span>
+        </button>
+      </div>
+    </aside>
   </div>
 
   <!-- ============================================================

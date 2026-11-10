@@ -181,12 +181,32 @@ export const dictionary = {
       // Welcome Section
       welcomeTitle: 'Welcome back, {name}',
       welcomeSubtitle: 'Your digital product workspace starts here.',
+      welcomeQuestion: 'How can we help you build today?',
       btnCreateRequest: 'Create Request',
       
       // Main Action Card
       actionCardTitle: 'Have an idea or operational challenge to solve?',
       actionCardDesc: 'Tell us what you need. Manuver will engineer it into a scalable digital solution.',
       btnStartConsultation: 'Start Consultation',
+
+      // Quick Solution Cards (Reference 3-Card Grid)
+      quickAutomationTitle: 'Workflow Automation',
+      quickAutomationDesc: 'Connect CRMs, WhatsApp, APIs, & Sheets without manual friction.',
+      quickWebTitle: 'Web Apps & SaaS',
+      quickWebDesc: 'Custom high-speed digital platforms, client portals, and web software.',
+      quickAiTitle: 'Custom AI Solutions',
+      quickAiDesc: 'Intelligent bots and private workflow pipelines trained on your data.',
+
+      // Consultation Dock
+      dockPlaceholder: 'Initiate a project brief or describe operational bottlenecks...',
+      dockPillCategory: 'Categories',
+      dockPillTimeline: 'Timeline',
+
+      // Right Activity Panel
+      panelActivityTitle: 'Request Activity',
+      searchPlaceholder: 'Search requests...',
+      emptyActivityText: 'No requests submitted yet.',
+      btnCreateNewRequest: 'Create New Request',
       
       // Section Headers
       sectionProjectsTitle: 'My Projects',
@@ -435,12 +455,32 @@ export const dictionary = {
       // Welcome Section
       welcomeTitle: 'Selamat datang kembali, {name}.',
       welcomeSubtitle: 'Ruang kerja digital Anda dimulai dari sini.',
+      welcomeQuestion: 'Apa yang ingin Anda kembangkan hari ini?',
       btnCreateRequest: 'Buat Permintaan',
       
       // Main Action Card
       actionCardTitle: 'Ada ide atau kebutuhan yang ingin diwujudkan?',
       actionCardDesc: 'Ceritakan kebutuhan Anda. Manuver akan membantu mengubahnya menjadi solusi digital.',
       btnStartConsultation: 'Mulai Konsultasi',
+
+      // Quick Solution Cards (Reference 3-Card Grid)
+      quickAutomationTitle: 'Otomasi Alur Kerja',
+      quickAutomationDesc: 'Hubungkan CRM, WhatsApp, API, & Sheets tanpa kerja manual.',
+      quickWebTitle: 'Aplikasi Web & SaaS',
+      quickWebDesc: 'Pengembangan platform digital, portal klien, dan web berkecepatan tinggi.',
+      quickAiTitle: 'Solusi AI Kustom',
+      quickAiDesc: 'Asisten cerdas dan integrasi AI berbasis data bisnis Anda.',
+
+      // Consultation Dock
+      dockPlaceholder: 'Konsultasikan ide proyek atau kendala manual Anda...',
+      dockPillCategory: 'Pilih Kategori',
+      dockPillTimeline: 'Timeline Standar',
+
+      // Right Activity Panel
+      panelActivityTitle: 'Aktivitas Permintaan',
+      searchPlaceholder: 'Cari permintaan...',
+      emptyActivityText: 'Belum ada riwayat permintaan.',
+      btnCreateNewRequest: 'Buat Permintaan Baru',
       
       // Section Headers
       sectionProjectsTitle: 'Proyek Saya',

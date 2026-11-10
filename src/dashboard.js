@@ -45,6 +45,7 @@ onLanguageChange((lang) => {
     renderUserProfile(currentUser);
     renderProjects(currentProjects);
     renderRequests(currentRequests);
+    renderRightPanel(currentRequests);
   }
 });
 
@@ -88,6 +89,10 @@ async function bootstrapDashboard() {
     setupNavigation();
     setupModal();
     setupSidebarToggle();
+
+    document.getElementById('panel-search-input')?.addEventListener('input', () => {
+      renderRightPanel(currentRequests);
+    });
   } catch (err) {
     window.location.replace('/');
   }
@@ -124,15 +129,21 @@ async function loadDashboardData() {
   // Render lists
   renderProjects(currentProjects);
   renderRequests(currentRequests);
+  renderRightPanel(currentRequests);
   updateCounts();
 }
 
 /**
- * Update Sidebar Count Badges
+ * Update Sidebar & Panel Count Badges
  */
 function updateCounts() {
   const reqBadge = document.getElementById('badge-requests-count');
   const projBadge = document.getElementById('badge-projects-count');
+  const panelBadge = document.getElementById('panel-requests-badge');
+
+  if (panelBadge) {
+    panelBadge.textContent = currentRequests.length;
+  }
 
   if (reqBadge) {
     if (currentRequests.length > 0) {
@@ -337,6 +348,54 @@ function renderRequests(requests) {
 }
 
 /**
+ * 6. RENDER RIGHT ACTIVITY PANEL (REFERENCE MATCH)
+ */
+function renderRightPanel(requests) {
+  const panelList = document.getElementById('panel-activity-list');
+  const panelBadge = document.getElementById('panel-requests-badge');
+  if (panelBadge) panelBadge.textContent = requests ? requests.length : 0;
+  if (!panelList) return;
+
+  const searchInput = document.getElementById('panel-search-input');
+  const searchTerm = (searchInput?.value || '').toLowerCase().trim();
+
+  const filtered = (requests || []).filter((r) => {
+    if (!searchTerm) return true;
+    const cat = formatCategoryLabel(r.service_category).toLowerCase();
+    const desc = (r.description || '').toLowerCase();
+    return cat.includes(searchTerm) || desc.includes(searchTerm);
+  });
+
+  if (!filtered || filtered.length === 0) {
+    panelList.innerHTML = `
+      <div class="panel-empty-box">
+        <p class="panel-empty-text">${t('dashboard.emptyActivityText', currentLang) || 'Belum ada riwayat permintaan.'}</p>
+      </div>
+    `;
+    return;
+  }
+
+  panelList.innerHTML = filtered.map((req) => {
+    const categoryLabel = formatCategoryLabel(req.service_category);
+    const status = req.status || 'received';
+    const dateFormatted = formatDate(req.created_at);
+
+    return `
+      <div class="panel-card open-request-trigger" data-category="${req.service_category || ''}" role="button" tabindex="0">
+        <div class="panel-card-head">
+          <h4 class="panel-card-title">${categoryLabel}</h4>
+          <span class="status-badge status-badge--${status}">${formatStatusLabel(status)}</span>
+        </div>
+        <p class="panel-card-desc">${escapeHtml(req.description || '')}</p>
+        <div class="panel-card-foot">
+          <span>${dateFormatted}</span>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+/**
  * 6. NAVIGATION & VIEW SWITCHING
  */
 function setupNavigation() {
@@ -528,6 +587,7 @@ function setupModal() {
         if (result.request) {
           currentRequests = [result.request, ...currentRequests];
           renderRequests(currentRequests);
+          renderRightPanel(currentRequests);
           updateCounts();
         } else {
           loadDashboardData();

@@ -168,115 +168,110 @@ export const dictionary = {
       navProjects: 'My Projects',
       navProducts: 'Products',
       navHelp: 'Help & Support',
-      badgeComingSoon: 'Soon',
-      badgeActive: 'Active',
       
       // Top Header Context Titles
       headerOverview: 'Overview',
       headerRequests: 'My Requests',
       headerProjects: 'My Projects',
-      headerProducts: 'Products & Solutions',
+      headerProducts: 'Products',
       headerHelp: 'Help & Support',
       
-      // Welcome Section
-      welcomeTitle: 'Welcome back, {name}',
-      welcomeSubtitle: 'Your digital product workspace starts here.',
-      welcomeQuestion: 'How can we help you build today?',
-      btnCreateRequest: 'Create Request',
+      // Overview Header
+      welcomeKicker: 'Welcome back',
+      welcomeSentence: "Manual work doesn't scale. Tell us what's blocking you.",
       
-      // Main Action Card
-      actionCardTitle: 'Have an idea or operational challenge to solve?',
-      actionCardDesc: 'Tell us what you need. Manuver will engineer it into a scalable digital solution.',
-      btnStartConsultation: 'Start Consultation',
-
-      // Quick Solution Cards (Reference 3-Card Grid)
-      quickAutomationTitle: 'Workflow Automation',
-      quickAutomationDesc: 'Connect CRMs, WhatsApp, APIs, & Sheets without manual friction.',
-      quickWebTitle: 'Web Apps & SaaS',
-      quickWebDesc: 'Custom high-speed digital platforms, client portals, and web software.',
-      quickAiTitle: 'Custom AI Solutions',
-      quickAiDesc: 'Intelligent bots and private workflow pipelines trained on your data.',
-
-      // Consultation Dock
-      dockPlaceholder: 'Initiate a project brief or describe operational bottlenecks...',
-      dockPillCategory: 'Categories',
-      dockPillTimeline: 'Timeline',
-
+      // Primary Action Row
+      inputPlaceholder: "Describe what's slowing your team down…",
+      btnStartRequest: 'Start a request →',
+      
+      // Services Section (3-row bordered list)
+      servicesLabel: 'CAPABILITIES',
+      service01Num: '01',
+      service01Title: 'Workflow Automation',
+      service01Desc: 'Connect CRMs, WhatsApp, APIs, and sheets without manual friction.',
+      service02Num: '02',
+      service02Title: 'Web Apps & SaaS',
+      service02Desc: 'Resilient digital platforms, client portals, and bespoke web software.',
+      service03Num: '03',
+      service03Title: 'Custom AI Solutions',
+      service03Desc: 'Intelligent automation agents trained on your proprietary data.',
+      
+      // Section Headers & Links
+      sectionProjectsTitle: 'MY PROJECTS',
+      sectionRequestsTitle: 'MY REQUESTS',
+      viewAll: 'View all →',
+      
+      // Empty States (Clear, direct, no motivational fluff)
+      emptyProjectsText: 'No projects yet. Once a request is accepted it shows up here with its stage and next milestone.',
+      emptyRequestsText: 'No requests yet. Describe a bottleneck above to submit your first brief.',
+      btnStartRequestSmall: 'Start a request',
+      
+      // Table Columns
+      colRequest: 'Request',
+      colCategory: 'Category',
+      colStatus: 'Status',
+      colDate: 'Date',
+      
       // Right Activity Panel
       panelActivityTitle: 'Request Activity',
-      searchPlaceholder: 'Search requests...',
-      emptyActivityText: 'No requests submitted yet.',
+      searchPlaceholder: 'Search requests…',
+      emptyActivityText: 'No requests logged yet.',
       btnCreateNewRequest: 'Create New Request',
       
-      // Section Headers
-      sectionProjectsTitle: 'My Projects',
-      sectionProjectsDesc: 'Track active builds, architecture phases, and software deployments.',
-      sectionRequestsTitle: 'My Requests',
-      sectionRequestsDesc: 'Live status of your submitted project briefs and feature inquiries.',
-      
-      // Empty States (Strictly 1 line muted text + 1 action)
-      emptyProjectsTitle: 'No active projects yet.',
-      emptyProjectsDesc: '',
-      emptyProjectsText: 'No active projects yet.',
-      btnShareIdea: 'Start Project',
-      
-      emptyRequestsTitle: 'No requests submitted yet.',
-      emptyRequestsDesc: '',
-      emptyRequestsText: 'No requests submitted yet.',
-      btnSubmitFirstRequest: 'Create Request',
-      
-      // Status Badges
+      // Status Labels
       statusReceived: 'Received',
-      statusUnderReview: 'Under Review',
-      statusInDiscussion: 'In Discussion',
-      statusInProgress: 'In Progress',
-      statusCompleted: 'Completed',
+      statusUnderReview: 'In review',
+      statusInDiscussion: 'In discussion',
+      statusInProgress: 'In progress',
+      statusCompleted: 'Done',
+      
+      // Categories
+      categoryAutomation: 'Workflow Automation',
+      categoryWeb: 'Web Application & SaaS',
+      categoryAi: 'Custom AI Solution',
+      categoryComprehensive: 'End-to-End System',
+      categoryOther: 'Other / Custom',
       
       // Request Modal Form
-      modalTitle: 'Create New Request',
-      modalSubtitle: 'Share your vision or operational friction. Our engineering team will review it within 24 hours.',
-      labelCategory: 'Solution Category',
-      categoryAutomation: 'Workflow Automation (CRMs, APIs, WhatsApp, Sheets)',
-      categoryWeb: 'Web Application / Modern SaaS Platform',
-      categoryAi: 'Custom AI Assistant / Intelligent Workflow',
-      categoryComprehensive: 'End-to-End System (Web + Automation + AI)',
-      categoryOther: 'Other (Custom / Unique Requirements)',
-      labelDesc: 'Describe your requirements or bottleneck',
-      descPlaceholder: 'E.g., We need an automated order intake pipeline connecting Shopify to our internal ERP and instant customer updates...',
-      labelTimeline: 'Target Timeline',
-      timelineUrgent: 'Urgent (3–7 Days)',
-      timelineStandard: 'Standard (1–2 Weeks)',
-      timelineFlexible: 'Flexible (2–4 Weeks)',
-      labelBudget: 'Budget Range (Optional)',
-      budgetFlexible: 'Flexible / To be discussed',
-      budgetTier1: '< IDR 10 Million',
+      modalTitle: 'Start a Request',
+      modalSubtitle: 'Describe the manual bottleneck or system you need built. We respond within 24 hours.',
+      labelCategory: 'Category',
+      labelDesc: 'What needs to be built or automated?',
+      descPlaceholder: 'E.g., We need an automated order intake pipeline connecting Shopify to our ERP and WhatsApp customer notifications…',
+      labelTimeline: 'Timeline',
+      timelineUrgent: 'Urgent (3–7 days)',
+      timelineStandard: 'Standard (1–2 weeks)',
+      timelineFlexible: 'Flexible (2–4 weeks)',
+      labelBudget: 'Budget (Optional)',
+      budgetFlexible: 'Flexible',
+      budgetTier1: '< IDR 10M',
       budgetTier2: 'IDR 10M – 30M',
-      budgetTier3: '> IDR 30 Million',
+      budgetTier3: '> IDR 30M',
       btnCancel: 'Cancel',
       btnSubmitRequest: 'Submit Request',
-      btnSubmitting: 'Submitting...',
-      toastSuccess: 'Request submitted successfully! Our team will follow up promptly.',
-      toastError: 'Failed to submit request. Please try again.',
+      btnSubmitting: 'Submitting…',
+      toastSuccess: 'Request submitted. We will review it shortly.',
+      toastError: 'Failed to submit. Please try again.',
       
       // Products View
-      productsHeading: 'Manuver Modular Solutions',
-      productsSubheading: 'Built on our core principles: Build, Automate, and Distribute.',
+      productsHeading: 'Modular Capabilities',
+      productsSubheading: 'Three core disciplines: Build, Automate, Distribute.',
       productBuildTitle: 'BUILD',
-      productBuildDesc: 'Custom software applications, modern high-conversion web platforms, and resilient system architectures.',
+      productBuildDesc: 'Resilient web platforms, fast client interfaces, and robust application architecture.',
       productAutomateTitle: 'AUTOMATE',
-      productAutomateDesc: '24/7 autonomous data pipelines, cross-tool webhooks, and automated operational task routing.',
+      productAutomateDesc: '24/7 background pipelines, API bridges, and zero-headcount operational workflows.',
       productDistributeTitle: 'DISTRIBUTE',
-      productDistributeDesc: 'License management, multi-tenant digital SaaS configurations, and secure commercial deployment.',
-      productAvailableBadge: 'Available via Consultation',
+      productDistributeDesc: 'Multi-tenant configurations, license management, and commercial scale.',
+      productAvailableBadge: 'Available via brief',
       
       // Help View
-      helpHeading: 'Help & Direct Support',
-      helpSubheading: 'Need assistance or have an urgent technical question? Connect directly with the Manuver team.',
-      helpWhatsAppTitle: 'Direct WhatsApp Consultation',
-      helpWhatsAppDesc: 'Chat directly with our lead technical architect in real-time.',
-      btnOpenWhatsApp: 'Chat on WhatsApp →',
-      helpEmailTitle: 'Email Support',
-      helpEmailDesc: 'Send detailed technical specs, RFPs, or security questionnaires.',
+      helpHeading: 'Direct Support',
+      helpSubheading: 'Speak directly with our technical lead.',
+      helpWhatsAppTitle: 'WhatsApp Direct',
+      helpWhatsAppDesc: 'Real-time technical discussions via WhatsApp.',
+      btnOpenWhatsApp: 'Open WhatsApp →',
+      helpEmailTitle: 'Email Inquiries',
+      helpEmailDesc: 'Send RFPs, architectural specifications, or NDAs.',
       btnEmailSupport: 'Send Email →'
     }
   },
@@ -431,7 +426,7 @@ export const dictionary = {
     },
     dashboard: {
       metaTitle: 'Dashboard · Manuver',
-      logoAria: 'Dashboard Manuver',
+      logoAria: 'Beranda Manuver',
       signOut: 'Keluar',
       signOutAria: 'Keluar dari akun Anda',
       loading: 'Memuat ruang kerja...',
@@ -442,115 +437,110 @@ export const dictionary = {
       navProjects: 'Proyek Saya',
       navProducts: 'Produk',
       navHelp: 'Bantuan',
-      badgeComingSoon: 'Segera',
-      badgeActive: 'Aktif',
       
       // Top Header Context Titles
       headerOverview: 'Ringkasan',
       headerRequests: 'Permintaan Saya',
       headerProjects: 'Proyek Saya',
-      headerProducts: 'Produk & Solusi',
-      headerHelp: 'Bantuan & Dukungan',
+      headerProducts: 'Produk',
+      headerHelp: 'Bantuan',
       
-      // Welcome Section
-      welcomeTitle: 'Selamat datang kembali, {name}.',
-      welcomeSubtitle: 'Ruang kerja digital Anda dimulai dari sini.',
-      welcomeQuestion: 'Apa yang ingin Anda kembangkan hari ini?',
-      btnCreateRequest: 'Buat Permintaan',
+      // Overview Header
+      welcomeKicker: 'Selamat datang kembali',
+      welcomeSentence: 'Pekerjaan manual tidak bisa scale. Ceritakan apa yang menghambat Anda.',
       
-      // Main Action Card
-      actionCardTitle: 'Ada ide atau kebutuhan yang ingin diwujudkan?',
-      actionCardDesc: 'Ceritakan kebutuhan Anda. Manuver akan membantu mengubahnya menjadi solusi digital.',
-      btnStartConsultation: 'Mulai Konsultasi',
-
-      // Quick Solution Cards (Reference 3-Card Grid)
-      quickAutomationTitle: 'Otomasi Alur Kerja',
-      quickAutomationDesc: 'Hubungkan CRM, WhatsApp, API, & Sheets tanpa kerja manual.',
-      quickWebTitle: 'Aplikasi Web & SaaS',
-      quickWebDesc: 'Pengembangan platform digital, portal klien, dan web berkecepatan tinggi.',
-      quickAiTitle: 'Solusi AI Kustom',
-      quickAiDesc: 'Asisten cerdas dan integrasi AI berbasis data bisnis Anda.',
-
-      // Consultation Dock
-      dockPlaceholder: 'Konsultasikan ide proyek atau kendala manual Anda...',
-      dockPillCategory: 'Pilih Kategori',
-      dockPillTimeline: 'Timeline Standar',
-
+      // Primary Action Row
+      inputPlaceholder: 'Jelaskan apa yang memperlambat tim Anda…',
+      btnStartRequest: 'Mulai permintaan →',
+      
+      // Services Section (3-row bordered list)
+      servicesLabel: 'KAPABILITAS',
+      service01Num: '01',
+      service01Title: 'Otomasi Alur Kerja',
+      service01Desc: 'Hubungkan CRM, WhatsApp, API, & Sheets tanpa pekerjaan manual.',
+      service02Num: '02',
+      service02Title: 'Aplikasi Web & SaaS',
+      service02Desc: 'Platform digital tangguh, portal klien, dan software web berkecepatan tinggi.',
+      service03Num: '03',
+      service03Title: 'Solusi AI Kustom',
+      service03Desc: 'Agen otomatisasi cerdas berbasis data bisnis Anda.',
+      
+      // Section Headers & Links
+      sectionProjectsTitle: 'PROYEK SAYA',
+      sectionRequestsTitle: 'PERMINTAAN SAYA',
+      viewAll: 'Lihat semua →',
+      
+      // Empty States (Clear, direct, no motivational fluff)
+      emptyProjectsText: 'Belum ada proyek. Begitu permintaan disetujui, proyek akan tampil di sini beserta tahap dan milestone berikutnya.',
+      emptyRequestsText: 'Belum ada permintaan. Jelaskan kendala di atas untuk mengajukan brief pertama Anda.',
+      btnStartRequestSmall: 'Mulai permintaan',
+      
+      // Table Columns
+      colRequest: 'Permintaan',
+      colCategory: 'Kategori',
+      colStatus: 'Status',
+      colDate: 'Tanggal',
+      
       // Right Activity Panel
       panelActivityTitle: 'Aktivitas Permintaan',
-      searchPlaceholder: 'Cari permintaan...',
+      searchPlaceholder: 'Cari permintaan…',
       emptyActivityText: 'Belum ada riwayat permintaan.',
       btnCreateNewRequest: 'Buat Permintaan Baru',
       
-      // Section Headers
-      sectionProjectsTitle: 'Proyek Saya',
-      sectionProjectsDesc: 'Pantau perkembangan aplikasi, fase arsitektur, dan sistem yang sedang dibangun.',
-      sectionRequestsTitle: 'Permintaan Saya',
-      sectionRequestsDesc: 'Status langsung dari brief proyek dan permintaan fitur yang Anda ajukan.',
-      
-      // Empty States (Strictly 1 line muted text + 1 action)
-      emptyProjectsTitle: 'Belum ada proyek aktif.',
-      emptyProjectsDesc: '',
-      emptyProjectsText: 'Belum ada proyek aktif.',
-      btnShareIdea: 'Mulai Proyek',
-      
-      emptyRequestsTitle: 'Belum ada permintaan yang diajukan.',
-      emptyRequestsDesc: '',
-      emptyRequestsText: 'Belum ada permintaan yang diajukan.',
-      btnSubmitFirstRequest: 'Buat Permintaan',
-      
-      // Status Badges
+      // Status Labels
       statusReceived: 'Diterima',
-      statusUnderReview: 'Sedang Ditinjau',
-      statusInDiscussion: 'Dalam Diskusi',
-      statusInProgress: 'Sedang Dikerjakan',
+      statusUnderReview: 'Ditinjau',
+      statusInDiscussion: 'Dalam diskusi',
+      statusInProgress: 'Dikerjakan',
       statusCompleted: 'Selesai',
       
+      // Categories
+      categoryAutomation: 'Otomasi Alur Kerja',
+      categoryWeb: 'Aplikasi Web & SaaS',
+      categoryAi: 'Solusi AI Kustom',
+      categoryComprehensive: 'Sistem End-to-End',
+      categoryOther: 'Lainnya / Kustom',
+      
       // Request Modal Form
-      modalTitle: 'Buat Permintaan Baru',
-      modalSubtitle: 'Ceritakan kendala manual atau ide produk Anda. Tim rekayasa kami akan meninjaunya dalam 24 jam.',
-      labelCategory: 'Kategori Solusi',
-      categoryAutomation: 'Otomasi Alur Kerja (CRM, API, WhatsApp, Sheets)',
-      categoryWeb: 'Aplikasi Web / Platform SaaS Modern',
-      categoryAi: 'Asisten AI Kustom / Alur Kerja Cerdas',
-      categoryComprehensive: 'Sistem Terintegrasi (Web + Otomasi + AI)',
-      categoryOther: 'Lainnya (Kebutuhan Khusus / Kustom)',
-      labelDesc: 'Deskripsikan Kebutuhan atau Masalah Bisnis Anda',
-      descPlaceholder: 'Contoh: Kami ingin menghubungkan form pesanan ke spreadsheet dan mengirim notifikasi WhatsApp otomatis ke pembeli...',
-      labelTimeline: 'Target Timeline Pengerjaan',
-      timelineUrgent: 'Mendesak (3–7 Hari Kerja)',
-      timelineStandard: 'Standar (1–2 Minggu)',
-      timelineFlexible: 'Fleksibel (2–4 Minggu)',
-      labelBudget: 'Perkiraan Budget (Opsional)',
-      budgetFlexible: 'Fleksibel / Diskusi lanjutan',
+      modalTitle: 'Mulai Permintaan',
+      modalSubtitle: 'Ceritakan kendala manual atau sistem yang ingin dibangun. Kami merespons dalam 24 jam.',
+      labelCategory: 'Kategori',
+      labelDesc: 'Apa yang perlu dibangun atau diotomatiskan?',
+      descPlaceholder: 'Contoh: Kami butuh alur intake pesanan otomatis yang menghubungkan Shopify ke ERP dan notifikasi WhatsApp ke pembeli…',
+      labelTimeline: 'Timeline',
+      timelineUrgent: 'Mendesak (3–7 hari)',
+      timelineStandard: 'Standar (1–2 minggu)',
+      timelineFlexible: 'Fleksibel (2–4 minggu)',
+      labelBudget: 'Budget (Opsional)',
+      budgetFlexible: 'Fleksibel',
       budgetTier1: '< Rp 10 Juta',
-      budgetTier2: 'Rp 10 Juta – 30 Juta',
+      budgetTier2: 'Rp 10M – 30M',
       budgetTier3: '> Rp 30 Juta',
       btnCancel: 'Batal',
       btnSubmitRequest: 'Kirimkan Permintaan',
-      btnSubmitting: 'Mengirim...',
-      toastSuccess: 'Permintaan berhasil dikirim! Tim Manuver akan segera menghubungi Anda.',
-      toastError: 'Gagal mengirim permintaan. Silakan coba kembali.',
+      btnSubmitting: 'Mengirim…',
+      toastSuccess: 'Permintaan terkirim. Tim kami akan segera meninjaunya.',
+      toastError: 'Gagal mengirim. Silakan coba lagi.',
       
       // Products View
-      productsHeading: 'Solusi Modular Manuver',
-      productsSubheading: 'Dibangun di atas tiga prinsip: Build, Automate, dan Distribute.',
+      productsHeading: 'Solusi Modular',
+      productsSubheading: 'Tiga disiplin utama: Build, Automate, Distribute.',
       productBuildTitle: 'BUILD',
-      productBuildDesc: 'Pengembangan aplikasi kustom, software tangguh, dan arsitektur sistem digital berperforma tinggi.',
+      productBuildDesc: 'Platform web tangguh, antarmuka klien cepat, dan arsitektur aplikasi andal.',
       productAutomateTitle: 'AUTOMATE',
-      productAutomateDesc: 'Solusi otomatisasi alur kerja 24/7 untuk menghilangkan friksi manual dan meningkatkan efisiensi bisnis.',
+      productAutomateDesc: 'Pipeline latar belakang 24/7, jembatan API, dan alur kerja nol-headcount.',
       productDistributeTitle: 'DISTRIBUTE',
-      productDistributeDesc: 'Konfigurasi lisensi produk digital, arsitektur multi-tenant, dan distribusi produk secara terukur.',
-      productAvailableBadge: 'Tersedia via Konsultasi',
+      productDistributeDesc: 'Konfigurasi multi-tenant, manajemen lisensi, dan skala komersial.',
+      productAvailableBadge: 'Tersedia via brief',
       
       // Help View
-      helpHeading: 'Bantuan & Dukungan Langsung',
-      helpSubheading: 'Butuh bantuan atau ingin konsultasi teknis mendesak? Hubungi langsung tim Manuver.',
-      helpWhatsAppTitle: 'Konsultasi Langsung via WhatsApp',
-      helpWhatsAppDesc: 'Terhubung langsung dengan lead technical architect Manuver secara realtime.',
-      btnOpenWhatsApp: 'Konsultasi di WhatsApp →',
-      helpEmailTitle: 'Dukungan via Email',
-      helpEmailDesc: 'Kirimkan dokumen spesifikasi teknis, NDA, atau proposal kerja sama.',
+      helpHeading: 'Bantuan Langsung',
+      helpSubheading: 'Hubungi langsung lead teknis kami.',
+      helpWhatsAppTitle: 'WhatsApp Langsung',
+      helpWhatsAppDesc: 'Diskusi teknis langsung secara real-time via WhatsApp.',
+      btnOpenWhatsApp: 'Buka WhatsApp →',
+      helpEmailTitle: 'Dukungan Email',
+      helpEmailDesc: 'Kirimkan RFP, spesifikasi arsitektur, atau NDA.',
       btnEmailSupport: 'Kirim Email →'
     }
   }

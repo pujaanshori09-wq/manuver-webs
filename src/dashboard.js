@@ -1,6 +1,7 @@
 /**
  * ============================================================
  * Manuver Authenticated Customer Workspace Controller
+ * Hand-designed, Bespoke Architecture
  * ============================================================
  */
 
@@ -80,7 +81,7 @@ async function bootstrapDashboard() {
           service_category: 'web_application',
           description: 'Pengembangan portal klien modern berkecepatan tinggi dengan sistem brief terpadu.',
           status: 'under_review',
-          created_at: new Date(Date.now() - 86400000).toISOString()
+          created_at: new Date(Date.now() - 3600000 * 5).toISOString()
         }
       ];
       renderProjects(currentProjects);
@@ -118,9 +119,10 @@ async function bootstrapDashboard() {
     loaderEl.classList.add('hidden');
     loaderEl.setAttribute('aria-hidden', 'true');
 
-    initSpatialParticles();
     setupNavigation();
     setupModal();
+    setupPrimaryInput();
+    setupStickyButtonObserver();
     setupSidebarToggle();
     setupRightPanelToggle();
 
@@ -145,10 +147,9 @@ async function loadDashboardData() {
 
     if (res.ok) {
       const data = await res.json();
-      currentProjects = Array.isArray(data.projects) ? data.projects : [];
-      currentRequests = Array.isArray(data.briefs) ? data.briefs : [];
+      currentProjects = data.projects || [];
+      currentRequests = data.briefs || [];
     } else {
-      // Fallback: try individual endpoints
       const [pRes, rRes] = await Promise.allSettled([
         fetch('/api/projects', { credentials: 'include' }).then((r) => r.json()),
         fetch('/api/requests', { credentials: 'include' }).then((r) => r.json())
@@ -168,7 +169,7 @@ async function loadDashboardData() {
 }
 
 /**
- * Update Sidebar & Panel Count Badges
+ * Update Sidebar & Panel Counts (Plain muted numbers, tabular)
  */
 function updateCounts() {
   const reqBadge = document.getElementById('badge-requests-count');
@@ -182,7 +183,7 @@ function updateCounts() {
   if (reqBadge) {
     if (currentRequests.length > 0) {
       reqBadge.textContent = currentRequests.length;
-      reqBadge.style.display = 'inline-flex';
+      reqBadge.style.display = 'inline';
     } else {
       reqBadge.style.display = 'none';
     }
@@ -191,7 +192,7 @@ function updateCounts() {
   if (projBadge) {
     if (currentProjects.length > 0) {
       projBadge.textContent = currentProjects.length;
-      projBadge.style.display = 'inline-flex';
+      projBadge.style.display = 'inline';
     } else {
       projBadge.style.display = 'none';
     }
@@ -199,26 +200,22 @@ function updateCounts() {
 }
 
 /**
- * 3. RENDER USER PROFILE
+ * 3. RENDER USER PROFILE (56px H1 with accent dot)
  */
 function renderUserProfile(user) {
   const fullName = (user.name && user.name.trim()) || user.email?.split('@')[0] || 'User';
   const firstName = fullName.split(' ')[0] || fullName;
-  const initial = (firstName[0] || 'M').toUpperCase();
+  const initial = (firstName[0] || 'P').toUpperCase();
 
-  // Welcome Header
-  const welcomeEl = document.getElementById('welcome-title');
-  if (welcomeEl) {
-    if (currentLang === 'id') {
-      welcomeEl.textContent = `Selamat datang kembali, ${firstName}.`;
-    } else {
-      welcomeEl.textContent = `Welcome back, ${firstName}.`;
-    }
+  // Overview Header: small kicker + H1 with accent period
+  const kickerEl = document.getElementById('welcome-kicker');
+  const welcomeH1 = document.getElementById('welcome-h1');
+  if (kickerEl) {
+    kickerEl.textContent = t('dashboard.welcomeKicker', currentLang) || 'Selamat datang kembali';
   }
-
-  // Header user name
-  const headerNameEl = document.getElementById('header-user-firstname');
-  if (headerNameEl) headerNameEl.textContent = firstName;
+  if (welcomeH1) {
+    welcomeH1.innerHTML = `${escapeHtml(firstName)}<span class="accent-dot">.</span>`;
+  }
 
   // Sidebar user name & email
   const sidebarNameEl = document.getElementById('sidebar-user-name');
@@ -226,11 +223,11 @@ function renderUserProfile(user) {
   if (sidebarNameEl) sidebarNameEl.textContent = fullName;
   if (sidebarEmailEl) sidebarEmailEl.textContent = user.email || '';
 
-  // Avatar slots
+  // Avatar slots (28px clean)
   const headerAvatarSlot = document.getElementById('header-avatar-slot');
   const sidebarAvatarSlot = document.getElementById('sidebar-avatar-slot');
 
-  function renderAvatar(container, sizeClass) {
+  function renderAvatar(container) {
     if (!container) return;
     if (user.avatarUrl) {
       const img = document.createElement('img');
@@ -252,7 +249,7 @@ function renderUserProfile(user) {
 }
 
 /**
- * 4. RENDER PROJECTS
+ * 4. RENDER PROJECTS (Left-aligned, clean, no big box)
  */
 function renderProjects(projects) {
   const overviewContainer = document.getElementById('overview-projects-container');
@@ -260,10 +257,10 @@ function renderProjects(projects) {
 
   if (!projects || projects.length === 0) {
     const emptyHtml = `
-      <div class="empty-state-box">
-        <p class="empty-state-muted">${t('dashboard.emptyProjectsText', currentLang) || 'Belum ada proyek aktif.'}</p>
-        <button type="button" class="btn-primary-action open-request-trigger">
-          ${t('dashboard.btnShareIdea', currentLang) || 'Mulai Proyek'}
+      <div class="empty-state-clean">
+        <span class="empty-state-sentence">${t('dashboard.emptyProjectsText', currentLang)}</span>
+        <button type="button" class="btn-quiet-action open-request-trigger">
+          ${t('dashboard.btnStartRequestSmall', currentLang)} &rarr;
         </button>
       </div>
     `;
@@ -272,55 +269,35 @@ function renderProjects(projects) {
     return;
   }
 
-  function buildProjectCard(p) {
-    const progress = Math.min(Math.max(p.progress_percent || 25, 5), 100);
+  function buildProjectRow(p) {
     const serviceLabel = formatCategoryLabel(p.service_type);
     const dateFormatted = p.updated_at ? formatDate(p.updated_at) : formatDate(p.created_at);
 
     return `
-      <article class="data-card">
-        <div class="data-card-top">
-          <div>
-            <h4 class="data-card-title">${escapeHtml(p.title || 'Project Manuver')}</h4>
-            <span class="data-category-tag">${serviceLabel}</span>
-          </div>
-          <span class="status-badge status-badge--${p.status || 'in_progress'}">
-            ${formatStatusLabel(p.status || 'in_progress')}
-          </span>
+      <div class="project-list-row">
+        <div class="project-list-left">
+          <span class="project-list-title">${escapeHtml(p.title || 'Project Manuver')}</span>
+          <span class="project-list-meta">${serviceLabel} · ${dateFormatted}</span>
         </div>
-        <p class="data-card-desc">${escapeHtml(p.notes || '')}</p>
-        <div class="progress-wrap" aria-label="Progress ${progress}%">
-          <div class="progress-fill" style="width: ${progress}%;"></div>
+        <div class="status-indicator status-indicator--${p.status || 'in_progress'}">
+          <span class="status-dot"></span>
+          <span>${formatStatusLabel(p.status || 'in_progress')}</span>
         </div>
-        <div class="data-card-meta">
-          <span>Progress: <strong>${progress}%</strong></span>
-          <span>Diperbarui: ${dateFormatted}</span>
-        </div>
-      </article>
+      </div>
     `;
   }
 
-  // Overview shows up to 2 items
   if (overviewContainer) {
-    overviewContainer.innerHTML = `
-      <div class="items-list-container">
-        ${projects.slice(0, 2).map(buildProjectCard).join('')}
-      </div>
-    `;
+    overviewContainer.innerHTML = projects.slice(0, 3).map(buildProjectRow).join('');
   }
 
-  // Full view shows all
   if (fullContainer) {
-    fullContainer.innerHTML = `
-      <div class="items-list-container">
-        ${projects.map(buildProjectCard).join('')}
-      </div>
-    `;
+    fullContainer.innerHTML = projects.map(buildProjectRow).join('');
   }
 }
 
 /**
- * 5. RENDER REQUESTS
+ * 5. RENDER REQUESTS (Compact Table: 44px rows, 1px dividers, no card wrapper)
  */
 function renderRequests(requests) {
   const overviewContainer = document.getElementById('overview-requests-container');
@@ -328,10 +305,10 @@ function renderRequests(requests) {
 
   if (!requests || requests.length === 0) {
     const emptyHtml = `
-      <div class="empty-state-box">
-        <p class="empty-state-muted">${t('dashboard.emptyRequestsText', currentLang) || 'Belum ada permintaan yang diajukan.'}</p>
-        <button type="button" class="btn-primary-action open-request-trigger">
-          ${t('dashboard.btnSubmitFirstRequest', currentLang) || 'Buat Permintaan'}
+      <div class="empty-state-clean">
+        <span class="empty-state-sentence">${t('dashboard.emptyRequestsText', currentLang)}</span>
+        <button type="button" class="btn-quiet-action open-request-trigger">
+          ${t('dashboard.btnStartRequestSmall', currentLang)} &rarr;
         </button>
       </div>
     `;
@@ -340,49 +317,52 @@ function renderRequests(requests) {
     return;
   }
 
-  function buildRequestCard(req) {
-    const categoryLabel = formatCategoryLabel(req.service_category);
-    const status = req.status || 'received';
-    const dateFormatted = formatDate(req.created_at);
-
+  function buildTable(items) {
     return `
-      <article class="data-card">
-        <div class="data-card-top">
-          <div>
-            <h4 class="data-card-title">${categoryLabel}</h4>
-            <div class="data-card-meta">
-              <span>Diajukan: ${dateFormatted}</span>
-              ${req.target_timeline ? `<span>Timeline: ${formatTimelineLabel(req.target_timeline)}</span>` : ''}
-            </div>
-          </div>
-          <span class="status-badge status-badge--${status}">
-            ${formatStatusLabel(status)}
-          </span>
-        </div>
-        <p class="data-card-desc">${escapeHtml(req.description || '')}</p>
-      </article>
+      <div class="table-outer-wrapper">
+        <table class="compact-table" role="table">
+          <thead>
+            <tr>
+              <th scope="col">${t('dashboard.colRequest', currentLang)}</th>
+              <th scope="col">${t('dashboard.colCategory', currentLang)}</th>
+              <th scope="col">${t('dashboard.colStatus', currentLang)}</th>
+              <th scope="col">${t('dashboard.colDate', currentLang)}</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${items.map((req) => {
+              const status = req.status || 'received';
+              return `
+                <tr class="table-row-clickable open-request-trigger" data-category="${req.service_category || ''}">
+                  <td class="table-cell-desc">${escapeHtml(req.description || 'Brief')}</td>
+                  <td class="table-cell-category">${formatCategoryLabel(req.service_category)}</td>
+                  <td>
+                    <span class="status-indicator status-indicator--${status}">
+                      <span class="status-dot"></span>
+                      <span>${formatStatusLabel(status)}</span>
+                    </span>
+                  </td>
+                  <td class="table-cell-date">${formatDate(req.created_at)}</td>
+                </tr>
+              `;
+            }).join('')}
+          </tbody>
+        </table>
+      </div>
     `;
   }
 
   if (overviewContainer) {
-    overviewContainer.innerHTML = `
-      <div class="items-list-container">
-        ${requests.slice(0, 3).map(buildRequestCard).join('')}
-      </div>
-    `;
+    overviewContainer.innerHTML = buildTable(requests.slice(0, 5));
   }
 
   if (fullContainer) {
-    fullContainer.innerHTML = `
-      <div class="items-list-container">
-        ${requests.map(buildRequestCard).join('')}
-      </div>
-    `;
+    fullContainer.innerHTML = buildTable(requests);
   }
 }
 
 /**
- * 6. RENDER RIGHT ACTIVITY PANEL (REFERENCE MATCH)
+ * 6. RENDER RIGHT ACTIVITY PANEL (Vertical Timeline: 1px line, 8px dot)
  */
 function renderRightPanel(requests) {
   const panelList = document.getElementById('panel-activity-list');
@@ -402,35 +382,87 @@ function renderRightPanel(requests) {
 
   if (!filtered || filtered.length === 0) {
     panelList.innerHTML = `
-      <div class="panel-empty-box">
-        <p class="panel-empty-text">${t('dashboard.emptyActivityText', currentLang) || 'Belum ada riwayat permintaan.'}</p>
-      </div>
+      <p class="panel-empty-text">${t('dashboard.emptyActivityText', currentLang)}</p>
     `;
     return;
   }
 
-  panelList.innerHTML = filtered.map((req) => {
-    const categoryLabel = formatCategoryLabel(req.service_category);
-    const status = req.status || 'received';
-    const dateFormatted = formatDate(req.created_at);
+  panelList.innerHTML = `
+    <div class="timeline-track">
+      ${filtered.map((req) => {
+        const status = req.status || 'received';
+        const timeAgo = formatRelativeTime(req.created_at);
 
-    return `
-      <div class="panel-card open-request-trigger" data-category="${req.service_category || ''}" role="button" tabindex="0">
-        <div class="panel-card-head">
-          <h4 class="panel-card-title">${categoryLabel}</h4>
-          <span class="status-badge status-badge--${status}">${formatStatusLabel(status)}</span>
-        </div>
-        <p class="panel-card-desc">${escapeHtml(req.description || '')}</p>
-        <div class="panel-card-foot">
-          <span>${dateFormatted}</span>
-        </div>
-      </div>
-    `;
-  }).join('');
+        return `
+          <div class="timeline-item open-request-trigger" data-category="${req.service_category || ''}" role="button" tabindex="0">
+            <div class="timeline-dot timeline-dot--${status}"></div>
+            <div class="timeline-body">
+              <h4 class="timeline-title">${formatCategoryLabel(req.service_category)}</h4>
+              <p class="timeline-desc">${escapeHtml(req.description || '')}</p>
+              <span class="timeline-time">${timeAgo}</span>
+            </div>
+          </div>
+        `;
+      }).join('')}
+    </div>
+  `;
 }
 
 /**
- * 6. NAVIGATION & VIEW SWITCHING
+ * 7. PRIMARY INPUT ROW INTERACTION
+ */
+function setupPrimaryInput() {
+  const inputEl = document.getElementById('primary-request-input');
+  const submitBtn = document.getElementById('primary-request-submit-btn');
+
+  function triggerFromInput() {
+    const val = inputEl?.value.trim() || '';
+    const descTextarea = document.getElementById('request-description');
+    if (descTextarea && val) {
+      descTextarea.value = val;
+    }
+    openModal();
+  }
+
+  submitBtn?.addEventListener('click', (e) => {
+    e.preventDefault();
+    triggerFromInput();
+  });
+
+  inputEl?.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      triggerFromInput();
+    }
+  });
+}
+
+/**
+ * 8. INTERSECTION OBSERVER: Hide Sticky Button when Main CTA Input is in View
+ */
+function setupStickyButtonObserver() {
+  const primaryBox = document.getElementById('primary-request-box');
+  const panelFooter = document.getElementById('right-panel-footer');
+  if (!primaryBox || !panelFooter) return;
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        panelFooter.classList.add('is-hidden');
+      } else {
+        panelFooter.classList.remove('is-hidden');
+      }
+    });
+  }, {
+    root: document.getElementById('main-layout-container') || null,
+    threshold: 0.2
+  });
+
+  observer.observe(primaryBox);
+}
+
+/**
+ * 9. NAVIGATION & VIEW SWITCHING
  */
 function setupNavigation() {
   const navButtons = document.querySelectorAll('.nav-item[data-view]');
@@ -444,6 +476,11 @@ function setupNavigation() {
       const isTarget = btn.getAttribute('data-view') === targetView;
       btn.classList.toggle('is-active', isTarget);
       btn.setAttribute('aria-selected', isTarget ? 'true' : 'false');
+      if (isTarget) {
+        btn.setAttribute('aria-current', 'page');
+      } else {
+        btn.removeAttribute('aria-current');
+      }
     });
 
     // Update viewport panels
@@ -482,7 +519,7 @@ function setupNavigation() {
     });
   });
 
-  // Cross-link buttons (e.g., "Lihat Semua ->")
+  // Cross-link buttons (e.g., "Lihat semua ->")
   document.querySelectorAll('.nav-switch-btn').forEach((btn) => {
     btn.addEventListener('click', (e) => {
       e.preventDefault();
@@ -498,214 +535,224 @@ function setupNavigation() {
 /**
  * Mobile Sidebar Drawer Handlers
  */
+function setupSidebarToggle() {
+  const openBtn = document.getElementById('sidebar-open-btn');
+  const closeBtn = document.getElementById('sidebar-close-btn');
+  const backdrop = document.getElementById('sidebar-backdrop');
+  const sidebar = document.getElementById('sidebar');
+
+  openBtn?.addEventListener('click', () => {
+    sidebar?.classList.add('is-open');
+    backdrop?.classList.add('is-active');
+  });
+
+  closeBtn?.addEventListener('click', closeMobileSidebar);
+  backdrop?.addEventListener('click', closeMobileSidebar);
+}
+
 function closeMobileSidebar() {
   document.getElementById('sidebar')?.classList.remove('is-open');
   document.getElementById('sidebar-backdrop')?.classList.remove('is-active');
 }
 
-function openMobileSidebar() {
-  document.getElementById('sidebar')?.classList.add('is-open');
-  document.getElementById('sidebar-backdrop')?.classList.add('is-active');
-}
-
-function setupSidebarToggle() {
-  document.getElementById('sidebar-open-btn')?.addEventListener('click', openMobileSidebar);
-  document.getElementById('sidebar-close-btn')?.addEventListener('click', closeMobileSidebar);
-  document.getElementById('sidebar-backdrop')?.addEventListener('click', closeMobileSidebar);
-}
-
-function openRightPanel() {
-  document.getElementById('right-activity-panel')?.classList.add('is-open');
-  document.getElementById('right-panel-backdrop')?.classList.add('is-active');
-}
-
-function closeRightPanel() {
-  document.getElementById('right-activity-panel')?.classList.remove('is-open');
-  document.getElementById('right-panel-backdrop')?.classList.remove('is-active');
-}
-
+/**
+ * Responsive Right Panel Toggle (<1280px)
+ */
 function setupRightPanelToggle() {
-  document.getElementById('right-panel-toggle-btn')?.addEventListener('click', () => {
-    const panel = document.getElementById('right-activity-panel');
-    if (panel?.classList.contains('is-open')) {
-      closeRightPanel();
-    } else {
-      openRightPanel();
-    }
-  });
-  document.getElementById('right-panel-close-btn')?.addEventListener('click', closeRightPanel);
-  document.getElementById('right-panel-backdrop')?.addEventListener('click', closeRightPanel);
+  const toggleBtn = document.getElementById('right-panel-toggle-btn');
+  const closeBtn = document.getElementById('right-panel-close-btn');
+  const backdrop = document.getElementById('right-panel-backdrop');
+  const panel = document.getElementById('right-activity-panel');
+
+  function openPanel() {
+    panel?.classList.add('is-open');
+    backdrop?.classList.add('is-active');
+  }
+
+  function closePanel() {
+    panel?.classList.remove('is-open');
+    backdrop?.classList.remove('is-active');
+  }
+
+  toggleBtn?.addEventListener('click', openPanel);
+  closeBtn?.addEventListener('click', closePanel);
+  backdrop?.addEventListener('click', closePanel);
 }
 
 /**
- * 7. REAL REQUEST CREATION MODAL FLOW
+ * 10. REAL REQUEST CREATION MODAL
  */
 function setupModal() {
   const modal = document.getElementById('request-modal');
   const closeBtn = document.getElementById('modal-close-btn');
   const cancelBtn = document.getElementById('modal-cancel-btn');
-  const form = document.getElementById('request-form');
-  const errorBox = document.getElementById('request-error-box');
-  const submitBtn = document.getElementById('request-submit-btn');
-  const submitText = document.getElementById('btn-submit-text');
-  const categorySelect = document.getElementById('req-category');
+  const form = document.getElementById('new-request-form');
+  const errorAlert = document.getElementById('request-form-error');
 
-  function openModal(preselectedCategory = null) {
-    if (modal) {
-      if (preselectedCategory && categorySelect) {
-        categorySelect.value = preselectedCategory;
-      }
-      if (errorBox) errorBox.style.display = 'none';
-      modal.classList.add('is-open');
-      modal.setAttribute('aria-hidden', 'false');
-      document.getElementById('req-desc')?.focus();
-    }
-  }
-
-  function closeModal() {
-    if (modal) {
-      modal.classList.remove('is-open');
-      modal.setAttribute('aria-hidden', 'true');
-      if (errorBox) errorBox.style.display = 'none';
-    }
-  }
-
-  // Bind all triggers
+  // Trigger buttons
   document.addEventListener('click', (e) => {
     const trigger = e.target.closest('.open-request-trigger');
-    if (trigger) {
-      e.preventDefault();
-      const cat = trigger.getAttribute('data-category');
-      openModal(cat);
+    if (!trigger) return;
+    e.preventDefault();
+
+    const category = trigger.getAttribute('data-category');
+    if (category) {
+      const select = document.getElementById('request-service-category');
+      if (select) select.value = category;
     }
+
+    openModal();
   });
 
   closeBtn?.addEventListener('click', closeModal);
   cancelBtn?.addEventListener('click', closeModal);
 
-  // Close on backdrop
   modal?.addEventListener('click', (e) => {
     if (e.target === modal) closeModal();
   });
 
-  // Close on Escape key
-  window.addEventListener('keydown', (e) => {
+  document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape' && modal?.classList.contains('is-open')) {
       closeModal();
     }
   });
 
-  // Handle Form Submission
   form?.addEventListener('submit', async (e) => {
     e.preventDefault();
+    if (errorAlert) errorAlert.style.display = 'none';
 
-    const category = categorySelect?.value;
-    const desc = document.getElementById('req-desc')?.value?.trim();
-    const timeline = document.getElementById('req-timeline')?.value;
-    const budget = document.getElementById('req-budget')?.value;
-
-    if (!desc) {
-      if (errorBox) {
-        errorBox.textContent = currentLang === 'id' ? 'Deskripsi kebutuhan wajib diisi.' : 'Description is required.';
-        errorBox.style.display = 'block';
-      }
-      return;
+    const submitBtn = document.getElementById('request-submit-btn');
+    const originalText = submitBtn?.textContent || 'Kirimkan Permintaan';
+    if (submitBtn) {
+      submitBtn.disabled = true;
+      submitBtn.textContent = t('dashboard.btnSubmitting', currentLang) || 'Mengirim...';
     }
 
-    // Loading state
-    if (submitBtn) submitBtn.disabled = true;
-    if (submitText) submitText.textContent = t('dashboard.btnSubmitting', currentLang);
-    if (errorBox) errorBox.style.display = 'none';
+    const payload = {
+      service_category: document.getElementById('request-service-category')?.value || 'workflow_automation',
+      description: document.getElementById('request-description')?.value.trim() || '',
+      target_timeline: document.getElementById('request-timeline')?.value || 'standard',
+      budget_tier: document.getElementById('request-budget')?.value || 'flexible'
+    };
 
     try {
       const res = await fetch('/api/requests', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
-        body: JSON.stringify({
-          serviceCategory: category,
-          description: desc,
-          targetTimeline: timeline,
-          budgetRange: budget
-        })
+        body: JSON.stringify(payload)
       });
 
-      const result = await res.json();
-
-      if (res.ok && result.success) {
-        // Reset form and close
-        form.reset();
-        closeModal();
-
-        // Show toast
-        showToast(t('dashboard.toastSuccess', currentLang), 'success');
-
-        // Prepend optimistic or refresh
-        if (result.request) {
-          currentRequests = [result.request, ...currentRequests];
-          renderRequests(currentRequests);
-          renderRightPanel(currentRequests);
-          updateCounts();
-        } else {
-          loadDashboardData();
-        }
-      } else {
-        const msg = result.error || t('dashboard.toastError', currentLang);
-        if (errorBox) {
-          errorBox.textContent = msg;
-          errorBox.style.display = 'block';
-        }
+      if (!res.ok) {
+        const errData = await res.json().catch(() => ({}));
+        throw new Error(errData.error || 'Gagal menyimpan permintaan');
       }
+
+      const created = await res.json();
+      currentRequests.unshift(created.request || {
+        id: 'req-' + Date.now(),
+        ...payload,
+        status: 'received',
+        created_at: new Date().toISOString()
+      });
+
+      renderRequests(currentRequests);
+      renderRightPanel(currentRequests);
+      updateCounts();
+
+      closeModal();
+      form.reset();
+      showToast(t('dashboard.toastSuccess', currentLang) || 'Permintaan berhasil dikirim!');
     } catch (err) {
-      if (errorBox) {
-        errorBox.textContent = currentLang === 'id' ? 'Terjadi kesalahan jaringan. Coba lagi.' : 'Network error. Please try again.';
-        errorBox.style.display = 'block';
+      if (errorAlert) {
+        errorAlert.textContent = err.message || t('dashboard.toastError', currentLang);
+        errorAlert.style.display = 'block';
       }
     } finally {
-      if (submitBtn) submitBtn.disabled = false;
-      if (submitText) submitText.textContent = t('dashboard.btnSubmitRequest', currentLang);
+      if (submitBtn) {
+        submitBtn.disabled = false;
+        submitBtn.textContent = originalText;
+      }
     }
   });
 }
 
+function openModal() {
+  const modal = document.getElementById('request-modal');
+  if (!modal) return;
+  modal.classList.add('is-open');
+  modal.setAttribute('aria-hidden', 'false');
+  setTimeout(() => {
+    document.getElementById('request-description')?.focus();
+  }, 100);
+}
+
+function closeModal() {
+  const modal = document.getElementById('request-modal');
+  if (!modal) return;
+  modal.classList.remove('is-open');
+  modal.setAttribute('aria-hidden', 'true');
+}
+
 /**
- * 8. SIGN OUT ACTION
+ * 11. SIGN OUT HANDLER
  */
 async function handleSignOut() {
   try {
-    await fetch('/api/auth/logout', {
-      method: 'POST',
-      credentials: 'include'
-    });
-  } catch (_) {}
+    await fetch('/auth/logout', { method: 'POST', credentials: 'include' });
+  } catch (_) {
+    // Ignore error
+  }
   window.location.replace('/');
 }
 
 /**
- * 9. TOAST NOTIFICATION
+ * Toast Notification Utility
  */
-function showToast(message, type = 'success') {
-  const toast = document.getElementById('app-toast');
+function showToast(message) {
+  const toast = document.getElementById('dashboard-toast');
   if (!toast) return;
-
   toast.textContent = message;
-  toast.className = `toast-popup is-visible is-${type}`;
-
+  toast.classList.add('is-visible');
   setTimeout(() => {
-    toast.className = 'toast-popup';
-  }, 4000);
+    toast.classList.remove('is-visible');
+  }, 3400);
 }
 
 /**
- * HELPER FORMATTERS
+ * Relative time formatter for vertical timeline
+ */
+function formatRelativeTime(dateStr) {
+  if (!dateStr) return '';
+  try {
+    const then = new Date(dateStr).getTime();
+    const diff = Math.floor((Date.now() - then) / 1000);
+    if (diff < 60) return currentLang === 'id' ? 'Baru saja' : 'Just now';
+    if (diff < 3600) {
+      const m = Math.floor(diff / 60);
+      return currentLang === 'id' ? `${m}m lalu` : `${m}m ago`;
+    }
+    if (diff < 86400) {
+      const h = Math.floor(diff / 3600);
+      return currentLang === 'id' ? `${h} jam lalu` : `${h}h ago`;
+    }
+    const d = Math.floor(diff / 86400);
+    return currentLang === 'id' ? `${d} hari lalu` : `${d}d ago`;
+  } catch (_) {
+    return formatDate(dateStr);
+  }
+}
+
+/**
+ * Format Helpers
  */
 function formatCategoryLabel(cat) {
   const map = {
-    workflow_automation: currentLang === 'id' ? 'Otomasi Alur Kerja' : 'Workflow Automation',
-    web_application: currentLang === 'id' ? 'Aplikasi Web / SaaS' : 'Web Application / SaaS',
-    custom_ai: currentLang === 'id' ? 'Solusi AI Kustom' : 'Custom AI Solution',
-    all_in_one: currentLang === 'id' ? 'Sistem Komprehensif' : 'End-to-End System',
-    other: currentLang === 'id' ? 'Lainnya' : 'Other'
+    workflow_automation: t('dashboard.categoryAutomation', currentLang) || 'Otomasi Alur Kerja',
+    web_application: t('dashboard.categoryWeb', currentLang) || 'Aplikasi Web & SaaS',
+    custom_ai: t('dashboard.categoryAi', currentLang) || 'Solusi AI Kustom',
+    all_in_one: t('dashboard.categoryComprehensive', currentLang) || 'Sistem End-to-End',
+    other: t('dashboard.categoryOther', currentLang) || 'Lainnya / Kustom'
   };
   return map[cat] || cat || 'General';
 }
@@ -713,24 +760,13 @@ function formatCategoryLabel(cat) {
 function formatStatusLabel(st) {
   const map = {
     received: t('dashboard.statusReceived', currentLang),
-    pending: t('dashboard.statusReceived', currentLang),
     under_review: t('dashboard.statusUnderReview', currentLang),
     in_discussion: t('dashboard.statusInDiscussion', currentLang),
     in_progress: t('dashboard.statusInProgress', currentLang),
     development: t('dashboard.statusInProgress', currentLang),
-    discovery: currentLang === 'id' ? 'Discovery' : 'Discovery',
     completed: t('dashboard.statusCompleted', currentLang)
   };
   return map[st] || st || 'Active';
-}
-
-function formatTimelineLabel(tl) {
-  const map = {
-    urgent: currentLang === 'id' ? '3–7 Hari' : '3–7 Days',
-    standard: currentLang === 'id' ? '1–2 Minggu' : '1–2 Weeks',
-    flexible: currentLang === 'id' ? 'Fleksibel' : 'Flexible'
-  };
-  return map[tl] || tl;
 }
 
 function formatDate(dateStr) {
@@ -754,129 +790,6 @@ function escapeHtml(str) {
     .replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;')
     .replace(/'/g, '&#039;');
-}
-
-/**
- * Subtle Spatial Particle Atmosphere for Dashboard
- * Lightweight Canvas 2D engine inspired by Manuver landing page
- * Respects prefers-reduced-motion, pauses when tab is backgrounded
- */
-function initSpatialParticles() {
-  const canvas = document.getElementById('spatial-particles-canvas');
-  if (!canvas) return;
-
-  const ctx = canvas.getContext('2d');
-  if (!ctx) return;
-
-  const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  let animationFrameId = null;
-  let isRunning = true;
-
-  let width = 0;
-  let height = 0;
-
-  function resize() {
-    const parent = canvas.parentElement;
-    if (!parent) return;
-    width = parent.clientWidth || window.innerWidth;
-    height = Math.max(parent.clientHeight, parent.scrollHeight || window.innerHeight);
-    const dpr = Math.min(window.devicePixelRatio || 1, 2);
-    canvas.width = width * dpr;
-    canvas.height = height * dpr;
-    canvas.style.width = width + 'px';
-    canvas.style.height = height + 'px';
-    ctx.scale(dpr, dpr);
-  }
-
-  resize();
-  window.addEventListener('resize', resize, { passive: true });
-
-  const particleCount = window.innerWidth < 768 ? 20 : 50;
-  const particles = [];
-  const palette = [
-    { r: 57, g: 123, b: 255 },  // Electric Blue
-    { r: 91, g: 203, b: 255 },  // Cyan
-    { r: 245, g: 247, b: 250 }  // Soft High-Contrast White
-  ];
-
-  for (let i = 0; i < particleCount; i++) {
-    const col = palette[Math.floor(Math.random() * palette.length)];
-    particles.push({
-      x: Math.random() * width,
-      y: Math.random() * height,
-      vx: (Math.random() - 0.5) * 0.3,
-      vy: (Math.random() - 0.5) * 0.3,
-      radius: Math.random() * 1.5 + 0.8,
-      baseAlpha: Math.random() * 0.4 + 0.15,
-      color: col
-    });
-  }
-
-  function draw() {
-    ctx.clearRect(0, 0, width, height);
-
-    // Subtle connection lines between nearby particles
-    for (let i = 0; i < particles.length; i++) {
-      const p1 = particles[i];
-      for (let j = i + 1; j < particles.length; j++) {
-        const p2 = particles[j];
-        const dx = p1.x - p2.x;
-        const dy = p1.y - p2.y;
-        const dist = Math.sqrt(dx * dx + dy * dy);
-        if (dist < 90) {
-          const lineAlpha = (1 - dist / 90) * 0.07;
-          ctx.strokeStyle = `rgba(91, 203, 255, ${lineAlpha})`;
-          ctx.lineWidth = 0.6;
-          ctx.beginPath();
-          ctx.moveTo(p1.x, p1.y);
-          ctx.lineTo(p2.x, p2.y);
-          ctx.stroke();
-        }
-      }
-    }
-
-    // Draw and drift particles
-    for (let i = 0; i < particles.length; i++) {
-      const p = particles[i];
-
-      if (!prefersReduced) {
-        p.x += p.vx;
-        p.y += p.vy;
-
-        if (p.x < 0) p.x = width;
-        else if (p.x > width) p.x = 0;
-        if (p.y < 0) p.y = height;
-        else if (p.y > height) p.y = 0;
-      }
-
-      ctx.beginPath();
-      ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-      ctx.fillStyle = `rgba(${p.color.r}, ${p.color.g}, ${p.color.b}, ${p.baseAlpha})`;
-      ctx.shadowColor = `rgba(${p.color.r}, ${p.color.g}, ${p.color.b}, 0.45)`;
-      ctx.shadowBlur = 6;
-      ctx.fill();
-      ctx.shadowBlur = 0;
-    }
-
-    if (isRunning && !prefersReduced) {
-      animationFrameId = requestAnimationFrame(draw);
-    }
-  }
-
-  draw();
-
-  // Visibility state handling
-  document.addEventListener('visibilitychange', () => {
-    if (document.hidden) {
-      isRunning = false;
-      if (animationFrameId) cancelAnimationFrame(animationFrameId);
-    } else {
-      if (!isRunning && !prefersReduced) {
-        isRunning = true;
-        animationFrameId = requestAnimationFrame(draw);
-      }
-    }
-  });
 }
 
 // Start application bootstrap immediately

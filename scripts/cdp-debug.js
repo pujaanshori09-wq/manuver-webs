@@ -13,12 +13,23 @@ const chrome = spawn(chromePath, [
   'about:blank'
 ]);
 
-setTimeout(async () => {
-  try {
-    const listRes = await fetch('http://127.0.0.1:9333/json/list');
-    const tabs = await listRes.json();
-    const wsUrl = tabs[0].webSocketDebuggerUrl;
+async function waitForChrome(maxAttempts = 15, delay = 500) {
+  for (let i = 0; i < maxAttempts; i++) {
+    try {
+      const res = await fetch('http://127.0.0.1:9333/json/list');
+      if (res.ok) {
+        const tabs = await res.json();
+        if (tabs && tabs[0]?.webSocketDebuggerUrl) return tabs[0].webSocketDebuggerUrl;
+      }
+    } catch (_) {}
+    await new Promise(r => setTimeout(r, delay));
+  }
+  throw new Error('Chrome remote debugging did not respond on port 9333');
+}
 
+(async () => {
+  try {
+    const wsUrl = await waitForChrome();
     const ws = new WebSocket(wsUrl);
     let id = 1;
 
@@ -91,17 +102,19 @@ setTimeout(async () => {
       })`, returnByValue: true });
       console.log('EVAL STATE:', evalRes.result.value);
 
-      // Capture 1440px
+      // Capture 1440px Desktop
       console.log('Capturing 1440x900...');
       await send('Emulation.setDeviceMetricsOverride', { width: 1440, height: 900, deviceScaleFactor: 1, mobile: false });
+      await new Promise(r => setTimeout(r, 400));
       const shot1440 = await send('Page.captureScreenshot', { format: 'png' });
       fs.writeFileSync('C:\\Users\\Asus\\.gemini\\antigravity\\brain\\d5e3a715-148f-46de-834a-a770b4f29c03\\screenshot-1440.png', Buffer.from(shot1440.data, 'base64'));
 
-      // Capture 1920px
-      console.log('Capturing 1920x1080...');
-      await send('Emulation.setDeviceMetricsOverride', { width: 1920, height: 1080, deviceScaleFactor: 1, mobile: false });
-      const shot1920 = await send('Page.captureScreenshot', { format: 'png' });
-      fs.writeFileSync('C:\\Users\\Asus\\.gemini\\antigravity\\brain\\d5e3a715-148f-46de-834a-a770b4f29c03\\screenshot-1920.png', Buffer.from(shot1920.data, 'base64'));
+      // Capture 390px Mobile Viewport (iPhone 14 / modern mobile standard)
+      console.log('Capturing 390x844 mobile...');
+      await send('Emulation.setDeviceMetricsOverride', { width: 390, height: 844, deviceScaleFactor: 2, mobile: true });
+      await new Promise(r => setTimeout(r, 400));
+      const shot390 = await send('Page.captureScreenshot', { format: 'png' });
+      fs.writeFileSync('C:\\Users\\Asus\\.gemini\\antigravity\\brain\\d5e3a715-148f-46de-834a-a770b4f29c03\\screenshot-390.png', Buffer.from(shot390.data, 'base64'));
 
       console.log('Screenshots written successfully!');
       ws.close();
@@ -113,4 +126,4 @@ setTimeout(async () => {
     chrome.kill();
     process.exit(1);
   }
-}, 1200);
+})();

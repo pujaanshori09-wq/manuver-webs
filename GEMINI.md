@@ -18,14 +18,14 @@ This workspace contains project-specific guidelines and anti-slop frontend stand
    - Detailed rules are located in [.agents/rules/design-taste-frontend.md](file:///.agents/rules/design-taste-frontend.md).
    - High standards inspired by figma.com and x.ai: one section per screen, equal margins, concrete copy without fluff, real UI components, subtle micro-interactions (2px hover lift, button step/press), and zero generic template aesthetic.
 
-4. **Client Dashboard UI Rules:**
-   - Feel: Tenang, mahal, dan buatan manusia.
-   - Canvas: Deep dark navy (`--bg-app: #080B12`, `--surface: #111B2B`, `--surface-card: #121C2C`, `--surface-muted: #0D1422`).
-   - Accent: Electric Blue (`--accent: #397BFF`, `--accent-cyan: #5BCBFF`, `--accent-soft: rgba(57,123,255,0.12)`).
-   - Primary Buttons: Electric Blue `--accent: #397BFF` with white text and soft glow hover.
-   - Typography: `Geist`, `Plus Jakarta Sans`, and `Inter` (welcome title 44px bold tracking -0.025em, default text 14px, muted text `--text-secondary: #A1ACBC`, `--text-muted: #687589`).
-   - Geometry: Fullscreen AppShell (`260px minmax(0,1fr) 340px`), cards 20px, inputs/buttons 12px or pill, border `rgba(130, 160, 200, 0.14)`.
-   - Atmosphere: Lightweight ambient 2D spatial particles + subtle electric blue depth glow.
-   - Empty State: Strictly one line muted text + one action button. No motivational filler.
-   - Menu: No unfinished badges (e.g. no "Soon" tag).
+4. **Client Dashboard UI Rules (Bespoke Hand-Designed Standard):**
+   - Feel: Buatan manusia, tenang, confident, tanpa AI slop.
+   - Canvas: Near-black (`--bg: #07080B`, `--surface-1: #0D0E12`, `--surface-2: #13151A`).
+   - Accent: Single signature Manuver orange-red (`--accent: #E8603C`, `--accent-ink: #0B0B0B`).
+   - Primary Buttons: Off-white pill (`--text: #F4F1EA` bg, `--accent-ink: #0B0B0B` text) for the primary CTA row only; sticky right button in `--accent`.
+   - Typography: `Geist`, `Geist Mono`, and `Inter`. Heavy, tightly-tracked grotesk headlines (tracking -0.03em, line-height 0.95-1.05). H1 at 56px bold with accent period (`Puja<span class="accent-dot">.</span>`). Tabular numbers for dates and counts.
+   - Geometry: Sidebar 232px, right panel 320px, middle max-width 960px left-aligned. Radius: 6px inputs/cards, 10px panels, full-pill ONLY for primary CTA and language toggle.
+   - Shadows: None. 1px borders only. No glow, no neon, no blur halos, no particle loops in app shell.
+   - Empty State: Strictly one line muted text + one quiet text button.
+   - Menu: No unfinished badges (e.g. no "Soon" tag). Left 2px accent bar for active nav item.
 

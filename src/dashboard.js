@@ -604,7 +604,8 @@ function formatCategoryLabel(cat) {
     workflow_automation: currentLang === 'id' ? 'Otomasi Alur Kerja' : 'Workflow Automation',
     web_application: currentLang === 'id' ? 'Aplikasi Web / SaaS' : 'Web Application / SaaS',
     custom_ai: currentLang === 'id' ? 'Solusi AI Kustom' : 'Custom AI Solution',
-    all_in_one: currentLang === 'id' ? 'Sistem Komprehensif' : 'End-to-End System'
+    all_in_one: currentLang === 'id' ? 'Sistem Komprehensif' : 'End-to-End System',
+    other: currentLang === 'id' ? 'Lainnya' : 'Other'
   };
   return map[cat] || cat || 'General';
 }

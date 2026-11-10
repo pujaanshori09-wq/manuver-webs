@@ -29,9 +29,11 @@ const PORT = process.env.PORT || 5000;
 const allowedOrigins = [
   'http://localhost:5000',
   'http://localhost:5173',
+  'http://localhost:4173',
   'http://localhost:3000',
   'http://127.0.0.1:5000',
   'http://127.0.0.1:5173',
+  'http://127.0.0.1:4173',
   'http://127.0.0.1:3000'
 ];
 if (process.env.FRONTEND_URL) {
@@ -45,10 +47,14 @@ if (process.env.VERCEL_URL) {
 app.use(cors({
   origin: (origin, callback) => {
     if (!origin) return callback(null, true);
+    // Allow any local development origin (localhost or 127.0.0.1 on any port)
+    if (/^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(origin)) {
+      return callback(null, true);
+    }
     if (allowedOrigins.includes(origin) || (origin.endsWith('.vercel.app') && origin.includes('manuver'))) {
       return callback(null, true);
     }
-    return callback(new Error('Not allowed by CORS: ' + origin));
+    return callback(null, false);
   },
   credentials: true
 }));

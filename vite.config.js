@@ -34,6 +34,17 @@ export default defineConfig(({ mode }) => {
     },
     plugins: [
       {
+        name: 'dashboard-dev-rewrite',
+        configureServer(server) {
+          server.middlewares.use((req, res, next) => {
+            if (req.url === '/dashboard' || req.url === '/dashboard/') {
+              req.url = '/dashboard.html';
+            }
+            next();
+          });
+        }
+      },
+      {
         name: 'api-chat-dev-middleware',
         configureServer(server) {
           server.middlewares.use(async (req, res, next) => {

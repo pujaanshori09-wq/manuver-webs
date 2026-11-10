@@ -1,10 +1,10 @@
 <!doctype html>
-<html lang="en">
+<html lang="id">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Dashboard · Manuver</title>
-  <meta name="description" content="Manuver Builder Dashboard">
+  <meta name="description" content="Manuver Customer Digital Workspace">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700;800&family=Geist+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -14,87 +14,410 @@
   <!-- Neutral Session Checking Loading State (Prevents Flash of Unauthenticated Content) -->
   <div id="dashboard-loader" role="status" aria-live="polite">
     <div class="loader-spinner" aria-hidden="true"></div>
-    <span class="loader-text" data-i18n="dashboard.loading">Loading dashboard...</span>
+    <span class="loader-text" data-i18n="dashboard.loading">Memuat ruang kerja...</span>
   </div>
 
-  <!-- Authenticated Dashboard UI Container -->
-  <div id="dashboard-app" aria-hidden="false">
-    <!-- Top Bar -->
-    <header class="topbar">
-      <div class="topbar-inner">
-        <a href="/" class="wordmark" data-i18n-aria="dashboard.logoAria" aria-label="Manuver Dashboard">
-          Manuver
+  <!-- Authenticated Customer Dashboard Root -->
+  <div id="dashboard-app" class="dashboard-shell" aria-hidden="true">
+    <!-- Sidebar Overlay for Mobile -->
+    <div id="sidebar-backdrop" class="sidebar-backdrop"></div>
+
+    <!-- 1. COMPACT ELEGANT SIDEBAR -->
+    <aside id="sidebar" class="sidebar" aria-label="Main Navigation">
+      <!-- Sidebar Header -->
+      <div class="sidebar-header">
+        <a href="/" class="brand-link" data-i18n-aria="dashboard.logoAria" aria-label="Beranda Manuver">
+          <span class="brand-badge" aria-hidden="true">M</span>
+          <span class="brand-name">Manuver</span>
         </a>
-
-        <div class="topbar-right">
-          <!-- Language Selection Segmented Control -->
-          <div class="lang-switch" role="group" aria-label="Language selection">
-            <button type="button" class="lang-btn active" data-lang="en" aria-pressed="true">EN</button>
-            <button type="button" class="lang-btn" data-lang="id" aria-pressed="false">ID</button>
-          </div>
-
-          <!-- User Profile -->
-          <div class="user-profile" id="user-profile-badge">
-            <span id="user-avatar-slot">
-              <span class="user-initials" aria-hidden="true">M</span>
-            </span>
-            <span class="user-name" id="user-display-name">Builder</span>
-          </div>
-
-          <!-- Sign Out Action -->
-          <button type="button" id="btn-signout" class="btn-signout" data-i18n="dashboard.signOut" data-i18n-aria="dashboard.signOutAria">
-            Sign out
-          </button>
-        </div>
+        <button type="button" id="sidebar-close-btn" class="sidebar-close-btn" aria-label="Tutup navigasi">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
       </div>
-    </header>
 
-    <!-- Center Empty State -->
-    <main class="main-content">
-      <section class="empty-state-card" aria-labelledby="empty-headline">
-        <div class="empty-icon-wrap" aria-hidden="true">
-          <!-- Clean minimal connector / webhook SVG icon -->
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
-            <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
+      <!-- Navigation Links -->
+      <nav class="sidebar-nav">
+        <div class="nav-section-label">WORKSPACE</div>
+        <ul class="nav-list" role="tablist">
+          <li role="presentation">
+            <button type="button" class="nav-item is-active" data-view="overview" role="tab" aria-selected="true">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="3" width="7" height="7"></rect>
+                <rect x="14" y="3" width="7" height="7"></rect>
+                <rect x="14" y="14" width="7" height="7"></rect>
+                <rect x="3" y="14" width="7" height="7"></rect>
+              </svg>
+              <span data-i18n="dashboard.navOverview">Ringkasan</span>
+            </button>
+          </li>
+          <li role="presentation">
+            <button type="button" class="nav-item" data-view="requests" role="tab" aria-selected="false">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                <polyline points="14 2 14 8 20 8"></polyline>
+                <line x1="16" y1="13" x2="8" y2="13"></line>
+                <line x1="16" y1="17" x2="8" y2="17"></line>
+                <polyline points="10 9 9 9 8 9"></polyline>
+              </svg>
+              <span data-i18n="dashboard.navRequests">Permintaan Saya</span>
+              <span id="badge-requests-count" class="nav-count-pill" style="display:none;">0</span>
+            </button>
+          </li>
+          <li role="presentation">
+            <button type="button" class="nav-item" data-view="projects" role="tab" aria-selected="false">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+                <polyline points="2 17 12 22 22 17"></polyline>
+                <polyline points="2 12 12 17 22 12"></polyline>
+              </svg>
+              <span data-i18n="dashboard.navProjects">Proyek Saya</span>
+              <span id="badge-projects-count" class="nav-count-pill" style="display:none;">0</span>
+            </button>
+          </li>
+          <li role="presentation">
+            <button type="button" class="nav-item" data-view="products" role="tab" aria-selected="false">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
+                <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
+              </svg>
+              <span data-i18n="dashboard.navProducts">Produk</span>
+              <span class="nav-badge-subtle" data-i18n="dashboard.badgeComingSoon">Segera</span>
+            </button>
+          </li>
+          <li role="presentation">
+            <button type="button" class="nav-item" data-view="help" role="tab" aria-selected="false">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+                <line x1="12" y1="17" x2="12.01" y2="17"></line>
+              </svg>
+              <span data-i18n="dashboard.navHelp">Bantuan</span>
+            </button>
+          </li>
+        </ul>
+      </nav>
+
+      <!-- Sidebar Footer / User Profile & Sign Out -->
+      <div class="sidebar-footer">
+        <div class="user-block">
+          <div id="sidebar-avatar-slot" class="user-avatar-wrap">
+            <span class="avatar-fallback" id="sidebar-avatar-fallback">M</span>
+          </div>
+          <div class="user-details">
+            <span class="user-name-text" id="sidebar-user-name">Pengguna</span>
+            <span class="user-email-text" id="sidebar-user-email">user@example.com</span>
+          </div>
+        </div>
+        <button type="button" id="sidebar-logout-btn" class="sidebar-signout-btn" data-i18n-aria="dashboard.signOutAria" title="Keluar dari akun">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+            <polyline points="16 17 21 12 16 7"></polyline>
+            <line x1="21" y1="12" x2="9" y2="12"></line>
           </svg>
+          <span data-i18n="dashboard.signOut">Keluar</span>
+        </button>
+      </div>
+    </aside>
+
+    <!-- MAIN VIEW AREA -->
+    <div class="main-layout">
+      <!-- 2. TOP HEADER -->
+      <header class="top-header">
+        <div class="header-left">
+          <button type="button" id="sidebar-open-btn" class="mobile-toggle-btn" aria-label="Buka navigasi">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+          </button>
+          <h2 class="header-context-title" id="header-context-title" data-i18n="dashboard.headerOverview">Ringkasan</h2>
         </div>
 
-        <h1 id="empty-headline" class="empty-headline" data-i18n="dashboard.emptyTitle">
-          No tools connected yet
-        </h1>
+        <div class="header-right">
+          <!-- Language Selector -->
+          <div class="lang-switch" role="group" aria-label="Pilihan bahasa">
+            <button type="button" class="lang-btn active" data-lang="id" aria-pressed="true">ID</button>
+            <button type="button" class="lang-btn" data-lang="en" aria-pressed="false">EN</button>
+          </div>
 
-        <p class="empty-description" data-i18n="dashboard.emptyDesc">
-          Connect your first tool to start automating your workflows and speeding up manual execution.
-        </p>
+          <!-- Header User Avatar -->
+          <div class="header-profile" id="header-profile-badge">
+            <div id="header-avatar-slot" class="header-avatar-wrap">
+              <span class="avatar-fallback" id="header-avatar-fallback">M</span>
+            </div>
+            <span class="header-user-firstname" id="header-user-firstname">Pengguna</span>
+          </div>
+        </div>
+      </header>
 
-        <button type="button" id="btn-connect-first" class="btn-primary-connect" data-i18n="dashboard.connectBtn">
-          Connect your first tool
-        </button>
-      </section>
-    </main>
-  </div>
+      <!-- VIEWPORT CONTAINER -->
+      <main class="viewport" id="viewport-root">
+        <!-- ============================================================
+             VIEW 1: OVERVIEW (RINGKASAN)
+             ============================================================ -->
+        <section id="view-overview" class="view-panel is-active" role="tabpanel">
+          <!-- 3. OVERVIEW / WELCOME SECTION -->
+          <div class="welcome-card">
+            <div class="welcome-copy">
+              <h1 class="welcome-title" id="welcome-title">Selamat datang kembali.</h1>
+              <p class="welcome-subtitle" data-i18n="dashboard.welcomeSubtitle">Ruang kerja digital Anda dimulai dari sini.</p>
+            </div>
+            <div class="welcome-action">
+              <button type="button" class="btn-primary-action open-request-trigger" data-i18n="dashboard.btnCreateRequest">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                <span>Buat Permintaan</span>
+              </button>
+            </div>
+          </div>
 
-  <!-- Connector Modal Dialog -->
-  <div id="connect-modal" class="modal-overlay" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="modal-title">
-    <div class="modal-dialog">
-      <div class="modal-badge" data-i18n="dashboard.modalBadge">
-        Connectors
-      </div>
-      <h2 id="modal-title" class="modal-title" data-i18n="dashboard.modalTitle">
-        First connector in preparation
-      </h2>
-      <p class="modal-desc" data-i18n="dashboard.modalDesc">
-        The first connector is currently being prepared. We will notify you as soon as it is ready.
-      </p>
-      <div class="modal-footer">
-        <button type="button" id="btn-modal-close" class="btn-modal-close" data-i18n="dashboard.modalClose">
-          Understood
-        </button>
-      </div>
+          <!-- 4. MAIN ACTION CARD -->
+          <div class="action-highlight-card">
+            <div class="action-highlight-content">
+              <div class="action-pill-tag">KONSULTASI SOLUSI</div>
+              <h3 class="action-highlight-title" data-i18n="dashboard.actionCardTitle">Ada ide atau kebutuhan yang ingin diwujudkan?</h3>
+              <p class="action-highlight-desc" data-i18n="dashboard.actionCardDesc">Ceritakan kebutuhan Anda. Manuver akan membantu mengubahnya menjadi solusi digital.</p>
+            </div>
+            <div class="action-highlight-btn-wrap">
+              <button type="button" class="btn-highlight-action open-request-trigger" data-i18n="dashboard.btnStartConsultation">
+                <span>Mulai Konsultasi &rarr;</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- RECENT PROJECTS PREVIEW -->
+          <div class="dashboard-section-block">
+            <div class="section-block-head">
+              <div>
+                <h3 class="section-block-title" data-i18n="dashboard.sectionProjectsTitle">Proyek Saya</h3>
+                <p class="section-block-desc" data-i18n="dashboard.sectionProjectsDesc">Pantau perkembangan aplikasi, fase arsitektur, dan sistem yang sedang dibangun.</p>
+              </div>
+              <button type="button" class="btn-link-action nav-switch-btn" data-target="projects">Lihat Semua &rarr;</button>
+            </div>
+            <div id="overview-projects-container">
+              <!-- Dynamically populated or thoughtful empty state -->
+            </div>
+          </div>
+
+          <!-- RECENT REQUESTS PREVIEW -->
+          <div class="dashboard-section-block">
+            <div class="section-block-head">
+              <div>
+                <h3 class="section-block-title" data-i18n="dashboard.sectionRequestsTitle">Permintaan Saya</h3>
+                <p class="section-block-desc" data-i18n="dashboard.sectionRequestsDesc">Status langsung dari brief proyek dan permintaan fitur yang Anda ajukan.</p>
+              </div>
+              <button type="button" class="btn-link-action nav-switch-btn" data-target="requests">Lihat Semua &rarr;</button>
+            </div>
+            <div id="overview-requests-container">
+              <!-- Dynamically populated or thoughtful empty state -->
+            </div>
+          </div>
+        </section>
+
+        <!-- ============================================================
+             VIEW 2: MY REQUESTS (PERMINTAAN SAYA)
+             ============================================================ -->
+        <section id="view-requests" class="view-panel" role="tabpanel" style="display:none;">
+          <div class="view-head">
+            <div>
+              <h2 class="view-title" data-i18n="dashboard.sectionRequestsTitle">Permintaan Saya</h2>
+              <p class="view-desc" data-i18n="dashboard.sectionRequestsDesc">Status langsung dari brief proyek dan permintaan fitur yang Anda ajukan.</p>
+            </div>
+            <button type="button" class="btn-primary-action open-request-trigger" data-i18n="dashboard.btnCreateRequest">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+              <span>Buat Permintaan</span>
+            </button>
+          </div>
+
+          <div id="full-requests-container" class="items-list-container">
+            <!-- Dynamically populated -->
+          </div>
+        </section>
+
+        <!-- ============================================================
+             VIEW 3: MY PROJECTS (PROYEK SAYA)
+             ============================================================ -->
+        <section id="view-projects" class="view-panel" role="tabpanel" style="display:none;">
+          <div class="view-head">
+            <div>
+              <h2 class="view-title" data-i18n="dashboard.sectionProjectsTitle">Proyek Saya</h2>
+              <p class="view-desc" data-i18n="dashboard.sectionProjectsDesc">Pantau perkembangan aplikasi, fase arsitektur, dan sistem yang sedang dibangun.</p>
+            </div>
+            <button type="button" class="btn-primary-action open-request-trigger" data-i18n="dashboard.btnShareIdea">
+              <span>Ceritakan Ide Anda</span>
+            </button>
+          </div>
+
+          <div id="full-projects-container" class="items-list-container">
+            <!-- Dynamically populated -->
+          </div>
+        </section>
+
+        <!-- ============================================================
+             VIEW 4: PRODUCTS (PRODUK & TIGA PRINSIP MANUVER)
+             ============================================================ -->
+        <section id="view-products" class="view-panel" role="tabpanel" style="display:none;">
+          <div class="view-head">
+            <div>
+              <h2 class="view-title" data-i18n="dashboard.productsHeading">Solusi Modular Manuver</h2>
+              <p class="view-desc" data-i18n="dashboard.productsSubheading">Dibangun di atas tiga prinsip: Build, Automate, dan Distribute.</p>
+            </div>
+          </div>
+
+          <div class="products-grid">
+            <!-- 1. BUILD -->
+            <div class="product-pillar-card">
+              <div class="product-card-badge" data-i18n="dashboard.productAvailableBadge">Tersedia via Konsultasi</div>
+              <div class="product-pillar-num">01</div>
+              <h3 class="product-pillar-title" data-i18n="dashboard.productBuildTitle">BUILD</h3>
+              <p class="product-pillar-desc" data-i18n="dashboard.productBuildDesc">
+                Pengembangan aplikasi kustom, software tangguh, dan arsitektur sistem digital berperforma tinggi.
+              </p>
+              <div class="product-card-footer">
+                <button type="button" class="btn-product-consult open-request-trigger" data-category="web_application">
+                  Konsultasi Build &rarr;
+                </button>
+              </div>
+            </div>
+
+            <!-- 2. AUTOMATE -->
+            <div class="product-pillar-card">
+              <div class="product-card-badge" data-i18n="dashboard.productAvailableBadge">Tersedia via Konsultasi</div>
+              <div class="product-pillar-num">02</div>
+              <h3 class="product-pillar-title" data-i18n="dashboard.productAutomateTitle">AUTOMATE</h3>
+              <p class="product-pillar-desc" data-i18n="dashboard.productAutomateDesc">
+                Solusi otomatisasi alur kerja 24/7 untuk menghilangkan friksi manual dan meningkatkan efisiensi bisnis.
+              </p>
+              <div class="product-card-footer">
+                <button type="button" class="btn-product-consult open-request-trigger" data-category="workflow_automation">
+                  Konsultasi Automate &rarr;
+                </button>
+              </div>
+            </div>
+
+            <!-- 3. DISTRIBUTE -->
+            <div class="product-pillar-card">
+              <div class="product-card-badge" data-i18n="dashboard.productAvailableBadge">Tersedia via Konsultasi</div>
+              <div class="product-pillar-num">03</div>
+              <h3 class="product-pillar-title" data-i18n="dashboard.productDistributeTitle">DISTRIBUTE</h3>
+              <p class="product-pillar-desc" data-i18n="dashboard.productDistributeDesc">
+                Konfigurasi lisensi produk digital, arsitektur multi-tenant, dan distribusi produk secara terukur.
+              </p>
+              <div class="product-card-footer">
+                <button type="button" class="btn-product-consult open-request-trigger" data-category="all_in_one">
+                  Konsultasi Distribute &rarr;
+                </button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ============================================================
+             VIEW 5: HELP & SUPPORT (BANTUAN)
+             ============================================================ -->
+        <section id="view-help" class="view-panel" role="tabpanel" style="display:none;">
+          <div class="view-head">
+            <div>
+              <h2 class="view-title" data-i18n="dashboard.helpHeading">Bantuan & Dukungan Langsung</h2>
+              <p class="view-desc" data-i18n="dashboard.helpSubheading">Butuh bantuan atau ingin konsultasi teknis mendesak? Hubungi langsung tim Manuver.</p>
+            </div>
+          </div>
+
+          <div class="help-grid">
+            <div class="help-card">
+              <div class="help-icon-box">
+                <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
+              </div>
+              <h3 class="help-card-title" data-i18n="dashboard.helpWhatsAppTitle">Konsultasi Langsung via WhatsApp</h3>
+              <p class="help-card-desc" data-i18n="dashboard.helpWhatsAppDesc">Terhubung langsung dengan lead technical architect Manuver secara realtime.</p>
+              <a href="https://wa.me/6287770020468?text=Halo%20Tim%20Manuver,%20saya%20sudah%20di%20dashboard%20dan%20ingin%20konsultasi%20langsung." target="_blank" rel="noopener noreferrer" class="btn-help-link" data-i18n="dashboard.btnOpenWhatsApp">
+                Konsultasi di WhatsApp &rarr;
+              </a>
+            </div>
+
+            <div class="help-card">
+              <div class="help-icon-box">
+                <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+              </div>
+              <h3 class="help-card-title" data-i18n="dashboard.helpEmailTitle">Dukungan via Email</h3>
+              <p class="help-card-desc" data-i18n="dashboard.helpEmailDesc">Kirimkan dokumen spesifikasi teknis, NDA, atau proposal kerja sama.</p>
+              <a href="mailto:aiomanuver@gmail.com?subject=Konsultasi%20Teknologi%20Manuver" class="btn-help-link" data-i18n="dashboard.btnEmailSupport">
+                Kirim Email &rarr;
+              </a>
+            </div>
+          </div>
+        </section>
+      </main>
     </div>
   </div>
 
+  <!-- ============================================================
+       REAL REQUEST / CONSULTATION CREATION MODAL
+       ============================================================ -->
+  <div id="request-modal" class="modal-overlay" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="modal-request-title">
+    <div class="modal-card">
+      <div class="modal-card-head">
+        <div>
+          <h2 id="modal-request-title" class="modal-headline" data-i18n="dashboard.modalTitle">Buat Permintaan Baru</h2>
+          <p class="modal-subtext" data-i18n="dashboard.modalSubtitle">Ceritakan kendala manual atau ide produk Anda. Tim rekayasa kami akan meninjaunya dalam 24 jam.</p>
+        </div>
+        <button type="button" id="modal-close-btn" class="modal-close-icon" aria-label="Tutup modal">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
+      </div>
+
+      <form id="request-form" class="modal-form">
+        <!-- Solution Category -->
+        <div class="form-group">
+          <label class="form-label" for="req-category" data-i18n="dashboard.labelCategory">Kategori Solusi</label>
+          <select id="req-category" class="form-select" required>
+            <option value="workflow_automation" data-i18n="dashboard.categoryAutomation">Otomasi Alur Kerja (CRM, API, WhatsApp, Sheets)</option>
+            <option value="web_application" data-i18n="dashboard.categoryWeb">Aplikasi Web / Platform SaaS Modern</option>
+            <option value="custom_ai" data-i18n="dashboard.categoryAi">Asisten AI Kustom / Alur Kerja Cerdas</option>
+            <option value="all_in_one" data-i18n="dashboard.categoryComprehensive">Sistem Terintegrasi (Web + Otomasi + AI)</option>
+          </select>
+        </div>
+
+        <!-- Description -->
+        <div class="form-group">
+          <label class="form-label" for="req-desc" data-i18n="dashboard.labelDesc">Deskripsikan Kebutuhan atau Masalah Bisnis Anda</label>
+          <textarea id="req-desc" class="form-textarea" rows="4" required data-i18n-placeholder="dashboard.descPlaceholder" placeholder="Contoh: Kami ingin menghubungkan form pesanan ke spreadsheet dan mengirim notifikasi WhatsApp otomatis ke pembeli..."></textarea>
+        </div>
+
+        <!-- Two Columns: Timeline & Budget -->
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="req-timeline" data-i18n="dashboard.labelTimeline">Target Timeline Pengerjaan</label>
+            <select id="req-timeline" class="form-select">
+              <option value="standard" selected data-i18n="dashboard.timelineStandard">Standar (1–2 Minggu)</option>
+              <option value="urgent" data-i18n="dashboard.timelineUrgent">Mendesak (3–7 Hari Kerja)</option>
+              <option value="flexible" data-i18n="dashboard.timelineFlexible">Fleksibel (2–4 Minggu)</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="req-budget" data-i18n="dashboard.labelBudget">Perkiraan Budget (Opsional)</label>
+            <select id="req-budget" class="form-select">
+              <option value="flexible" selected data-i18n="dashboard.budgetFlexible">Fleksibel / Diskusi lanjutan</option>
+              <option value="tier1" data-i18n="dashboard.budgetTier1">&lt; Rp 10 Juta</option>
+              <option value="tier2" data-i18n="dashboard.budgetTier2">Rp 10 Juta – 30 Juta</option>
+              <option value="tier3" data-i18n="dashboard.budgetTier3">&gt; Rp 30 Juta</option>
+            </select>
+          </div>
+        </div>
+
+        <div id="request-error-box" class="form-error-alert" style="display:none;"></div>
+
+        <div class="modal-card-foot">
+          <button type="button" id="modal-cancel-btn" class="btn-modal-cancel" data-i18n="dashboard.btnCancel">Batal</button>
+          <button type="submit" id="request-submit-btn" class="btn-primary-action">
+            <span id="btn-submit-text" data-i18n="dashboard.btnSubmitRequest">Kirimkan Permintaan</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- TOAST NOTIFICATION -->
+  <div id="app-toast" class="toast-popup" role="alert" aria-live="polite"></div>
+
+  <!-- DASHBOARD APPLICATION SCRIPT -->
   <script type="module" src="/src/dashboard.js"></script>
 </body>
 </html>

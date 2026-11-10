@@ -135,7 +135,7 @@ export async function getUserDashboardData(userId) {
 
   try {
     const briefsRes = await pool.query(
-      `SELECT * FROM project_briefs WHERE user_id = $1 ORDER BY created_at DESC LIMIT 5`,
+      `SELECT * FROM project_briefs WHERE user_id = $1 ORDER BY created_at DESC LIMIT 20`,
       [userId]
     );
     briefs = briefsRes.rows;
@@ -149,20 +149,6 @@ export async function getUserDashboardData(userId) {
     latestRoi = roiRes.rows[0] || null;
   } catch (_) {}
 
-  // If new user has no projects yet, provide default onboarding project tracker
-  if (projects.length === 0) {
-    projects = [
-      {
-        id: 0,
-        title: 'Konsultasi & Discovery Awal Manuver',
-        service_type: 'workflow_automation',
-        status: 'discovery',
-        progress_percent: 25,
-        notes: 'Sesi pemetaan alur kerja repetitif dan kebutuhan teknologi bersama tim Manuver.'
-      }
-    ];
-  }
-
   return {
     user,
     projects,
@@ -172,15 +158,47 @@ export async function getUserDashboardData(userId) {
 }
 
 /**
+ * Gets real projects for a user
+ */
+export async function getProjectsByUser(userId) {
+  try {
+    const res = await pool.query(
+      `SELECT * FROM projects WHERE user_id = $1 ORDER BY updated_at DESC`,
+      [userId]
+    );
+    return res.rows;
+  } catch (err) {
+    console.error('Error fetching user projects:', err);
+    return [];
+  }
+}
+
+/**
+ * Gets real briefs/requests for a user
+ */
+export async function getRequestsByUser(userId) {
+  try {
+    const res = await pool.query(
+      `SELECT * FROM project_briefs WHERE user_id = $1 ORDER BY created_at DESC`,
+      [userId]
+    );
+    return res.rows;
+  } catch (err) {
+    console.error('Error fetching user requests:', err);
+    return [];
+  }
+}
+
+/**
  * Submits a new project brief
  */
-export async function createProjectBrief({ userId, serviceCategory, description, budgetRange, targetTimeline }) {
+export async function createProjectBrief({ userId, serviceCategory, description, budgetRange, targetTimeline, status = 'received' }) {
   const query = `
-    INSERT INTO project_briefs (user_id, service_category, description, budget_range, target_timeline)
-    VALUES ($1, $2, $3, $4, $5)
+    INSERT INTO project_briefs (user_id, service_category, description, budget_range, target_timeline, status)
+    VALUES ($1, $2, $3, $4, $5, $6)
     RETURNING *;
   `;
-  const values = [userId, serviceCategory, description, budgetRange, targetTimeline];
+  const values = [userId, serviceCategory, description, budgetRange, targetTimeline, status];
   const { rows } = await pool.query(query, values);
   return rows[0];
 }

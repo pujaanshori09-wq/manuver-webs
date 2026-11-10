@@ -4,6 +4,8 @@ import {
   upsertGoogleUser,
   findUserById,
   getUserDashboardData,
+  getProjectsByUser,
+  getRequestsByUser,
   createProjectBrief,
   saveRoiCalculation
 } from './db.js';
@@ -239,6 +241,96 @@ authRouter.post('/brief', async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
+
+/**
+ * Middleware: Verifies JWT authentication
+ */
+export function requireAuth(req, res, next) {
+  const token = req.cookies?.manuver_token || req.headers.authorization?.replace('Bearer ', '');
+  if (!token) {
+    return res.status(401).json({ error: 'Unauthorized' });
+  }
+
+  try {
+    const decoded = jwt.verify(token, JWT_SECRET);
+    req.userId = decoded.userId;
+    req.user = decoded;
+    next();
+  } catch (err) {
+    return res.status(401).json({ error: 'Invalid or expired session' });
+  }
+}
+
+/**
+ * Shared handler for fetching full dashboard data
+ */
+export async function handleGetDashboardData(req, res) {
+  res.set('Cache-Control', 'no-store, no-cache, must-revalidate, private');
+  try {
+    const data = await getUserDashboardData(req.userId);
+    if (!data) return res.status(404).json({ error: 'User not found' });
+    res.json(data);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+}
+
+/**
+ * Shared handler for getting user's projects
+ */
+export async function handleGetProjects(req, res) {
+  res.set('Cache-Control', 'no-store, no-cache, must-revalidate, private');
+  try {
+    const projects = await getProjectsByUser(req.userId);
+    res.json({ success: true, projects });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+}
+
+/**
+ * Shared handler for getting user's requests / briefs
+ */
+export async function handleGetRequests(req, res) {
+  res.set('Cache-Control', 'no-store, no-cache, must-revalidate, private');
+  try {
+    const requests = await getRequestsByUser(req.userId);
+    res.json({ success: true, requests });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+}
+
+/**
+ * Shared handler for creating a new request / brief
+ */
+export async function handleCreateRequest(req, res) {
+  const { serviceCategory, description, budgetRange, targetTimeline } = req.body;
+  if (!serviceCategory || !description || !description.trim()) {
+    return res.status(400).json({ error: 'Kategori dan deskripsi kebutuhan wajib diisi' });
+  }
+
+  try {
+    const request = await createProjectBrief({
+      userId: req.userId,
+      serviceCategory: serviceCategory.trim(),
+      description: description.trim(),
+      budgetRange: budgetRange ? budgetRange.trim() : 'flexible',
+      targetTimeline: targetTimeline ? targetTimeline.trim() : 'standard',
+      status: 'received'
+    });
+    res.status(201).json({ success: true, request });
+  } catch (err) {
+    console.error('Error creating project request:', err);
+    res.status(500).json({ error: 'Gagal menyimpan permintaan ke database' });
+  }
+}
+
+// Mount routes on authRouter
+authRouter.get('/dashboard', requireAuth, handleGetDashboardData);
+authRouter.get('/projects', requireAuth, handleGetProjects);
+authRouter.get('/requests', requireAuth, handleGetRequests);
+authRouter.post('/requests', requireAuth, handleCreateRequest);
 
 /**
  * 7. POST /api/auth/roi

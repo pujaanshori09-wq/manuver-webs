@@ -13,11 +13,7 @@ export default defineConfig(({ mode }) => {
   return {
     server: {
       proxy: {
-        '/api/auth': {
-          target: 'http://localhost:5000',
-          changeOrigin: true
-        },
-        '/api/me': {
+        '/api': {
           target: 'http://localhost:5000',
           changeOrigin: true
         },

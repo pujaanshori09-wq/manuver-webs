@@ -6,7 +6,15 @@ import path from 'path';
 import fs from 'fs';
 import { fileURLToPath } from 'url';
 import { initDb } from './db.js';
-import { authRouter, handleGetMe } from './auth.js';
+import {
+  authRouter,
+  handleGetMe,
+  requireAuth,
+  handleGetDashboardData,
+  handleGetProjects,
+  handleGetRequests,
+  handleCreateRequest
+} from './auth.js';
 import chatHandler from '../api/chat.js';
 
 dotenv.config();
@@ -53,6 +61,12 @@ initDb();
 
 // Strict endpoint GET /api/me
 app.get('/api/me', handleGetMe);
+
+// Dedicated API endpoints for dashboard data & request submission
+app.get('/api/dashboard/data', requireAuth, handleGetDashboardData);
+app.get('/api/projects', requireAuth, handleGetProjects);
+app.get('/api/requests', requireAuth, handleGetRequests);
+app.post('/api/requests', requireAuth, handleCreateRequest);
 
 // Mount Google OAuth & Auth routes on both /api/auth and /auth
 app.use('/api/auth', authRouter);

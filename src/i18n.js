@@ -160,15 +160,101 @@ export const dictionary = {
       logoAria: 'Manuver Dashboard',
       signOut: 'Sign out',
       signOutAria: 'Sign out of your account',
-      loading: 'Loading dashboard...',
-      emptyBadge: 'Workspace',
-      emptyTitle: 'No tools connected yet',
-      emptyDesc: 'Connect your first tool to start automating your workflows and speeding up manual execution.',
-      connectBtn: 'Connect your first tool',
-      modalBadge: 'Connectors',
-      modalTitle: 'First connector in preparation',
-      modalDesc: 'The first connector is currently being prepared. We will notify you as soon as it is ready.',
-      modalClose: 'Understood'
+      loading: 'Loading workspace...',
+      
+      // Sidebar Navigation
+      navOverview: 'Overview',
+      navRequests: 'My Requests',
+      navProjects: 'My Projects',
+      navProducts: 'Products',
+      navHelp: 'Help & Support',
+      badgeComingSoon: 'Soon',
+      badgeActive: 'Active',
+      
+      // Top Header Context Titles
+      headerOverview: 'Overview',
+      headerRequests: 'My Requests',
+      headerProjects: 'My Projects',
+      headerProducts: 'Products & Solutions',
+      headerHelp: 'Help & Support',
+      
+      // Welcome Section
+      welcomeTitle: 'Welcome back, {name}',
+      welcomeSubtitle: 'Your digital product workspace starts here.',
+      btnCreateRequest: 'Create Request',
+      
+      // Main Action Card
+      actionCardTitle: 'Have an idea or operational challenge to solve?',
+      actionCardDesc: 'Tell us what you need. Manuver will engineer it into a scalable digital solution.',
+      btnStartConsultation: 'Start Consultation',
+      
+      // Section Headers
+      sectionProjectsTitle: 'My Projects',
+      sectionProjectsDesc: 'Track active builds, architecture phases, and software deployments.',
+      sectionRequestsTitle: 'My Requests',
+      sectionRequestsDesc: 'Live status of your submitted project briefs and feature inquiries.',
+      
+      // Empty States
+      emptyProjectsTitle: 'No projects yet.',
+      emptyProjectsDesc: 'Every great solution begins with an idea.',
+      btnShareIdea: 'Share Your Idea',
+      
+      emptyRequestsTitle: 'No requests submitted yet.',
+      emptyRequestsDesc: 'Submit your first technical requirements or consultation brief.',
+      btnSubmitFirstRequest: 'Submit First Request',
+      
+      // Status Badges
+      statusReceived: 'Received',
+      statusUnderReview: 'Under Review',
+      statusInDiscussion: 'In Discussion',
+      statusInProgress: 'In Progress',
+      statusCompleted: 'Completed',
+      
+      // Request Modal Form
+      modalTitle: 'Create New Request',
+      modalSubtitle: 'Share your vision or operational friction. Our engineering team will review it within 24 hours.',
+      labelCategory: 'Solution Category',
+      categoryAutomation: 'Workflow Automation (CRMs, APIs, WhatsApp, Sheets)',
+      categoryWeb: 'Web Application / Modern SaaS Platform',
+      categoryAi: 'Custom AI Assistant / Intelligent Workflow',
+      categoryComprehensive: 'End-to-End System (Web + Automation + AI)',
+      labelDesc: 'Describe your requirements or bottleneck',
+      descPlaceholder: 'E.g., We need an automated order intake pipeline connecting Shopify to our internal ERP and instant customer updates...',
+      labelTimeline: 'Target Timeline',
+      timelineUrgent: 'Urgent (3–7 Days)',
+      timelineStandard: 'Standard (1–2 Weeks)',
+      timelineFlexible: 'Flexible (2–4 Weeks)',
+      labelBudget: 'Budget Range (Optional)',
+      budgetFlexible: 'Flexible / To be discussed',
+      budgetTier1: '< IDR 10 Million',
+      budgetTier2: 'IDR 10M – 30M',
+      budgetTier3: '> IDR 30 Million',
+      btnCancel: 'Cancel',
+      btnSubmitRequest: 'Submit Request',
+      btnSubmitting: 'Submitting...',
+      toastSuccess: 'Request submitted successfully! Our team will follow up promptly.',
+      toastError: 'Failed to submit request. Please try again.',
+      
+      // Products View
+      productsHeading: 'Manuver Modular Solutions',
+      productsSubheading: 'Built on our core principles: Build, Automate, and Distribute.',
+      productBuildTitle: 'BUILD',
+      productBuildDesc: 'Custom software applications, modern high-conversion web platforms, and resilient system architectures.',
+      productAutomateTitle: 'AUTOMATE',
+      productAutomateDesc: '24/7 autonomous data pipelines, cross-tool webhooks, and automated operational task routing.',
+      productDistributeTitle: 'DISTRIBUTE',
+      productDistributeDesc: 'License management, multi-tenant digital SaaS configurations, and secure commercial deployment.',
+      productAvailableBadge: 'Available via Consultation',
+      
+      // Help View
+      helpHeading: 'Help & Direct Support',
+      helpSubheading: 'Need assistance or have an urgent technical question? Connect directly with the Manuver team.',
+      helpWhatsAppTitle: 'Direct WhatsApp Consultation',
+      helpWhatsAppDesc: 'Chat directly with our lead technical architect in real-time.',
+      btnOpenWhatsApp: 'Chat on WhatsApp →',
+      helpEmailTitle: 'Email Support',
+      helpEmailDesc: 'Send detailed technical specs, RFPs, or security questionnaires.',
+      btnEmailSupport: 'Send Email →'
     }
   },
   id: {
@@ -325,15 +411,101 @@ export const dictionary = {
       logoAria: 'Dashboard Manuver',
       signOut: 'Keluar',
       signOutAria: 'Keluar dari akun Anda',
-      loading: 'Memuat dashboard...',
-      emptyBadge: 'Ruang Kerja',
-      emptyTitle: 'Belum ada tool yang terhubung',
-      emptyDesc: 'Hubungkan tool pertama kamu untuk mulai mengotomasi alur kerja dan mempercepat eksekusi manual.',
-      connectBtn: 'Hubungkan tool pertama',
-      modalBadge: 'Konektor',
-      modalTitle: 'Konektor pertama sedang disiapkan',
-      modalDesc: 'Konektor pertama sedang disiapkan. Kami akan memberi tahu kamu saat siap.',
-      modalClose: 'Mengerti'
+      loading: 'Memuat ruang kerja...',
+      
+      // Sidebar Navigation
+      navOverview: 'Ringkasan',
+      navRequests: 'Permintaan Saya',
+      navProjects: 'Proyek Saya',
+      navProducts: 'Produk',
+      navHelp: 'Bantuan',
+      badgeComingSoon: 'Segera',
+      badgeActive: 'Aktif',
+      
+      // Top Header Context Titles
+      headerOverview: 'Ringkasan',
+      headerRequests: 'Permintaan Saya',
+      headerProjects: 'Proyek Saya',
+      headerProducts: 'Produk & Solusi',
+      headerHelp: 'Bantuan & Dukungan',
+      
+      // Welcome Section
+      welcomeTitle: 'Selamat datang kembali, {name}.',
+      welcomeSubtitle: 'Ruang kerja digital Anda dimulai dari sini.',
+      btnCreateRequest: 'Buat Permintaan',
+      
+      // Main Action Card
+      actionCardTitle: 'Ada ide atau kebutuhan yang ingin diwujudkan?',
+      actionCardDesc: 'Ceritakan kebutuhan Anda. Manuver akan membantu mengubahnya menjadi solusi digital.',
+      btnStartConsultation: 'Mulai Konsultasi',
+      
+      // Section Headers
+      sectionProjectsTitle: 'Proyek Saya',
+      sectionProjectsDesc: 'Pantau perkembangan aplikasi, fase arsitektur, dan sistem yang sedang dibangun.',
+      sectionRequestsTitle: 'Permintaan Saya',
+      sectionRequestsDesc: 'Status langsung dari brief proyek dan permintaan fitur yang Anda ajukan.',
+      
+      // Empty States
+      emptyProjectsTitle: 'Belum ada proyek.',
+      emptyProjectsDesc: 'Setiap solusi besar dimulai dari sebuah ide.',
+      btnShareIdea: 'Ceritakan Ide Anda',
+      
+      emptyRequestsTitle: 'Belum ada permintaan yang diajukan.',
+      emptyRequestsDesc: 'Kirimkan brief konsultasi atau kebutuhan teknis pertama Anda.',
+      btnSubmitFirstRequest: 'Ajukan Permintaan Pertama',
+      
+      // Status Badges
+      statusReceived: 'Diterima',
+      statusUnderReview: 'Sedang Ditinjau',
+      statusInDiscussion: 'Dalam Diskusi',
+      statusInProgress: 'Sedang Dikerjakan',
+      statusCompleted: 'Selesai',
+      
+      // Request Modal Form
+      modalTitle: 'Buat Permintaan Baru',
+      modalSubtitle: 'Ceritakan kendala manual atau ide produk Anda. Tim rekayasa kami akan meninjaunya dalam 24 jam.',
+      labelCategory: 'Kategori Solusi',
+      categoryAutomation: 'Otomasi Alur Kerja (CRM, API, WhatsApp, Sheets)',
+      categoryWeb: 'Aplikasi Web / Platform SaaS Modern',
+      categoryAi: 'Asisten AI Kustom / Alur Kerja Cerdas',
+      categoryComprehensive: 'Sistem Terintegrasi (Web + Otomasi + AI)',
+      labelDesc: 'Deskripsikan Kebutuhan atau Masalah Bisnis Anda',
+      descPlaceholder: 'Contoh: Kami ingin menghubungkan form pesanan ke spreadsheet dan mengirim notifikasi WhatsApp otomatis ke pembeli...',
+      labelTimeline: 'Target Timeline Pengerjaan',
+      timelineUrgent: 'Mendesak (3–7 Hari Kerja)',
+      timelineStandard: 'Standar (1–2 Minggu)',
+      timelineFlexible: 'Fleksibel (2–4 Minggu)',
+      labelBudget: 'Perkiraan Budget (Opsional)',
+      budgetFlexible: 'Fleksibel / Diskusi lanjutan',
+      budgetTier1: '< Rp 10 Juta',
+      budgetTier2: 'Rp 10 Juta – 30 Juta',
+      budgetTier3: '> Rp 30 Juta',
+      btnCancel: 'Batal',
+      btnSubmitRequest: 'Kirimkan Permintaan',
+      btnSubmitting: 'Mengirim...',
+      toastSuccess: 'Permintaan berhasil dikirim! Tim Manuver akan segera menghubungi Anda.',
+      toastError: 'Gagal mengirim permintaan. Silakan coba kembali.',
+      
+      // Products View
+      productsHeading: 'Solusi Modular Manuver',
+      productsSubheading: 'Dibangun di atas tiga prinsip: Build, Automate, dan Distribute.',
+      productBuildTitle: 'BUILD',
+      productBuildDesc: 'Pengembangan aplikasi kustom, software tangguh, dan arsitektur sistem digital berperforma tinggi.',
+      productAutomateTitle: 'AUTOMATE',
+      productAutomateDesc: 'Solusi otomatisasi alur kerja 24/7 untuk menghilangkan friksi manual dan meningkatkan efisiensi bisnis.',
+      productDistributeTitle: 'DISTRIBUTE',
+      productDistributeDesc: 'Konfigurasi lisensi produk digital, arsitektur multi-tenant, dan distribusi produk secara terukur.',
+      productAvailableBadge: 'Tersedia via Konsultasi',
+      
+      // Help View
+      helpHeading: 'Bantuan & Dukungan Langsung',
+      helpSubheading: 'Butuh bantuan atau ingin konsultasi teknis mendesak? Hubungi langsung tim Manuver.',
+      helpWhatsAppTitle: 'Konsultasi Langsung via WhatsApp',
+      helpWhatsAppDesc: 'Terhubung langsung dengan lead technical architect Manuver secara realtime.',
+      btnOpenWhatsApp: 'Konsultasi di WhatsApp →',
+      helpEmailTitle: 'Dukungan via Email',
+      helpEmailDesc: 'Kirimkan dokumen spesifikasi teknis, NDA, atau proposal kerja sama.',
+      btnEmailSupport: 'Kirim Email →'
     }
   }
 };

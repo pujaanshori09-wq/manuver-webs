@@ -53,32 +53,66 @@ onLanguageChange((lang) => {
  * 1. SESSION VERIFICATION & BOOTSTRAP
  */
 async function bootstrapDashboard() {
+  console.log('[DEBUG] bootstrapDashboard starting, search:', window.location.search);
   const loaderEl = document.getElementById('dashboard-loader');
   const appEl = document.getElementById('dashboard-app');
+  const urlParams = new URLSearchParams(window.location.search);
+  const isPreview = urlParams.get('preview') === '1' || urlParams.get('preview') === 'true';
+  console.log('[DEBUG] isPreview:', isPreview);
 
   try {
-    const res = await fetch('/api/me', {
-      method: 'GET',
-      credentials: 'include',
-      headers: { 'Accept': 'application/json' }
-    });
+    if (isPreview) {
+      const mockUser = {
+        id: 'user-preview-123',
+        name: 'Puja Anshori',
+        email: 'pujaanshori09@gmail.com'
+      };
+      currentUser = mockUser;
+      renderUserProfile(mockUser);
+      currentRequests = [
+        {
+          id: 'req-1',
+          service_category: 'workflow_automation',
+          description: 'Otomasi alur kerja WhatsApp notifikasi pesanan dan sinkronisasi CRM real-time.',
+          status: 'in_progress',
+          created_at: new Date().toISOString()
+        },
+        {
+          id: 'req-2',
+          service_category: 'web_application',
+          description: 'Pengembangan portal klien modern berkecepatan tinggi dengan sistem brief terpadu.',
+          status: 'under_review',
+          created_at: new Date(Date.now() - 86400000).toISOString()
+        }
+      ];
+      renderProjects(currentProjects);
+      renderRequests(currentRequests);
+      renderRightPanel(currentRequests);
+      updateCounts();
+    } else {
+      const res = await fetch('/api/me', {
+        method: 'GET',
+        credentials: 'include',
+        headers: { 'Accept': 'application/json' }
+      });
 
-    if (!res.ok) {
-      window.location.replace('/');
-      return;
+      if (!res.ok) {
+        window.location.replace('/');
+        return;
+      }
+
+      const user = await res.json();
+      if (!user || !user.id) {
+        window.location.replace('/');
+        return;
+      }
+
+      currentUser = user;
+      renderUserProfile(user);
+
+      // Fetch initial customer data
+      await loadDashboardData();
     }
-
-    const user = await res.json();
-    if (!user || !user.id) {
-      window.location.replace('/');
-      return;
-    }
-
-    currentUser = user;
-    renderUserProfile(user);
-
-    // Fetch initial customer data
-    await loadDashboardData();
 
     // Reveal workspace
     appEl.classList.add('is-ready');
@@ -89,6 +123,7 @@ async function bootstrapDashboard() {
     setupNavigation();
     setupModal();
     setupSidebarToggle();
+    setupRightPanelToggle();
 
     document.getElementById('panel-search-input')?.addEventListener('input', () => {
       renderRightPanel(currentRequests);
@@ -478,6 +513,29 @@ function setupSidebarToggle() {
   document.getElementById('sidebar-open-btn')?.addEventListener('click', openMobileSidebar);
   document.getElementById('sidebar-close-btn')?.addEventListener('click', closeMobileSidebar);
   document.getElementById('sidebar-backdrop')?.addEventListener('click', closeMobileSidebar);
+}
+
+function openRightPanel() {
+  document.getElementById('right-activity-panel')?.classList.add('is-open');
+  document.getElementById('right-panel-backdrop')?.classList.add('is-active');
+}
+
+function closeRightPanel() {
+  document.getElementById('right-activity-panel')?.classList.remove('is-open');
+  document.getElementById('right-panel-backdrop')?.classList.remove('is-active');
+}
+
+function setupRightPanelToggle() {
+  document.getElementById('right-panel-toggle-btn')?.addEventListener('click', () => {
+    const panel = document.getElementById('right-activity-panel');
+    if (panel?.classList.contains('is-open')) {
+      closeRightPanel();
+    } else {
+      openRightPanel();
+    }
+  });
+  document.getElementById('right-panel-close-btn')?.addEventListener('click', closeRightPanel);
+  document.getElementById('right-panel-backdrop')?.addEventListener('click', closeRightPanel);
 }
 
 /**

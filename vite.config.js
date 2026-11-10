@@ -15,7 +15,12 @@ export default defineConfig(({ mode }) => {
       proxy: {
         '/api': {
           target: 'http://localhost:5000',
-          changeOrigin: true
+          changeOrigin: true,
+          bypass: (req) => {
+            if (req.url.endsWith('.js') || req.url.includes('.js?')) {
+              return req.url;
+            }
+          }
         },
         '/auth': {
           target: 'http://localhost:5000',
@@ -37,8 +42,8 @@ export default defineConfig(({ mode }) => {
         name: 'dashboard-dev-rewrite',
         configureServer(server) {
           server.middlewares.use((req, res, next) => {
-            if (req.url === '/dashboard' || req.url === '/dashboard/') {
-              req.url = '/dashboard.html';
+            if (req.url.startsWith('/dashboard') && !req.url.startsWith('/dashboard.html')) {
+              req.url = req.url.replace(/^\/dashboard\/?(\?.*)?$/, '/dashboard.html$1');
             }
             next();
           });

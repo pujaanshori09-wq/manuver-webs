@@ -3,9 +3,10 @@ import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import path from 'path';
+import fs from 'fs';
 import { fileURLToPath } from 'url';
 import { initDb } from './db.js';
-import { authRouter } from './auth.js';
+import { authRouter, handleGetMe } from './auth.js';
 import chatHandler from '../api/chat.js';
 
 dotenv.config();
@@ -16,14 +17,42 @@ const __dirname = path.dirname(__filename);
 const app = express();
 const PORT = process.env.PORT || 5000;
 
+// Explicit CORS origin allowlist (strict credentials support)
+const allowedOrigins = [
+  'http://localhost:5000',
+  'http://localhost:5173',
+  'http://localhost:3000',
+  'http://127.0.0.1:5000',
+  'http://127.0.0.1:5173',
+  'http://127.0.0.1:3000'
+];
+if (process.env.FRONTEND_URL) {
+  allowedOrigins.push(process.env.FRONTEND_URL.replace(/\/$/, ''));
+}
+if (process.env.VERCEL_URL) {
+  allowedOrigins.push(`https://${process.env.VERCEL_URL}`);
+}
+
 // Middlewares
-app.use(cors({ origin: true, credentials: true }));
+app.use(cors({
+  origin: (origin, callback) => {
+    if (!origin) return callback(null, true);
+    if (allowedOrigins.includes(origin) || (origin.endsWith('.vercel.app') && origin.includes('manuver'))) {
+      return callback(null, true);
+    }
+    return callback(new Error('Not allowed by CORS: ' + origin));
+  },
+  credentials: true
+}));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 // Initialize PostgreSQL database schema
 initDb();
+
+// Strict endpoint GET /api/me
+app.get('/api/me', handleGetMe);
 
 // Mount Google OAuth & Auth routes on both /api/auth and /auth
 app.use('/api/auth', authRouter);
@@ -37,6 +66,16 @@ app.all('/api/chat', (req, res) => {
 // Serve frontend static files if dist exists
 const distPath = path.join(__dirname, '../dist');
 app.use(express.static(distPath));
+
+// Dedicated route for /dashboard
+app.get('/dashboard', (req, res) => {
+  const distDashboard = path.join(distPath, 'dashboard.html');
+  const rootDashboard = path.join(__dirname, '../dashboard.html');
+  if (fs.existsSync(distDashboard)) {
+    return res.sendFile(distDashboard);
+  }
+  return res.sendFile(rootDashboard);
+});
 
 // Serve standalone prototype pages directly if requested
 app.get('/prototype-particles.html', (req, res) => {

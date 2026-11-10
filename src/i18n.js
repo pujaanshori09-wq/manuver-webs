@@ -154,6 +154,21 @@ export const dictionary = {
         btnWhatsApp: 'Consult Your Project on WhatsApp →',
         guarantee: 'Free initial consultation · Transparent modular scope · 30-day bug warranty'
       }
+    },
+    dashboard: {
+      metaTitle: 'Dashboard · Manuver',
+      logoAria: 'Manuver Dashboard',
+      signOut: 'Sign out',
+      signOutAria: 'Sign out of your account',
+      loading: 'Loading dashboard...',
+      emptyBadge: 'Workspace',
+      emptyTitle: 'No tools connected yet',
+      emptyDesc: 'Connect your first tool to start automating your workflows and speeding up manual execution.',
+      connectBtn: 'Connect your first tool',
+      modalBadge: 'Connectors',
+      modalTitle: 'First connector in preparation',
+      modalDesc: 'The first connector is currently being prepared. We will notify you as soon as it is ready.',
+      modalClose: 'Understood'
     }
   },
   id: {
@@ -304,6 +319,21 @@ export const dictionary = {
         btnWhatsApp: 'Konsultasikan Project Anda di WhatsApp →',
         guarantee: 'Konsultasi awal gratis · Skema transparan · Garansi bug 30 hari'
       }
+    },
+    dashboard: {
+      metaTitle: 'Dashboard · Manuver',
+      logoAria: 'Dashboard Manuver',
+      signOut: 'Keluar',
+      signOutAria: 'Keluar dari akun Anda',
+      loading: 'Memuat dashboard...',
+      emptyBadge: 'Ruang Kerja',
+      emptyTitle: 'Belum ada tool yang terhubung',
+      emptyDesc: 'Hubungkan tool pertama kamu untuk mulai mengotomasi alur kerja dan mempercepat eksekusi manual.',
+      connectBtn: 'Hubungkan tool pertama',
+      modalBadge: 'Konektor',
+      modalTitle: 'Konektor pertama sedang disiapkan',
+      modalDesc: 'Konektor pertama sedang disiapkan. Kami akan memberi tahu kamu saat siap.',
+      modalClose: 'Mengerti'
     }
   }
 };

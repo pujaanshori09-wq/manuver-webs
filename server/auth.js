@@ -22,6 +22,47 @@ function getRedirectUri(req) {
   return `${protocol}://${host}/auth/google/callback`;
 }
 
+export function getCookieOptions() {
+  const isProd = process.env.NODE_ENV === 'production';
+  const isCrossSite = process.env.COOKIE_SAMESITE === 'none' || Boolean(process.env.CROSS_SITE);
+  return {
+    httpOnly: true,
+    secure: isProd || isCrossSite,
+    sameSite: isCrossSite ? 'none' : 'lax',
+    path: '/'
+  };
+}
+
+/**
+ * Shared handler for GET /api/me and GET /api/auth/me
+ * Returns { id, email, name, avatarUrl } for the user in the verified JWT cookie
+ */
+export async function handleGetMe(req, res) {
+  res.set('Cache-Control', 'no-store, no-cache, must-revalidate, private');
+  const token = req.cookies?.manuver_token || req.headers.authorization?.replace('Bearer ', '');
+
+  if (!token) {
+    return res.status(401).json({ error: 'Unauthorized' });
+  }
+
+  try {
+    const decoded = jwt.verify(token, JWT_SECRET);
+    let user = null;
+    try {
+      user = await findUserById(decoded.userId);
+    } catch (_) {}
+
+    const id = user?.id || decoded.userId;
+    const email = user?.email || decoded.email;
+    const name = user?.name || decoded.name;
+    const avatarUrl = user?.avatar_url || decoded.avatarUrl || '';
+
+    return res.json({ id, email, name, avatarUrl });
+  } catch (err) {
+    return res.status(401).json({ error: 'Unauthorized' });
+  }
+}
+
 /**
  * 1. GET /api/auth/google
  * Redirects the user to Google's standard OAuth consent screen
@@ -124,17 +165,15 @@ authRouter.get('/google/callback', async (req, res) => {
       { expiresIn: '7d' }
     );
 
-    // Set secure HTTP-only cookie
-    const isProd = process.env.NODE_ENV === 'production';
-    res.cookie('manuver_token', token, {
-      httpOnly: true,
-      secure: isProd,
-      sameSite: 'lax',
+    // Set secure HTTP-only cookie using unified options
+    const cookieOptions = {
+      ...getCookieOptions(),
       maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
-    });
+    };
+    res.cookie('manuver_token', token, cookieOptions);
 
-    // Redirect user back to the homepage
-    res.redirect('/?auth=success');
+    // Redirect user to the protected dashboard
+    res.redirect('/dashboard');
   } catch (err) {
     console.error('OAuth callback exception:', err);
     res.redirect('/?auth=server_error');
@@ -142,44 +181,17 @@ authRouter.get('/google/callback', async (req, res) => {
 });
 
 /**
- * 3. GET /api/auth/me
- * Returns current authenticated user from PostgreSQL
+ * 3. GET /api/auth/me (also wired directly to /api/me)
+ * Returns { id, email, name, avatarUrl } for the user in the verified JWT cookie
  */
-authRouter.get('/me', async (req, res) => {
-  const token = req.cookies?.manuver_token || req.headers.authorization?.replace('Bearer ', '');
-
-  if (!token) {
-    return res.status(401).json({ user: null });
-  }
-
-  try {
-    const decoded = jwt.verify(token, JWT_SECRET);
-    let user = null;
-    try {
-      user = await findUserById(decoded.userId);
-    } catch (_) {}
-
-    if (!user) {
-      user = {
-        id: decoded.userId,
-        email: decoded.email,
-        name: decoded.name,
-        avatar_url: decoded.avatarUrl || ''
-      };
-    }
-
-    res.json({ user });
-  } catch (err) {
-    res.status(401).json({ user: null });
-  }
-});
+authRouter.get('/me', handleGetMe);
 
 /**
  * 4. POST /api/auth/logout
- * Clears the session cookie
+ * Clears the session cookie using exact matching attributes
  */
 authRouter.post('/logout', (req, res) => {
-  res.clearCookie('manuver_token');
+  res.clearCookie('manuver_token', getCookieOptions());
   res.json({ success: true, message: 'Logged out successfully' });
 });
 

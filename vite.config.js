@@ -11,10 +11,27 @@ export default defineConfig(({ mode }) => {
   }
 
   return {
+    server: {
+      proxy: {
+        '/api/auth': {
+          target: 'http://localhost:5000',
+          changeOrigin: true
+        },
+        '/api/me': {
+          target: 'http://localhost:5000',
+          changeOrigin: true
+        },
+        '/auth': {
+          target: 'http://localhost:5000',
+          changeOrigin: true
+        }
+      }
+    },
     build: {
       rollupOptions: {
         input: {
           main: path.resolve(__dirname, 'index.html'),
+          dashboard: path.resolve(__dirname, 'dashboard.html'),
           particles: path.resolve(__dirname, 'prototype-particles.html')
         }
       }

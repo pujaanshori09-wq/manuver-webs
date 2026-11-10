@@ -80,39 +80,20 @@
   }
   .logo-word{
     font-family: "Geist", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-    font-size: clamp(26px, 2.8vw, 32px);
-    font-weight: 800;
-    letter-spacing: -0.04em;
+    font-size: clamp(22px, 2.4vw, 26px);
+    font-weight: 700;
+    letter-spacing: -0.035em;
     line-height: 1;
     color: #ffffff;
     display: inline-block;
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    /* 3D dimensional extrusion with ambient occlusion */
-    text-shadow:
-      0 1px 0 #dedcd7,
-      0 2px 0 #bfbdb8,
-      0 3px 0 #9f9e98,
-      0 4px 0 #7e7d78,
-      0 5px 0 #585753,
-      0 6px 1px rgba(0, 0, 0, 0.4),
-      0 8px 12px rgba(0, 0, 0, 0.5),
-      0 14px 22px rgba(0, 0, 0, 0.35);
-    transition: transform 0.25s cubic-bezier(0.2, 0.7, 0.3, 1), text-shadow 0.25s cubic-bezier(0.2, 0.7, 0.3, 1);
+    transition: opacity 0.2s ease, transform 0.2s ease;
   }
   .logo:hover .logo-word{
-    transform: translateY(-2px);
-    text-shadow:
-      0 1px 0 #ffffff,
-      0 2px 0 #dedcd7,
-      0 3px 0 #bfbdb8,
-      0 4px 0 #9f9e98,
-      0 5px 0 #7e7d78,
-      0 6px 0 #585753,
-      0 7px 1px rgba(0, 0, 0, 0.45),
-      0 10px 14px rgba(0, 0, 0, 0.55),
-      0 18px 26px rgba(0, 0, 0, 0.4);
+    opacity: 0.88;
+    transform: translateY(-1px);
   }
   .navend{ margin-left:auto; display:flex; align-items:center; gap:clamp(10px,1.4vw,18px) }
   .navend .sign{
@@ -371,7 +352,6 @@
     <div class="hero-grid">
       <!-- LEFT column -->
       <div class="hero-left">
-        <span class="badge"><i></i><span data-i18n="hero.badge">The cost of moving slow</span></span>
         <h1 class="lead">
           <span data-i18n="hero.titleLine1">Slow Doesn&rsquo;t Scale.</span><br>
           <span class="orange" data-i18n="hero.titleLine2">Manuver Does.</span>

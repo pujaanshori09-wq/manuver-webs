@@ -1,3 +1,4 @@
+import 'dotenv/config';
 import pg from 'pg';
 import dotenv from 'dotenv';
 import fs from 'fs';
@@ -43,6 +44,11 @@ const requiresSsl = connectionString.includes('sslmode=require') || connectionSt
 export const pool = new Pool({
   connectionString,
   ssl: requiresSsl ? { rejectUnauthorized: false } : false
+});
+
+// Resilient pool error listener to prevent process crashes when database is offline
+pool.on('error', (err) => {
+  console.warn('PostgreSQL Pool idle error (handled):', err.message);
 });
 
 /**
@@ -133,13 +139,21 @@ export async function upsertGoogleUser({ googleId, email, name, avatarUrl }) {
  * Finds user by database ID
  */
 export async function findUserById(id) {
-  const query = `
-    SELECT id, google_id, email, name, avatar_url, created_at
-    FROM users
-    WHERE id = $1;
-  `;
-  const { rows } = await pool.query(query, [id]);
-  return rows[0] || null;
+  try {
+    const numId = Number(id);
+    if (!Number.isInteger(numId) || numId > 2147483647) {
+      return null;
+    }
+    const query = `
+      SELECT id, google_id, email, name, avatar_url, created_at
+      FROM users
+      WHERE id = $1;
+    `;
+    const { rows } = await pool.query(query, [numId]);
+    return rows[0] || null;
+  } catch (err) {
+    return null;
+  }
 }
 
 /**

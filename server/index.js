@@ -1,3 +1,4 @@
+import 'dotenv/config';
 import express from 'express';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
@@ -104,12 +105,21 @@ app.get('/prototype-particles.html', (req, res) => {
 app.use('/src', express.static(path.join(__dirname, '../src')));
 
 // Fallback to index.html for SPA routing
-app.use((req, res) => {
+app.use((req, res, next) => {
+  if (req.method !== 'GET') return next();
   res.sendFile(path.join(distPath, 'index.html'), (err) => {
     if (err) {
       res.status(200).send('Manuver Express API Server is running. Use frontend on port 5173 or build dist.');
     }
   });
+});
+
+// Centralized error handling middleware
+app.use((err, req, res, next) => {
+  console.error('[Express Uncaught Error]:', err);
+  if (!res.headersSent) {
+    res.status(500).json({ error: 'Internal Server Error', message: err.message });
+  }
 });
 
 app.listen(PORT, () => {

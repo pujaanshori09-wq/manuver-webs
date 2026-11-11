@@ -1,3 +1,4 @@
+import 'dotenv/config';
 import express from 'express';
 import jwt from 'jsonwebtoken';
 import {
@@ -12,9 +13,9 @@ import {
 
 export const authRouter = express.Router();
 
-const JWT_SECRET = process.env.JWT_SECRET || 'manuver_super_secure_jwt_secret_key_2026';
-const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID || '';
-const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET || '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';
+const getJwtSecret = () => process.env.JWT_SECRET || 'manuver_super_secure_jwt_secret_key_2026';
+const getGoogleClientId = () => process.env.GOOGLE_CLIENT_ID || '';
+const getGoogleClientSecret = () => process.env.GOOGLE_CLIENT_SECRET || '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';
 
 function getRedirectUri(req) {
   if (process.env.GOOGLE_REDIRECT_URI) return process.env.GOOGLE_REDIRECT_URI;
@@ -48,7 +49,7 @@ export async function handleGetMe(req, res) {
   }
 
   try {
-    const decoded = jwt.verify(token, JWT_SECRET);
+    const decoded = jwt.verify(token, getJwtSecret());
     let user = null;
     try {
       user = await findUserById(decoded.userId);
@@ -70,16 +71,22 @@ export async function handleGetMe(req, res) {
  * Redirects the user to Google's standard OAuth consent screen
  */
 authRouter.get('/google', (req, res) => {
-  if (!GOOGLE_CLIENT_ID) {
+  const clientId = getGoogleClientId();
+  if (!clientId) {
     return res.status(500).send(`
-      <h3>Google Client ID belum dikonfigurasi di file .env!</h3>
-      <p>Silakan tambahkan <code>GOOGLE_CLIENT_ID=...</code> di file .env Anda.</p>
+      <div style="font-family:sans-serif;padding:32px;background:#0d0e12;color:#f4f1ea;">
+        <h3>Google Client ID belum dikonfigurasi di file .env!</h3>
+        <p>Silakan tambahkan <code>GOOGLE_CLIENT_ID=...</code> di file .env Anda.</p>
+      </div>
     `);
   }
 
   const redirectUri = getRedirectUri(req);
   const scope = encodeURIComponent('openid email profile');
-  const googleAuthUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${encodeURIComponent(GOOGLE_CLIENT_ID)}&redirect_uri=${encodeURIComponent(redirectUri)}&response_type=code&scope=${scope}&access_type=offline&prompt=consent`;
+  const referer = req.headers.referer || '';
+  const returnTo = referer.includes(':5173') ? 'http://localhost:5173/dashboard' : '/dashboard';
+  const state = Buffer.from(JSON.stringify({ returnTo })).toString('base64');
+  const googleAuthUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${encodeURIComponent(clientId)}&redirect_uri=${encodeURIComponent(redirectUri)}&response_type=code&scope=${scope}&state=${encodeURIComponent(state)}&access_type=offline&prompt=consent`;
 
   res.redirect(googleAuthUrl);
 });
@@ -103,6 +110,8 @@ authRouter.get('/google/callback', async (req, res) => {
 
   try {
     const redirectUri = getRedirectUri(req);
+    const clientId = getGoogleClientId();
+    const clientSecret = getGoogleClientSecret();
 
     // Exchange auth code for Google access token
     const tokenResponse = await fetch('https://oauth2.googleapis.com/token', {
@@ -110,8 +119,8 @@ authRouter.get('/google/callback', async (req, res) => {
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       body: new URLSearchParams({
         code: String(code),
-        client_id: GOOGLE_CLIENT_ID,
-        client_secret: GOOGLE_CLIENT_SECRET,
+        client_id: clientId,
+        client_secret: clientSecret,
         redirect_uri: redirectUri,
         grant_type: 'authorization_code'
       })
@@ -141,16 +150,16 @@ authRouter.get('/google/callback', async (req, res) => {
       dbUser = await upsertGoogleUser({
         googleId: profile.id,
         email: profile.email,
-        name: profile.name || profile.given_name || 'User',
+        name: profile.name || profile.given_name || 'Puja Anshori',
         avatarUrl: profile.picture || ''
       });
     } catch (dbErr) {
       console.warn('PostgreSQL write skipped (database not connected):', dbErr.message);
       dbUser = {
-        id: profile.id,
+        id: 1, // Safe numeric ID for PostgreSQL queries
         google_id: profile.id,
         email: profile.email,
-        name: profile.name || profile.given_name || 'User',
+        name: profile.name || profile.given_name || 'Puja Anshori',
         avatar_url: profile.picture || ''
       };
     }
@@ -163,7 +172,7 @@ authRouter.get('/google/callback', async (req, res) => {
         name: dbUser.name,
         avatarUrl: dbUser.avatar_url
       },
-      JWT_SECRET,
+      getJwtSecret(),
       { expiresIn: '7d' }
     );
 
@@ -175,7 +184,23 @@ authRouter.get('/google/callback', async (req, res) => {
     res.cookie('manuver_token', token, cookieOptions);
 
     // Redirect user to the protected dashboard
-    res.redirect('/dashboard');
+    let destination = '/dashboard';
+    if (req.query.state) {
+      try {
+        const parsed = JSON.parse(Buffer.from(req.query.state, 'base64').toString('utf8'));
+        if (parsed.returnTo && (parsed.returnTo.startsWith('/') || parsed.returnTo.startsWith('http://localhost'))) {
+          destination = parsed.returnTo;
+        }
+      } catch (_) {}
+    } else {
+      const frontendUrl = process.env.FRONTEND_URL;
+      const host = req.get('host') || '';
+      if (frontendUrl && !host.includes(new URL(frontendUrl).host)) {
+        destination = `${frontendUrl.replace(/\/$/, '')}/dashboard`;
+      }
+    }
+
+    res.redirect(destination);
   } catch (err) {
     console.error('OAuth callback exception:', err);
     res.redirect('/?auth=server_error');
@@ -206,7 +231,7 @@ authRouter.get('/dashboard', async (req, res) => {
   if (!token) return res.status(401).json({ error: 'Unauthorized' });
 
   try {
-    const decoded = jwt.verify(token, JWT_SECRET);
+    const decoded = jwt.verify(token, getJwtSecret());
     const data = await getUserDashboardData(decoded.userId);
     if (!data) return res.status(404).json({ error: 'User not found' });
     res.json(data);
@@ -224,7 +249,7 @@ authRouter.post('/brief', async (req, res) => {
   if (!token) return res.status(401).json({ error: 'Unauthorized' });
 
   try {
-    const decoded = jwt.verify(token, JWT_SECRET);
+    const decoded = jwt.verify(token, getJwtSecret());
     const { serviceCategory, description, budgetRange, targetTimeline } = req.body;
     if (!serviceCategory || !description) {
       return res.status(400).json({ error: 'Service category and description are required' });
@@ -252,7 +277,7 @@ export function requireAuth(req, res, next) {
   }
 
   try {
-    const decoded = jwt.verify(token, JWT_SECRET);
+    const decoded = jwt.verify(token, getJwtSecret());
     req.userId = decoded.userId;
     req.user = decoded;
     next();
@@ -341,7 +366,7 @@ authRouter.post('/roi', async (req, res) => {
   if (!token) return res.status(401).json({ error: 'Unauthorized' });
 
   try {
-    const decoded = jwt.verify(token, JWT_SECRET);
+    const decoded = jwt.verify(token, getJwtSecret());
     const { hoursPerWeek, teamSize, monthlySavedHours, annualSavedHours } = req.body;
     const result = await saveRoiCalculation({
       userId: decoded.userId,

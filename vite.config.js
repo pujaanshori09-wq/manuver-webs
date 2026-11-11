@@ -20,11 +20,35 @@ export default defineConfig(({ mode }) => {
             if (req.url.endsWith('.js') || req.url.includes('.js?')) {
               return req.url;
             }
+          },
+          configure: (proxy) => {
+            proxy.on('error', (err, req, res) => {
+              console.warn('[Vite Proxy]: Express server on port 5000 not reachable.', err.message);
+              if (!res.headersSent) {
+                res.writeHead(502, { 'Content-Type': 'application/json' });
+                res.end(JSON.stringify({
+                  error: 'Backend offline',
+                  message: 'Express server on port 5000 is not running. Start with `npm run server`.'
+                }));
+              }
+            });
           }
         },
         '/auth': {
           target: 'http://localhost:5000',
-          changeOrigin: true
+          changeOrigin: true,
+          configure: (proxy) => {
+            proxy.on('error', (err, req, res) => {
+              console.warn('[Vite Proxy]: Express server on port 5000 not reachable.', err.message);
+              if (!res.headersSent) {
+                res.writeHead(502, { 'Content-Type': 'application/json' });
+                res.end(JSON.stringify({
+                  error: 'Backend offline',
+                  message: 'Express server on port 5000 is not running. Start with `npm run server`.'
+                }));
+              }
+            });
+          }
         }
       }
     },

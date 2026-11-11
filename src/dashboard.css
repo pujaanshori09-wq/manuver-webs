@@ -71,10 +71,10 @@ button {
   color: inherit;
 }
 
-/* Focus Visible: 2px --accent with 2px offset */
+/* Focus Visible: 2px --accent with 2px offset (exclude borderless wrapped inputs) */
 button:focus-visible,
 a:focus-visible,
-input:focus-visible,
+input:not(.primary-request-input):not(.panel-search-input):focus-visible,
 select:focus-visible,
 textarea:focus-visible {
   outline: 2px solid var(--accent);
@@ -602,13 +602,13 @@ textarea:focus-visible {
   background: var(--surface-1);
   border: 1px solid var(--border);
   border-radius: var(--radius-pill);
-  padding: 4px 6px 4px 20px;
+  padding: 5px 6px 5px 22px;
   gap: 12px;
   transition: border-color 0.15s ease-out;
 }
 
 .primary-request-input-wrap:focus-within {
-  border-color: var(--border-strong);
+  border-color: var(--accent);
 }
 
 .primary-request-input {
@@ -618,8 +618,16 @@ textarea:focus-visible {
   font-family: inherit;
   font-size: 14.5px;
   color: var(--text);
-  outline: none;
+  outline: none !important;
+  box-shadow: none !important;
   padding: 10px 0;
+  min-width: 0;
+}
+
+.primary-request-input:focus,
+.primary-request-input:focus-visible {
+  outline: none !important;
+  box-shadow: none !important;
 }
 
 .primary-request-input::placeholder {
@@ -1014,7 +1022,7 @@ textarea:focus-visible {
 }
 
 .panel-search-box:focus-within {
-  border-color: var(--border-strong);
+  border-color: var(--accent);
 }
 
 .panel-search-box svg {
@@ -1029,8 +1037,15 @@ textarea:focus-visible {
   font-family: inherit;
   font-size: 13px;
   color: var(--text);
-  outline: none;
+  outline: none !important;
+  box-shadow: none !important;
   padding: 0;
+}
+
+.panel-search-input:focus,
+.panel-search-input:focus-visible {
+  outline: none !important;
+  box-shadow: none !important;
 }
 
 .panel-search-input::placeholder {

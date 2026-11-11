@@ -1,4 +1,4 @@
-import { spawn } from 'child_process';
+import { fork } from 'child_process';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
@@ -6,28 +6,24 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const rootDir = path.resolve(__dirname, '..');
 
-const isWin = process.platform === 'win32';
-const npxCmd = isWin ? 'npx.cmd' : 'npx';
-const nodeCmd = process.execPath;
-
-console.log('----------------------------------------------------');
+console.log('====================================================');
 console.log('⚡ Starting MANUVER full-stack development environment');
 console.log('   - Express Backend & OAuth: http://localhost:5000');
 console.log('   - Vite Frontend:           http://localhost:5173');
-console.log('----------------------------------------------------');
+console.log('====================================================');
 
-// 1. Start Express backend on port 5000
-const serverProcess = spawn(nodeCmd, ['server/index.js'], {
+// 1. Start Express backend on port 5000 using fork (immune to Windows path spaces)
+const serverModule = path.resolve(rootDir, 'server/index.js');
+const serverProcess = fork(serverModule, [], {
   cwd: rootDir,
-  stdio: 'inherit',
-  shell: isWin
+  stdio: 'inherit'
 });
 
-// 2. Start Vite dev server on port 5173
-const viteProcess = spawn(npxCmd, ['vite', '--host', '0.0.0.0'], {
+// 2. Start Vite dev server on port 5173 using fork
+const viteModule = path.resolve(rootDir, 'node_modules/vite/bin/vite.js');
+const viteProcess = fork(viteModule, ['--host', '0.0.0.0'], {
   cwd: rootDir,
-  stdio: 'inherit',
-  shell: isWin
+  stdio: 'inherit'
 });
 
 function cleanup() {

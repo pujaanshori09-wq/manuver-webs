@@ -1,15 +1,11 @@
 import { initI18n, t } from './src/i18n.js';
 import { initChatWidget } from './src/ChatWidget.js';
-import { initClientPortal, openClientPortal } from './src/ClientPortal.js';
 
 // Initialize i18n & language switcher
 initI18n();
 
 // Initialize Manuver AI Assistant Chat Widget
 initChatWidget();
-
-// Initialize Manuver Client Portal & Project Tracker
-initClientPortal();
 
 // Connect Hero CTA buttons to open consultative AI discovery
 document.querySelector('#hero-start-building')?.addEventListener('click', (e) => {
@@ -48,6 +44,22 @@ export function signInWithGoogle() {
 }
 
 /**
+ * Navigate to the authenticated client dashboard.
+ * If not logged in, initiates Google OAuth.
+ */
+export function openClientDashboard() {
+  fetch('/api/me', { credentials: 'include', headers: { Accept: 'application/json' } })
+    .then((r) => {
+      if (r.ok) {
+        window.location.href = '/dashboard';
+      } else {
+        signInWithGoogle();
+      }
+    })
+    .catch(() => signInWithGoogle());
+}
+
+/**
  * Updates navbar UI based on authentication state
  */
 export function updateAuthUI(user) {
@@ -57,13 +69,13 @@ export function updateAuthUI(user) {
 
   if (user) {
     const displayName = user.name || user.email?.split('@')[0] || 'User';
-    const avatar = user.avatar_url
-      ? `<img src="${user.avatar_url}" style="width:22px;height:22px;border-radius:50%;vertical-align:middle;margin-right:6px;border:1.5px solid var(--accent);" alt="" />`
+    const avatar = user.avatarUrl
+      ? `<img src="${user.avatarUrl}" style="width:22px;height:22px;border-radius:50%;vertical-align:middle;margin-right:6px;border:1.5px solid var(--accent);" alt="" />`
       : '👤 ';
 
     signInEl.innerHTML = `
       <span style="display:inline-flex;align-items:center;gap:6px;">
-        <span class="user-portal-trigger" title="Buka Client Portal (${user.email})" style="display:inline-flex;align-items:center;cursor:pointer;">
+        <span class="user-portal-trigger" title="Buka Dashboard (${user.email})" style="display:inline-flex;align-items:center;cursor:pointer;">
           ${avatar}<span>${displayName}</span>
         </span>
         <button type="button" class="user-quick-logout" title="Keluar dari akun" style="background:none;border:none;color:var(--dim);font-size:12px;cursor:pointer;padding:0 2px;opacity:0.75;">(Keluar)</button>
@@ -75,7 +87,7 @@ export function updateAuthUI(user) {
 
     portalTrigger?.addEventListener('click', (e) => {
       e.stopPropagation();
-      openClientPortal();
+      window.location.href = '/dashboard';
     });
 
     quickLogout?.addEventListener('click', async (e) => {
@@ -90,7 +102,7 @@ export function updateAuthUI(user) {
       googleLoginBtn.innerHTML = `<span>🚀 Client Portal</span>`;
       googleLoginBtn.onclick = (e) => {
         e.preventDefault();
-        openClientPortal();
+        window.location.href = '/dashboard';
       };
     }
   } else {
@@ -128,10 +140,10 @@ if (googleLoginBtn) {
 }
 
 // Check logged in user status from PostgreSQL backend on page load
-fetch('/api/auth/me', { credentials: 'include' })
-  .then((res) => (res.ok ? res.json() : { user: null }))
+fetch('/api/me', { credentials: 'include', headers: { Accept: 'application/json' } })
+  .then((res) => (res.ok ? res.json() : null))
   .then((data) => {
-    updateAuthUI(data?.user || null);
+    updateAuthUI(data || null);
   })
   .catch(() => {
     updateAuthUI(null);
@@ -141,7 +153,6 @@ fetch('/api/auth/me', { credentials: 'include' })
 const navHeader = document.querySelector('.nav-header');
 if (navHeader) {
   window.addEventListener('pointermove', (e) => {
-    // If cursor approaches the top navbar (within 80px of top)
     if (e.clientY <= 80 || navHeader.matches(':hover')) {
       navHeader.classList.add('nav-active');
     } else {

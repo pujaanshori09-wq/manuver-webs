@@ -5,29 +5,48 @@
  * Zero AI slop: No gradients, no glows, no shadows, no particles
  * ============================================================ */
 
+@import "./globals.css";
+
 :root {
-  /* 1) DESIGN TOKENS — Source of truth */
-  --bg:            #07080B;   /* Flat app background, no gradient */
-  --surface-1:     #0D0E12;   /* Panels, table headers, hover rows */
-  --surface-2:     #13151A;   /* Raised controls / secondary elements */
-  
-  --border:        rgba(244, 241, 234, 0.08);
-  --border-strong: rgba(244, 241, 234, 0.16);
+  /* 1) DESIGN TOKENS — Locked Palette (Single Source of Truth) */
+  --bg-base:          #17181D;                  /* latar utama */
+  --sidebar-top:      #2B2E39;                  /* gradien sidebar atas */
+  --sidebar-bottom:   #1A1C22;                  /* gradien sidebar bawah */
+  --panel:            rgba(255,255,255,0.06);   /* daftar dan kotak input */
+  --panel-hover:      rgba(255,255,255,0.12);   /* baris hover / menu aktif */
+  --border:           rgba(255,255,255,0.08);
+  --text:             #F5F2EE;
+  --text-muted:       #B4B2AE;
+  --accent:           #E8643C;                  /* titik "Puja." saja */
+  --glow-warm:        rgba(232,100,60,0.22);    /* pojok kanan bawah, fixed */
 
-  --text:          #F4F1EA;   /* Warm off-white */
-  --text-muted:    #8C8B87;
-  --text-faint:    #5A5954;
+  /* Derived / semantic aliases mapped strictly to the locked tokens */
+  --bg:               var(--bg-base);
+  --bg-header:        color-mix(in srgb, var(--bg-base) 80%, transparent);
+  --surface-1:        var(--panel);
+  --surface-2:        var(--panel-hover);
+  --glass-bg:         var(--panel);
+  --glass-bg-strong:  var(--panel-hover);
+  --glass-border:     var(--border);
+  --bg-glow-warm:     var(--glow-warm);
+  --bg-glow-cool:     var(--panel);
+  --glass-highlight:  inset 0 1px 0 var(--border);
+  --glass-shadow:     0 8px 32px color-mix(in srgb, var(--bg-base) 45%, transparent);
+  --glass-blur:       24px;
+  --glass-fallback:   var(--sidebar-bottom);
+  --border-strong:    var(--panel-hover);
+  --text-faint:       var(--text-muted);
+  --accent-text:      var(--accent);
+  --accent-ink:       var(--bg-base);
 
-  --accent:        #E8603C;   /* Orange-red, from landing "Manuver Does." */
-  --accent-ink:    #0B0B0B;   /* Text on accent */
-
-  --success:       #4CAF7A;   /* Status only, desaturated */
-  --warning:       #E0A83A;
-  --danger:        #E5484D;
+  --success:          var(--text);
+  --warning:          var(--text-muted);
+  --danger:           var(--accent);
 
   /* Typography */
-  --font-sans:     "Geist", Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  --font-mono:     "Geist Mono", monospace;
+  --font-heading:     "Inter Tight", Inter, ui-sans-serif, system-ui, sans-serif;
+  --font-sans:        Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-mono:        var(--font-sans);
 
   /* Geometry & Scale */
   --radius-sm:     6px;       /* Inputs, cards, action buttons */
@@ -403,11 +422,13 @@ textarea:focus-visible {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: var(--bg);
+  background: var(--bg-header);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
   border-bottom: 1px solid var(--border);
   position: sticky;
   top: 0;
-  z-index: 30;
+  z-index: 20;
   flex-shrink: 0;
 }
 
@@ -560,6 +581,7 @@ textarea:focus-visible {
   flex-direction: column;
   align-items: flex-start;
   text-align: left;
+  overflow: visible;
 }
 
 .welcome-kicker {
@@ -573,9 +595,11 @@ textarea:focus-visible {
   font-size: 56px;
   font-weight: 700;
   letter-spacing: -0.03em;
-  line-height: 0.95;
+  line-height: 1.1;
+  padding-bottom: 4px;
+  overflow: visible;
   color: var(--text);
-  margin: 6px 0 12px;
+  margin: 0 0 12px;
 }
 
 .accent-dot {
@@ -1198,7 +1222,7 @@ textarea:focus-visible {
 .modal-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(7, 8, 11, 0.85);
+  background: color-mix(in srgb, var(--bg-base) 85%, transparent);
   z-index: 1000;
   display: flex;
   align-items: center;
@@ -1314,8 +1338,8 @@ textarea:focus-visible {
 .form-error-alert {
   font-size: 13px;
   color: var(--danger);
-  background: rgba(229, 72, 77, 0.1);
-  border: 1px solid rgba(229, 72, 77, 0.25);
+  background: color-mix(in srgb, var(--danger) 10%, transparent);
+  border: 1px solid color-mix(in srgb, var(--danger) 25%, transparent);
   padding: 8px 12px;
   border-radius: var(--radius-sm);
 }
@@ -1383,7 +1407,7 @@ textarea:focus-visible {
 .sidebar-backdrop {
   position: fixed;
   inset: 0;
-  background: rgba(7, 8, 11, 0.7);
+  background: color-mix(in srgb, var(--bg-base) 70%, transparent);
   z-index: 48;
   opacity: 0;
   visibility: hidden;
@@ -1468,11 +1492,14 @@ textarea:focus-visible {
   }
 
   .viewport {
-    padding: 24px 16px 48px;
+    padding: 48px 16px 48px;
   }
 
   .welcome-h1 {
     font-size: 36px;
+    line-height: 1.1;
+    padding-bottom: 4px;
+    overflow: visible;
   }
 
   .form-row {
@@ -1512,4 +1539,304 @@ textarea:focus-visible {
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }
+}
+
+
+/* ============================================================
+ * LOCKED PALETTE & DARK GLASS LAYER
+ * Charcoal base · sidebar gradient · warm bottom-right glow
+ * ============================================================ */
+
+html, body {
+  background-color: var(--bg-base);
+}
+
+body::before,
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+
+body::before {
+  background: radial-gradient(60vmax 60vmax at 100% 100%, var(--glow-warm), transparent 60%);
+}
+
+body::after {
+  opacity: 0.035;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+}
+
+#dashboard-app,
+#dashboard-loader,
+.modal-overlay,
+.toast-popup {
+  position: relative;
+  z-index: 1;
+}
+
+.modal-overlay { position: fixed; z-index: 100; }
+.toast-popup   { position: fixed; z-index: 110; }
+
+/* Shell surfaces become transparent so glow shows through */
+.dashboard-shell,
+.main-layout,
+.viewport,
+#dashboard-loader {
+  background: transparent;
+}
+
+/* Sticky Frosted Page Header */
+.top-header {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  background: var(--bg-header);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+}
+
+/* --- Glass utility --- */
+.glass {
+  background: var(--panel);
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(140%);
+  backdrop-filter: blur(var(--glass-blur)) saturate(140%);
+  border: 1px solid var(--border);
+  box-shadow: var(--glass-highlight), var(--glass-shadow);
+}
+
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .glass { background: var(--glass-fallback); }
+}
+
+/* Sidebar: locked vertical gradient (--sidebar-top -> --sidebar-bottom) */
+.sidebar,
+.sidebar.glass {
+  background: linear-gradient(180deg, var(--sidebar-top) 0%, var(--sidebar-bottom) 100%);
+  border-width: 0 1px 0 0;
+  border-right: 1px solid var(--border);
+  border-radius: 0;
+}
+
+.sidebar-footer {
+  background: transparent;
+}
+
+.right-panel.glass {
+  border-width: 0 0 0 1px;
+  border-radius: 0;
+}
+
+.right-panel-footer {
+  background: transparent;
+}
+
+/* Nested elements inside glass: border + strong bg on hover, never more blur */
+.panel-search-box {
+  background: var(--panel);
+  border: 1px solid var(--border);
+}
+.panel-search-box:focus-within { border-color: var(--panel-hover); }
+
+/* --- Typography --- */
+h1, h2, h3,
+.welcome-h1,
+.view-title,
+.modal-headline,
+.brand-word,
+.right-panel-title,
+.service-row-title {
+  font-family: var(--font-heading);
+  letter-spacing: -0.03em;
+}
+
+.overview-header {
+  overflow: visible;
+}
+
+.welcome-h1 {
+  font-size: 56px;
+  font-weight: 600;
+  line-height: 1.1;
+  padding-bottom: 4px;
+  overflow: visible;
+  color: var(--text);
+}
+
+.accent-dot { color: var(--accent); }
+
+.welcome-sentence,
+.section-sublabel,
+.service-row-num,
+.service-row-desc,
+.empty-state-sentence,
+.panel-empty-text,
+.right-panel-count {
+  color: var(--text-muted);
+}
+
+/* --- Sidebar nav: active = --panel-hover, no orange bar --- */
+.nav-item {
+  border-left: 0;
+  border-radius: 8px;
+}
+.nav-item:hover {
+  background: var(--panel);
+  color: var(--text);
+}
+.nav-item.is-active {
+  background: var(--panel-hover);
+  color: var(--text);
+  border-left: 0;
+}
+.nav-item.is-active svg { color: var(--text); }
+
+/* --- Buttons --- */
+/* Primary: off-white pill, dark text */
+.btn-primary-pill,
+.btn-accent-action {
+  background: var(--text);
+  color: var(--accent-ink);
+  border: 0;
+  border-radius: var(--radius-pill);
+  font-weight: 500;
+}
+.btn-primary-pill:hover,
+.btn-accent-action:hover {
+  opacity: 0.92;
+}
+
+/* Secondary: glass pill */
+.btn-modal-cancel,
+.btn-secondary-pill {
+  background: var(--panel);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-pill);
+}
+.btn-modal-cancel:hover,
+.btn-secondary-pill:hover {
+  background: var(--panel-hover);
+}
+
+/* "Lihat semua" links: muted, not orange */
+.accent-link-btn {
+  color: var(--text-muted);
+}
+.accent-link-btn:hover {
+  color: var(--text);
+  opacity: 1;
+}
+
+/* --- Primary input (glass pill) --- */
+.primary-request-input-wrap.glass {
+  border-radius: var(--radius-pill);
+}
+.primary-request-input-wrap.glass:focus-within {
+  border-color: var(--panel-hover);
+}
+.primary-request-input::placeholder { color: var(--text-muted); }
+
+/* --- Capabilities: one glass list, rows only get hover bg --- */
+.services-bordered-list.glass {
+  border-radius: 14px;
+  overflow: hidden;
+}
+.service-row {
+  background: transparent;
+  border-bottom: 1px solid var(--border);
+}
+.service-row:last-child { border-bottom: 0; }
+.service-row:hover { background: var(--panel-hover); }
+.service-row-arrow {
+  color: var(--text-muted);
+  font-size: 13px;
+}
+.service-row:hover .service-row-arrow {
+  color: var(--text);
+}
+
+/* --- Empty-state cards (in scroll column): glass container, one line --- */
+#overview-projects-container .empty-state-clean,
+#overview-requests-container .empty-state-clean {
+  background: var(--panel);
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(140%);
+  backdrop-filter: blur(var(--glass-blur)) saturate(140%);
+  border: 1px solid var(--border);
+  box-shadow: var(--glass-highlight), var(--glass-shadow);
+  border-radius: 14px;
+  padding: 16px 20px;
+}
+
+/* Tables / timeline inside scroll: border only, no blur */
+.table-outer-wrapper,
+.requests-table-wrap {
+  background: transparent;
+  border: 1px solid var(--border);
+}
+
+/* --- Activity panel empty state: single line --- */
+.panel-empty-text {
+  font-size: 13px;
+  padding: 4px 0;
+}
+
+/* --- Modal: solid fallback (not counted in glass budget) --- */
+.modal-card {
+  background: var(--glass-fallback);
+  border: 1px solid var(--border);
+}
+
+/* --- Responsive --- */
+@media (max-width: 767px) {
+  .dashboard-shell.is-ready {
+    grid-template-columns: minmax(0, 1fr);
+    width: 100%;
+  }
+  .viewport {
+    padding: 48px 16px 48px;
+  }
+  .welcome-h1 {
+    font-size: 34px;
+    line-height: 1.1;
+    padding-bottom: 4px;
+    overflow: visible;
+  }
+  .primary-request-input-wrap.glass {
+    border-radius: 14px;
+    padding: 12px;
+  }
+  #overview-projects-container .empty-state-clean,
+  #overview-requests-container .empty-state-clean {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+}
+
+/* --- Accessibility: reduced transparency / motion --- */
+@media (prefers-reduced-transparency: reduce) {
+  .glass,
+  .top-header,
+  #overview-projects-container .empty-state-clean,
+  #overview-requests-container .empty-state-clean {
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    background: var(--glass-fallback);
+  }
+  body::after { display: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .glass,
+  .top-header,
+  #overview-projects-container .empty-state-clean,
+  #overview-requests-container .empty-state-clean {
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    background: var(--glass-fallback);
+  }
+  * { transition: none !important; animation: none !important; }
 }

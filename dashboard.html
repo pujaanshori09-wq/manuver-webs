@@ -7,7 +7,7 @@
   <meta name="description" content="Manuver Customer Digital Workspace">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Inter+Tight:wght@500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/src/dashboard.css">
 </head>
 <body>
@@ -24,7 +24,7 @@
     <div id="right-panel-backdrop" class="right-panel-backdrop"></div>
 
     <!-- 1. SIDEBAR (232px, flat --bg, 1px right border) -->
-    <aside id="sidebar" class="sidebar" aria-label="Main Navigation">
+    <aside id="sidebar" class="sidebar glass" aria-label="Main Navigation">
       <!-- Sidebar Header / Wordmark -->
       <div class="sidebar-header">
         <a href="/" class="brand-link" data-i18n-aria="dashboard.logoAria" aria-label="Beranda Manuver">
@@ -71,15 +71,6 @@
               </svg>
               <span data-i18n="dashboard.navProjects">Proyek Saya</span>
               <span id="badge-projects-count" class="nav-count" style="display:none;">0</span>
-            </button>
-          </li>
-          <li role="presentation">
-            <button type="button" class="nav-item" data-view="products" role="tab" aria-selected="false">
-              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
-                <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
-              </svg>
-              <span data-i18n="dashboard.navProducts">Produk</span>
             </button>
           </li>
           <li role="presentation">
@@ -155,14 +146,13 @@
         <section id="view-overview" class="view-panel is-active" role="tabpanel">
           <!-- Left-aligned Grotesk Headline Header -->
           <div class="overview-header">
-            <span class="welcome-kicker" id="welcome-kicker" data-i18n="dashboard.welcomeKicker">Selamat datang kembali</span>
-            <h1 class="welcome-h1" id="welcome-h1">Puja<span class="accent-dot">.</span></h1>
+            <h1 class="welcome-h1" id="welcome-h1">Selamat datang, Puja<span class="accent-dot">.</span></h1>
             <p class="welcome-sentence" data-i18n="dashboard.welcomeSentence">Pekerjaan manual tidak bisa scale. Ceritakan apa yang menghambat Anda.</p>
           </div>
 
           <!-- Primary Action Input Row -->
           <div class="primary-request-box" id="primary-request-box">
-            <div class="primary-request-input-wrap">
+            <div class="primary-request-input-wrap glass">
               <input type="text" id="primary-request-input" class="primary-request-input" placeholder="Jelaskan apa yang memperlambat tim Anda…" data-i18n-placeholder="dashboard.inputPlaceholder" aria-label="Jelaskan apa yang memperlambat tim Anda" />
               <button type="button" id="primary-request-submit-btn" class="btn-primary-pill open-request-trigger" data-i18n="dashboard.btnStartRequest">
                 Mulai permintaan &rarr;
@@ -175,7 +165,7 @@
             <div class="section-label-row">
               <span class="section-sublabel" data-i18n="dashboard.servicesLabel">KAPABILITAS</span>
             </div>
-            <div class="services-bordered-list">
+            <div class="services-bordered-list glass">
               <button type="button" class="service-row open-request-trigger" data-category="workflow_automation">
                 <span class="service-row-num" data-i18n="dashboard.service01Num">01</span>
                 <div class="service-row-body">
@@ -265,45 +255,6 @@
         </section>
 
         <!-- ============================================================
-             VIEW 4: PRODUCTS VIEW
-             ============================================================ -->
-        <section id="view-products" class="view-panel" role="tabpanel" style="display:none;">
-          <div class="view-head">
-            <div>
-              <span class="section-sublabel" data-i18n="dashboard.productsHeading">SOLUSI MODULAR</span>
-              <h2 class="view-title" data-i18n="dashboard.productsSubheading">Tiga disiplin utama: Build, Automate, Distribute.</h2>
-            </div>
-          </div>
-
-          <div class="services-bordered-list">
-            <div class="service-row">
-              <span class="service-row-num">01</span>
-              <div class="service-row-body">
-                <h3 class="service-row-title" data-i18n="dashboard.productBuildTitle">BUILD</h3>
-                <p class="service-row-desc" data-i18n="dashboard.productBuildDesc">Platform web tangguh, antarmuka klien cepat, dan arsitektur aplikasi andal.</p>
-              </div>
-              <button type="button" class="accent-link-btn open-request-trigger" data-category="web_application" data-i18n="dashboard.btnStartRequestSmall">Mulai permintaan &rarr;</button>
-            </div>
-            <div class="service-row">
-              <span class="service-row-num">02</span>
-              <div class="service-row-body">
-                <h3 class="service-row-title" data-i18n="dashboard.productAutomateTitle">AUTOMATE</h3>
-                <p class="service-row-desc" data-i18n="dashboard.productAutomateDesc">Pipeline latar belakang 24/7, jembatan API, dan alur kerja nol-headcount.</p>
-              </div>
-              <button type="button" class="accent-link-btn open-request-trigger" data-category="workflow_automation" data-i18n="dashboard.btnStartRequestSmall">Mulai permintaan &rarr;</button>
-            </div>
-            <div class="service-row">
-              <span class="service-row-num">03</span>
-              <div class="service-row-body">
-                <h3 class="service-row-title" data-i18n="dashboard.productDistributeTitle">DISTRIBUTE</h3>
-                <p class="service-row-desc" data-i18n="dashboard.productDistributeDesc">Konfigurasi multi-tenant, manajemen lisensi, dan skala komersial.</p>
-              </div>
-              <button type="button" class="accent-link-btn open-request-trigger" data-category="all_in_one" data-i18n="dashboard.btnStartRequestSmall">Mulai permintaan &rarr;</button>
-            </div>
-          </div>
-        </section>
-
-        <!-- ============================================================
              VIEW 5: HELP VIEW
              ============================================================ -->
         <section id="view-help" class="view-panel" role="tabpanel" style="display:none;">
@@ -341,7 +292,7 @@
     </div>
 
     <!-- 3. RIGHT PANEL "Request Activity" (320px, 1px left border, collapsible) -->
-    <aside id="right-activity-panel" class="right-panel" aria-label="Aktivitas Permintaan">
+    <aside id="right-activity-panel" class="right-panel glass" aria-label="Aktivitas Permintaan">
       <div class="right-panel-header">
         <div class="right-panel-title-wrap">
           <h3 class="right-panel-title" data-i18n="dashboard.panelActivityTitle">Aktivitas Permintaan</h3>

@@ -207,14 +207,11 @@ function renderUserProfile(user) {
   const firstName = fullName.split(' ')[0] || fullName;
   const initial = (firstName[0] || 'P').toUpperCase();
 
-  // Overview Header: small kicker + H1 with accent period
-  const kickerEl = document.getElementById('welcome-kicker');
+  // Overview Header: "Selamat datang, {nama}" with accent period
   const welcomeH1 = document.getElementById('welcome-h1');
-  if (kickerEl) {
-    kickerEl.textContent = t('dashboard.welcomeKicker', currentLang) || 'Selamat datang kembali';
-  }
   if (welcomeH1) {
-    welcomeH1.innerHTML = `${escapeHtml(firstName)}<span class="accent-dot">.</span>`;
+    const greet = t('dashboard.welcomeTitle', currentLang) || 'Selamat datang';
+    welcomeH1.innerHTML = `${escapeHtml(greet)}, ${escapeHtml(firstName)}<span class="accent-dot">.</span>`;
   }
 
   // Sidebar user name & email
@@ -497,14 +494,15 @@ function setupNavigation() {
 
     // Update header contextual title
     if (headerContextTitle) {
-      const titles = {
-        overview: t('dashboard.headerOverview', currentLang),
-        requests: t('dashboard.headerRequests', currentLang),
-        projects: t('dashboard.headerProjects', currentLang),
-        products: t('dashboard.headerProducts', currentLang),
-        help: t('dashboard.headerHelp', currentLang)
+      const titleKeys = {
+        overview: 'dashboard.headerOverview',
+        requests: 'dashboard.headerRequests',
+        projects: 'dashboard.headerProjects',
+        help: 'dashboard.headerHelp'
       };
-      headerContextTitle.textContent = titles[targetView] || 'Workspace';
+      const i18nKey = titleKeys[targetView] || 'dashboard.headerOverview';
+      headerContextTitle.setAttribute('data-i18n', i18nKey);
+      headerContextTitle.textContent = t(i18nKey, currentLang) || 'Workspace';
     }
 
     // Close mobile sidebar if open

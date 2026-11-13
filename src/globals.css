@@ -1,0 +1,13 @@
+:root {
+  --bg-base:        #17181D;                  /* latar utama */
+  --sidebar-top:    #2B2E39;                  /* gradien sidebar atas */
+  --sidebar-bottom: #1A1C22;                  /* gradien sidebar bawah */
+  --panel:          rgba(255,255,255,0.06);   /* daftar dan kotak input */
+  --panel-hover:    rgba(255,255,255,0.12);   /* baris hover / menu aktif */
+  --border:         rgba(255,255,255,0.08);
+  --text:           #F5F2EE;
+  --text-muted:     #B4B2AE;
+  --accent:         #E8643C;                  /* titik "Puja." saja */
+  --glow-warm:      rgba(232,100,60,0.22);    /* pojok kanan bawah, fixed */
+}
+

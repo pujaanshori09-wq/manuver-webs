@@ -166,7 +166,6 @@ export const dictionary = {
       navOverview: 'Overview',
       navRequests: 'My Requests',
       navProjects: 'My Projects',
-      navProducts: 'Products',
       navHelp: 'Help & Support',
       
       // Top Header Context Titles
@@ -177,7 +176,7 @@ export const dictionary = {
       headerHelp: 'Help & Support',
       
       // Overview Header
-      welcomeKicker: 'Welcome back',
+      welcomeTitle: 'Welcome',
       welcomeSentence: "Manual work doesn't scale. Tell us what's blocking you.",
       
       // Primary Action Row
@@ -215,7 +214,7 @@ export const dictionary = {
       // Right Activity Panel
       panelActivityTitle: 'Request Activity',
       searchPlaceholder: 'Search requests…',
-      emptyActivityText: 'No requests logged yet.',
+      emptyActivityText: 'No requests yet.',
       btnCreateNewRequest: 'Create New Request',
       
       // Status Labels
@@ -435,7 +434,6 @@ export const dictionary = {
       navOverview: 'Ringkasan',
       navRequests: 'Permintaan Saya',
       navProjects: 'Proyek Saya',
-      navProducts: 'Produk',
       navHelp: 'Bantuan',
       
       // Top Header Context Titles
@@ -446,7 +444,7 @@ export const dictionary = {
       headerHelp: 'Bantuan',
       
       // Overview Header
-      welcomeKicker: 'Selamat datang kembali',
+      welcomeTitle: 'Selamat datang',
       welcomeSentence: 'Pekerjaan manual tidak bisa scale. Ceritakan apa yang menghambat Anda.',
       
       // Primary Action Row
@@ -484,7 +482,7 @@ export const dictionary = {
       // Right Activity Panel
       panelActivityTitle: 'Aktivitas Permintaan',
       searchPlaceholder: 'Cari permintaan…',
-      emptyActivityText: 'Belum ada riwayat permintaan.',
+      emptyActivityText: 'Belum ada permintaan.',
       btnCreateNewRequest: 'Buat Permintaan Baru',
       
       // Status Labels
@@ -638,6 +636,18 @@ export function updateDOM(lang = currentLang) {
     if (!key) return;
     const val = t(key, lang);
     if (typeof val === 'string') {
+      el.setAttribute('aria-label', val);
+    }
+  });
+
+  // Update elements with data-i18n-placeholder
+  const placeholderElements = document.querySelectorAll('[data-i18n-placeholder]');
+  placeholderElements.forEach((el) => {
+    const key = el.getAttribute('data-i18n-placeholder');
+    if (!key) return;
+    const val = t(key, lang);
+    if (typeof val === 'string' && val !== key) {
+      el.setAttribute('placeholder', val);
       el.setAttribute('aria-label', val);
     }
   });
